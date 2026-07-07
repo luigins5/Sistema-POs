@@ -3846,41 +3846,41 @@
         <div className="modal-overlay" onClick={onClose}>
           <div className="modal" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
-              <h3><i className="fas fa-box"></i> {product ? 'Edit' : 'Add'} Product</h3>
+              <h3><i className="fas fa-box"></i> {product ? 'Editar' : 'Agregar'} Producto</h3>
               <button className="close-btn" onClick={onClose}><i className="fas fa-times"></i></button>
             </div>
             <div className="modal-body">
               <form onSubmit={submit}>
                 <div className="form-group">
                   <label><i className="fas fa-barcode"></i> SKU</label>
-                  <input type="text" value={product ? product.sku : 'Auto-generated on save'} disabled />
+                  <input type="text" value={product ? product.sku : 'Generado automáticamente'} disabled />
                 </div>
                 {formData.imageUrl ? <div className="prod-img-preview"><img src={formData.imageUrl} alt="" onError={(e) => { e.target.style.display = 'none'; }} /></div> : null}
                 <div className="form-grid">
-                  <div className="form-group"><label>Product Name *</label><input type="text" value={formData.name} onChange={(e) => setFormData(p => ({ ...p, name: e.target.value }))} required /></div>
-                  <SearchableDropdown label="Category" icon="fas fa-tag" options={catOpts} value={formData.category} onChange={(val) => setFormData(p => ({ ...p, category: val }))} placeholder="Select category..." required={true} />
-                  <div className="form-group"><label>Brand</label><input type="text" value={formData.brand} onChange={(e) => setFormData(p => ({ ...p, brand: e.target.value }))} /></div>
-                  <div className="form-group"><label><i className="fas fa-barcode"></i> Barcode (UPC/EAN)</label><input type="text" placeholder="Scan or type retail barcode" value={formData.barcode} onChange={(e) => setFormData(p => ({ ...p, barcode: e.target.value }))} /></div>
-                  <div className="form-group"><label>Selling Price *</label><input type="number" step="0.01" min="0" value={formData.price} onChange={(e) => setFormData(p => ({ ...p, price: e.target.value }))} required /></div>
-                  <div className="form-group"><label>Cost</label><input type="number" step="0.01" min="0" value={formData.cost} onChange={(e) => setFormData(p => ({ ...p, cost: e.target.value }))} /></div>
-                  <div className="form-group"><label>Wholesale Price</label><input type="number" step="0.01" min="0" value={formData.wholesalePrice} onChange={(e) => setFormData(p => ({ ...p, wholesalePrice: e.target.value }))} /></div>
-                  <div className="form-group"><label>MRP / List Price</label><input type="number" step="0.01" min="0" value={formData.mrp} onChange={(e) => setFormData(p => ({ ...p, mrp: e.target.value }))} /></div>
-                  <div className="form-group"><label>Tax Rate % {settings?.taxRate ? `(default ${settings.taxRate}%)` : ''}</label><input type="number" step="0.01" min="0" placeholder="blank = use default" value={formData.taxRate} onChange={(e) => setFormData(p => ({ ...p, taxRate: e.target.value }))} /></div>
-                  <div className="form-group"><label>Unit</label><input type="text" placeholder="pcs, box, kg..." value={formData.unit} onChange={(e) => setFormData(p => ({ ...p, unit: e.target.value }))} /></div>
-                  <div className="form-group"><label>Reorder Level *</label><input type="number" step="1" min="0" value={formData.reorderLevel} onChange={(e) => setFormData(p => ({ ...p, reorderLevel: e.target.value }))} required /></div>
-                  <div className="form-group"><label>Max Stock</label><input type="number" step="1" min="0" value={formData.maxStock} onChange={(e) => setFormData(p => ({ ...p, maxStock: e.target.value }))} /></div>
-                  <div className="form-group"><label>Reorder Qty</label><input type="number" step="1" min="0" placeholder="fixed restock amount" value={formData.reorderQty} onChange={(e) => setFormData(p => ({ ...p, reorderQty: e.target.value }))} /></div>
-                  <div className="form-group"><label>Supplier</label><input type="text" value={formData.supplier} onChange={(e) => setFormData(p => ({ ...p, supplier: e.target.value }))} /></div>
-                  <div className="form-group"><label><i className="fas fa-location-dot"></i> Location / Bin</label><input type="text" placeholder="Aisle-Shelf-Bin" value={formData.location} onChange={(e) => setFormData(p => ({ ...p, location: e.target.value }))} /></div>
-                  <div className="form-group"><label>Batch / Lot No</label><input type="text" value={formData.batchNo} onChange={(e) => setFormData(p => ({ ...p, batchNo: e.target.value }))} /></div>
-                  <div className="form-group"><label><i className="fas fa-calendar-xmark"></i> Expiry Date</label><input type="date" value={formData.expiryDate} onChange={(e) => setFormData(p => ({ ...p, expiryDate: e.target.value }))} /></div>
-                  <SearchableDropdown label="Status" icon="fas fa-toggle-on" options={STATUS_OPTS} value={formData.status} onChange={(val) => setFormData(p => ({ ...p, status: val }))} placeholder="Active" />
+                  <div className="form-group"><label>Nombre del Producto *</label><input type="text" value={formData.name} onChange={(e) => setFormData(p => ({ ...p, name: e.target.value }))} required /></div>
+                  <SearchableDropdown label="Categoría" icon="fas fa-tag" options={catOpts} value={formData.category} onChange={(val) => setFormData(p => ({ ...p, category: val }))} placeholder="Seleccionar categoría..." required={true} />
+                  <div className="form-group"><label>Marca</label><input type="text" value={formData.brand} onChange={(e) => setFormData(p => ({ ...p, brand: e.target.value }))} /></div>
+                  <div className="form-group"><label><i className="fas fa-barcode"></i> Código de Barras</label><input type="text" placeholder="Escanear o escribir..." value={formData.barcode} onChange={(e) => setFormData(p => ({ ...p, barcode: e.target.value }))} /></div>
+                  <div className="form-group"><label>Precio de Venta *</label><input type="number" step="0.01" min="0" value={formData.price} onChange={(e) => setFormData(p => ({ ...p, price: e.target.value }))} required /></div>
+                  <div className="form-group"><label>Costo</label><input type="number" step="0.01" min="0" value={formData.cost} onChange={(e) => setFormData(p => ({ ...p, cost: e.target.value }))} /></div>
+                  <div className="form-group"><label>Precio Mayorista</label><input type="number" step="0.01" min="0" value={formData.wholesalePrice} onChange={(e) => setFormData(p => ({ ...p, wholesalePrice: e.target.value }))} /></div>
+                  <div className="form-group"><label>Precio de Lista</label><input type="number" step="0.01" min="0" value={formData.mrp} onChange={(e) => setFormData(p => ({ ...p, mrp: e.target.value }))} /></div>
+                  <div className="form-group"><label>Tasa Impuesto % {settings?.taxRate ? `(defecto ${settings.taxRate}%)` : ''}</label><input type="number" step="0.01" min="0" placeholder="vacío = defecto" value={formData.taxRate} onChange={(e) => setFormData(p => ({ ...p, taxRate: e.target.value }))} /></div>
+                  <div className="form-group"><label>Unidad</label><input type="text" placeholder="pz, caja, kg..." value={formData.unit} onChange={(e) => setFormData(p => ({ ...p, unit: e.target.value }))} /></div>
+                  <div className="form-group"><label>Nivel de Reorden *</label><input type="number" step="1" min="0" value={formData.reorderLevel} onChange={(e) => setFormData(p => ({ ...p, reorderLevel: e.target.value }))} required /></div>
+                  <div className="form-group"><label>Stock Máximo</label><input type="number" step="1" min="0" value={formData.maxStock} onChange={(e) => setFormData(p => ({ ...p, maxStock: e.target.value }))} /></div>
+                  <div className="form-group"><label>Cant. Reorden</label><input type="number" step="1" min="0" placeholder="monto de restock" value={formData.reorderQty} onChange={(e) => setFormData(p => ({ ...p, reorderQty: e.target.value }))} /></div>
+                  <div className="form-group"><label>Proveedor</label><input type="text" value={formData.supplier} onChange={(e) => setFormData(p => ({ ...p, supplier: e.target.value }))} /></div>
+                  <div className="form-group"><label><i className="fas fa-location-dot"></i> Ubicación</label><input type="text" placeholder="Pasillo-Estante" value={formData.location} onChange={(e) => setFormData(p => ({ ...p, location: e.target.value }))} /></div>
+                  <div className="form-group"><label>Lote</label><input type="text" value={formData.batchNo} onChange={(e) => setFormData(p => ({ ...p, batchNo: e.target.value }))} /></div>
+                  <div className="form-group"><label><i className="fas fa-calendar-xmark"></i> Fecha Caducidad</label><input type="date" value={formData.expiryDate} onChange={(e) => setFormData(p => ({ ...p, expiryDate: e.target.value }))} /></div>
+                  <SearchableDropdown label="Estado" icon="fas fa-toggle-on" options={STATUS_OPTS} value={formData.status} onChange={(val) => setFormData(p => ({ ...p, status: val }))} placeholder="Activo" />
                 </div>
-                <div className="form-group"><label><i className="fas fa-image"></i> Image URL</label><input type="text" placeholder="https://..." value={formData.imageUrl} onChange={(e) => setFormData(p => ({ ...p, imageUrl: e.target.value }))} /></div>
-                <div className="form-group"><label>Description</label><textarea rows="2" value={formData.description} onChange={(e) => setFormData(p => ({ ...p, description: e.target.value }))}></textarea></div>
+                <div className="form-group"><label><i className="fas fa-image"></i> URL de Imagen</label><input type="text" placeholder="https://..." value={formData.imageUrl} onChange={(e) => setFormData(p => ({ ...p, imageUrl: e.target.value }))} /></div>
+                <div className="form-group"><label>Descripción</label><textarea rows="2" value={formData.description} onChange={(e) => setFormData(p => ({ ...p, description: e.target.value }))}></textarea></div>
                 <div className="form-actions">
-                  <button type="submit" className="btn btn-primary" disabled={saving}>{saving ? <><i className="fas fa-spinner fa-spin"></i> Saving...</> : <><i className="fas fa-save"></i> Save</>}</button>
-                  <button type="button" className="btn btn-secondary" onClick={onClose}><i className="fas fa-times"></i> Cancel</button>
+                  <button type="submit" className="btn btn-primary" disabled={saving}>{saving ? <><i className="fas fa-spinner fa-spin"></i> Guardando...</> : <><i className="fas fa-save"></i> Guardar</>}</button>
+                  <button type="button" className="btn btn-secondary" onClick={onClose}><i className="fas fa-times"></i> Cancelar</button>
                 </div>
               </form>
             </div>
@@ -3906,7 +3906,7 @@
         <div className="modal-overlay" onClick={onClose}>
           <div className="modal" style={{ maxWidth: '380px' }} onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
-              <h3><i className="fas fa-qrcode"></i> Product QR Code</h3>
+              <h3><i className="fas fa-qrcode"></i> Código QR del Producto</h3>
               <button className="close-btn" onClick={onClose}><i className="fas fa-times"></i></button>
             </div>
             <div className="modal-body" style={{ textAlign: 'center' }}>
@@ -3914,8 +3914,8 @@
               <p style={{ marginTop: '14px', fontWeight: 700, color: 'var(--navy-primary)', fontSize: '16px', letterSpacing: '.5px' }}>{product.sku}</p>
               <p style={{ color: '#999', fontSize: '13px', marginTop: '4px' }}>{product.name}</p>
               <div className="form-actions" style={{ justifyContent: 'center', marginTop: '24px' }}>
-                <button className="btn btn-primary" onClick={() => window.print()}><i className="fas fa-print"></i> Print Label</button>
-                <button className="btn btn-secondary" onClick={onClose}><i className="fas fa-times"></i> Close</button>
+                <button className="btn btn-primary" onClick={() => window.print()}><i className="fas fa-print"></i> Imprimir Etiqueta</button>
+                <button className="btn btn-secondary" onClick={onClose}><i className="fas fa-times"></i> Cerrar</button>
               </div>
             </div>
             {/* print-only mirror, hidden on screen, shown via .qr-label-print in @media print */}
@@ -3974,12 +3974,12 @@
           <div className="rr-header">
             <img src={LOGO_URL} alt="" className="rr-logo" />
             <div>
-              <div className="rr-title">Reorder Report</div>
-              <div className="rr-sub">Generated {formatDateForDisplay(new Date().toISOString())}</div>
+              <div className="rr-title">Reporte de Reorden</div>
+              <div className="rr-sub">Generado el {formatDateForDisplay(new Date().toISOString())}</div>
             </div>
           </div>
           <table className="rr-table">
-            <thead><tr><th>Name</th><th>SKU</th><th>Category</th><th>Qty On Hand</th><th>Reorder Level</th><th>Suggested Reorder</th></tr></thead>
+            <thead><tr><th>Nombre</th><th>SKU</th><th>Categoría</th><th>Cant. Disponible</th><th>Nivel Reorden</th><th>Reorden Sugerido</th></tr></thead>
             <tbody>
               {rows.map(r => (
                 <tr key={r.id}>
@@ -4019,7 +4019,7 @@
       const openEdit = useCallback((id) => { setEditingId(id); setShowModal(true); }, []);
 
       useEffect(() => {
-        if (err || (data && data[0] && !data[0].success)) Swal.fire({ icon: 'error', title: 'Error', text: (data && data[0] && data[0].message) || 'Failed to load products' });
+        if (err || (data && data[0] && !data[0].success)) Swal.fire({ icon: 'error', title: 'Error', text: (data && data[0] && data[0].message) || 'Error al cargar productos' });
       }, [err, data]);
 
       useEffect(() => {
@@ -4034,15 +4034,15 @@
             createdRow: (row, d) => { if (Number(d.qtyOnHand) <= Number(d.reorderLevel || 0)) $(row).addClass('row-warn'); }, // low stock
             columns: [
               { data: 'imageUrl', title: '', orderable: false, render: (d, t) => t === 'display' ? (d ? `<img class="prod-thumb" src="${esc(d)}" onerror="this.style.visibility='hidden'">` : `<span class="prod-thumb empty"><i class="fas fa-box"></i></span>`) : '' },
-              { data: 'name', title: 'Name', render: (d, t, row) => t === 'display' ? esc(d) + (row.brand ? `<div class="cell-sub">${esc(row.brand)}</div>` : '') : d },
+              { data: 'name', title: 'Nombre', render: (d, t, row) => t === 'display' ? esc(d) + (row.brand ? `<div class="cell-sub">${esc(row.brand)}</div>` : '') : d },
               { data: 'sku', title: 'SKU', render: (d, t) => t === 'display' ? '<code>' + esc(d) + '</code>' : d },
-              { data: 'barcode', title: 'Barcode', render: (d, t) => t === 'display' ? (d ? '<code>' + esc(d) + '</code>' : '<span style="color:#bbb">—</span>') : (d || '') },
-              { data: 'category', title: 'Category', render: (d, t) => t === 'display' ? esc(d) : d },
-              { data: 'price', title: 'Price', render: (d, t) => t === 'display' ? money(d) : d },
-              { data: 'qtyOnHand', title: 'Qty On Hand', render: (d, t, row) => t === 'display' ? (Number(d) <= Number(row.reorderLevel || 0) ? '<span class="status-badge status-inactive">' + d + '</span>' : d) : d },
-              { data: 'reorderLevel', title: 'Reorder Level' },
-              { data: 'status', title: 'Status', render: (d, t) => t === 'display' ? (d === 'discontinued' ? '<span class="status-badge status-inactive">Discontinued</span>' : '<span class="status-badge status-active">Active</span>') : (d || 'active') },
-              { data: null, title: 'Actions', orderable: false, render: () => `<button class="action-icon" data-action="view" title="View"><i class="fas fa-eye"></i></button><button class="action-icon edit-icon" data-action="edit" title="Edit"><i class="fas fa-edit"></i></button><button class="action-icon qr-icon" data-action="qr" title="QR"><i class="fas fa-qrcode"></i></button>` + (role === 'Admin' ? `<button class="action-icon delete-icon" data-action="delete" title="Delete"><i class="fas fa-trash"></i></button>` : '') }
+              { data: 'barcode', title: 'Cód. Barras', render: (d, t) => t === 'display' ? (d ? '<code>' + esc(d) + '</code>' : '<span style="color:#bbb">—</span>') : (d || '') },
+              { data: 'category', title: 'Categoría', render: (d, t) => t === 'display' ? esc(d) : d },
+              { data: 'price', title: 'Precio', render: (d, t) => t === 'display' ? money(d) : d },
+              { data: 'qtyOnHand', title: 'Cant. Disponible', render: (d, t, row) => t === 'display' ? (Number(d) <= Number(row.reorderLevel || 0) ? '<span class="status-badge status-inactive">' + d + '</span>' : d) : d },
+              { data: 'reorderLevel', title: 'Nivel Reorden' },
+              { data: 'status', title: 'Estado', render: (d, t) => t === 'display' ? (d === 'discontinued' ? '<span class="status-badge status-inactive">Descontinuado</span>' : '<span class="status-badge status-active">Activo</span>') : (d || 'active') },
+              { data: null, title: 'Acciones', orderable: false, render: () => `<button class="action-icon" data-action="view" title="Ver"><i class="fas fa-eye"></i></button><button class="action-icon edit-icon" data-action="edit" title="Editar"><i class="fas fa-edit"></i></button><button class="action-icon qr-icon" data-action="qr" title="QR"><i class="fas fa-qrcode"></i></button>` + (role === 'Admin' ? `<button class="action-icon delete-icon" data-action="delete" title="Eliminar"><i class="fas fa-trash"></i></button>` : '') }
             ],
             pageLength: 10,
             lengthMenu: [[10, 25, 50, -1], [10, 25, 50, 'All']],
@@ -4051,7 +4051,7 @@
             buttons: [
               { extend: 'csv', text: '<i class="fas fa-file-csv"></i> CSV', exportOptions: { columns: ':not(:last-child)' } },
               { extend: 'pdf', text: '<i class="fas fa-file-pdf"></i> PDF', exportOptions: { columns: ':not(:last-child)' } },
-              { extend: 'print', text: '<i class="fas fa-print"></i> Print', exportOptions: { columns: ':not(:last-child)' } }
+              { extend: 'print', text: '<i class="fas fa-print"></i> Imprimir', exportOptions: { columns: ':not(:last-child)' } }
             ],
             order: [[1, 'asc']]
           });
@@ -4111,12 +4111,12 @@
       };
 
       const handleSave = async (formData) => {
-        setLoad(editingId ? 'Updating product...' : 'Saving product...');
+        setLoad(editingId ? 'Actualizando producto...' : 'Guardando producto...');
         const result = editingId ? await fbUpdateProduct(editingId, formData, user) : await fbAddProduct(formData, user);
         setLoad('');
         if (result.success) {
           setShowModal(false); setEditingId(null);
-          Swal.fire({ icon: 'success', title: 'Success!', text: result.message, timer: 2000, showConfirmButton: false });
+          Swal.fire({ icon: 'success', title: '¡Éxito!', text: result.message, timer: 2000, showConfirmButton: false });
           reload();
         } else {
           Swal.fire({ icon: 'error', title: 'Error', text: result.message });
@@ -4124,9 +4124,9 @@
       };
 
       const handleDelete = (product) => {
-        Swal.fire({ icon: 'warning', title: 'Delete?', text: 'This cannot be undone', showCancelButton: true, confirmButtonColor: '#ea4335', confirmButtonText: 'Delete' }).then(async (result) => {
+        Swal.fire({ icon: 'warning', title: '¿Eliminar?', text: 'Esta acción no se puede deshacer', showCancelButton: true, confirmButtonColor: '#ea4335', confirmButtonText: 'Eliminar', cancelButtonText: 'Cancelar' }).then(async (result) => {
           if (!result.isConfirmed) return;
-          setLoad('Deleting product...');
+          setLoad('Eliminando producto...');
           const r = await fbDeleteProduct(product.id, product.name, user);
           setLoad('');
           if (r.success) { Swal.fire({ icon: 'success', text: r.message, timer: 2000, showConfirmButton: false }); reload(); }
@@ -4138,31 +4138,31 @@
         <div className="data-section">
           {load && <TopLoadingBar />}
           <div className="section-header">
-            <h2><i className="fas fa-boxes-stacked"></i> Products</h2>
+            <h2><i className="fas fa-boxes-stacked"></i> Productos</h2>
             <div style={{ display: 'flex', gap: '10px' }}>
               <RefreshBtn onClick={reload} />
-              <button className="btn btn-secondary" onClick={() => setShowReorderReport(true)} disabled={reorderRows.length === 0}><i className="fas fa-triangle-exclamation"></i> Print Reorder Report</button>
-              <button className="btn btn-secondary" onClick={handlePrintLabels} disabled={products.length === 0}><i className="fas fa-print"></i> {isFiltered ? 'Print Filtered Labels' : 'Print All QR Labels'}</button>
-              <button className="btn btn-success" onClick={() => { setEditingId(null); setShowModal(true); }}><i className="fas fa-plus"></i> Add Product</button>
+              <button className="btn btn-secondary" onClick={() => setShowReorderReport(true)} disabled={reorderRows.length === 0}><i className="fas fa-triangle-exclamation"></i> Imprimir Reporte de Reorden</button>
+              <button className="btn btn-secondary" onClick={handlePrintLabels} disabled={products.length === 0}><i className="fas fa-print"></i> {isFiltered ? 'Imprimir Etiquetas Filtradas' : 'Imprimir Etiquetas QR'}</button>
+              <button className="btn btn-success" onClick={() => { setEditingId(null); setShowModal(true); }}><i className="fas fa-plus"></i> Agregar Producto</button>
             </div>
           </div>
           {!loading && (
             <div className="filters-section">
               <div className="filters-header">
-                <h3><i className="fas fa-filter"></i> Filters</h3>
-                <button className="btn btn-secondary btn-sm" onClick={clearFilters}><i className="fas fa-times-circle"></i> Clear All</button>
+                <h3><i className="fas fa-filter"></i> Filtros</h3>
+                <button className="btn btn-secondary btn-sm" onClick={clearFilters}><i className="fas fa-times-circle"></i> Limpiar Todo</button>
               </div>
               <div className="filters-grid">
-                <SearchableDropdown label="Category" icon="fas fa-tag" options={catOpts} value={filters.category} onChange={(val) => setFilters(f => ({ ...f, category: val }))} placeholder="All Categories" />
-                <SearchableDropdown label="Stock Status" icon="fas fa-triangle-exclamation" options={LOW_STOCK_OPTS} value={filters.lowStock} onChange={(val) => setFilters(f => ({ ...f, lowStock: val }))} placeholder="All Stock Levels" />
-                <SearchableDropdown label="Status" icon="fas fa-toggle-on" options={PRODUCT_STATUS_FILTER} value={filters.status} onChange={(val) => setFilters(f => ({ ...f, status: val }))} placeholder="All Statuses" />
+                <SearchableDropdown label="Categoría" icon="fas fa-tag" options={catOpts} value={filters.category} onChange={(val) => setFilters(f => ({ ...f, category: val }))} placeholder="Todas las categorías" />
+                <SearchableDropdown label="Estado del Stock" icon="fas fa-triangle-exclamation" options={LOW_STOCK_OPTS} value={filters.lowStock} onChange={(val) => setFilters(f => ({ ...f, lowStock: val }))} placeholder="Todos los niveles" />
+                <SearchableDropdown label="Estado" icon="fas fa-toggle-on" options={PRODUCT_STATUS_FILTER} value={filters.status} onChange={(val) => setFilters(f => ({ ...f, status: val }))} placeholder="Todos los estados" />
               </div>
             </div>
           )}
           {loading && <TableSkeleton rows={8} columns={7} />}
           <div style={{ display: loading ? 'none' : 'block' }}>
             <table id="productsTable" className="display" style={{ width: '100%' }}></table>
-            {products.length > 0 && <SummaryBar items={[{ label: 'Products', value: products.length }, { label: 'Stock Value', value: money(stockValue) }, { label: 'Low Stock', value: reorderRows.length }]} />}
+            {products.length > 0 && <SummaryBar items={[{ label: 'Productos', value: products.length }, { label: 'Valor del Stock', value: money(stockValue) }, { label: 'Stock Bajo', value: reorderRows.length }]} />}
           </div>
           {showModal && <ProductModal product={byId[editingId]} onClose={() => { setShowModal(false); setEditingId(null); }} onSave={handleSave} />}
           {viewProd && <ProductHubModal product={viewProd} onClose={() => setViewProd(null)} />}
