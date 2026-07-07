@@ -5268,20 +5268,20 @@
       return (
         <div className="modal-overlay" onClick={onClose}>
           <div className="modal" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header"><h3><i className="fas fa-receipt"></i> {editItem ? 'Edit' : 'Add'} Expense</h3><button className="close-btn" onClick={onClose}><i className="fas fa-times"></i></button></div>
+            <div className="modal-header"><h3><i className="fas fa-receipt"></i> {editItem ? 'Editar' : 'Agregar'} Gasto</h3><button className="close-btn" onClick={onClose}><i className="fas fa-times"></i></button></div>
             <div className="modal-body">
-              <form onSubmit={(e) => { e.preventDefault(); if (!(Number(f.amount) > 0)) return Swal.fire({ icon: 'warning', title: 'Enter an amount' }); setSaving(true); onSave({ ...f, amount: Number(f.amount) || 0 }); }}>
+              <form onSubmit={(e) => { e.preventDefault(); if (!(Number(f.amount) > 0)) return Swal.fire({ icon: 'warning', title: 'Ingrese un monto' }); setSaving(true); onSave({ ...f, amount: Number(f.amount) || 0 }); }}>
                 <div className="form-grid">
-                  <div className="form-group"><label>Date *</label><input type="date" value={f.date} onChange={(e) => upd('date', e.target.value)} required /></div>
-                  <SearchableDropdown label="Category" icon="fas fa-tag" options={EXPENSE_CATEGORY_OPTS} value={f.category} onChange={(v) => upd('category', v)} placeholder="Select..." required={true} />
-                  <div className="form-group"><label>Payee / Paid To</label><input type="text" value={f.payee} onChange={(e) => upd('payee', e.target.value)} /></div>
-                  <div className="form-group"><label>Amount *</label><input type="number" step="0.01" min="0" value={f.amount} onChange={(e) => upd('amount', e.target.value)} required /></div>
-                  <SearchableDropdown label="Paid Via" icon="fas fa-money-bill-wave" options={PAYMENT_OPTS} value={f.paymentMethod} onChange={(v) => upd('paymentMethod', v)} placeholder="Cash" />
+                  <div className="form-group"><label>Fecha *</label><input type="date" value={f.date} onChange={(e) => upd('date', e.target.value)} required /></div>
+                  <SearchableDropdown label="Categoría" icon="fas fa-tag" options={EXPENSE_CATEGORY_OPTS} value={f.category} onChange={(v) => upd('category', v)} placeholder="Seleccionar..." required={true} />
+                  <div className="form-group"><label>Beneficiario / Pagado a</label><input type="text" value={f.payee} onChange={(e) => upd('payee', e.target.value)} /></div>
+                  <div className="form-group"><label>Monto *</label><input type="number" step="0.01" min="0" value={f.amount} onChange={(e) => upd('amount', e.target.value)} required /></div>
+                  <SearchableDropdown label="Método de Pago" icon="fas fa-money-bill-wave" options={PAYMENT_OPTS} value={f.paymentMethod} onChange={(v) => upd('paymentMethod', v)} placeholder="Efectivo" />
                 </div>
-                <div className="form-group"><label>Notes</label><textarea rows="2" value={f.notes} onChange={(e) => upd('notes', e.target.value)}></textarea></div>
+                <div className="form-group"><label>Notas</label><textarea rows="2" value={f.notes} onChange={(e) => upd('notes', e.target.value)}></textarea></div>
                 <div className="form-actions">
-                  <button type="submit" className="btn btn-primary" disabled={saving}>{saving ? <><i className="fas fa-spinner fa-spin"></i> Saving...</> : <><i className="fas fa-save"></i> Save</>}</button>
-                  <button type="button" className="btn btn-secondary" onClick={onClose}><i className="fas fa-times"></i> Cancel</button>
+                  <button type="submit" className="btn btn-primary" disabled={saving}>{saving ? <><i className="fas fa-spinner fa-spin"></i> Guardando...</> : <><i className="fas fa-save"></i> Guardar</>}</button>
+                  <button type="button" className="btn btn-secondary" onClick={onClose}><i className="fas fa-times"></i> Cancelar</button>
                 </div>
               </form>
             </div>
@@ -5312,7 +5312,7 @@
       }), [expenses, filters]);
       const total = useMemo(() => filtered.reduce((s, e) => s + Number(e.amount || 0), 0), [filtered]);
 
-      useEffect(() => { if (err || (data && !data.success)) Swal.fire({ icon: 'error', title: 'Error', text: (data && data.message) || 'Failed to load expenses' }); }, [err, data]);
+      useEffect(() => { if (err || (data && !data.success)) Swal.fire({ icon: 'error', title: 'Error', text: (data && data.message) || 'Error al cargar gastos' }); }, [err, data]);
 
       useEffect(() => {
         if (loading) return;
@@ -5323,16 +5323,16 @@
             data: filtered,
             columnDefs: [{ targets: '_all', defaultContent: '' }], // tolerate rows missing newer fields - no "unknown parameter" warning
             columns: [
-              { data: 'date', title: 'Date', render: (d, t, row) => t === 'display' ? esc(d || (row.createdAt || '').slice(0, 10)) : d },
-              { data: 'category', title: 'Category', render: (d, t) => t === 'display' ? '<span class="type-chip">' + esc(d || '') + '</span>' : d },
-              { data: 'payee', title: 'Payee', render: (d, t) => t === 'display' ? esc(d || '-') : d },
-              { data: 'amount', title: 'Amount', render: (d, t) => t === 'display' ? money(d) : d },
-              { data: 'paymentMethod', title: 'Paid Via', render: (d, t) => t === 'display' ? esc(d || '-') : d },
-              { data: 'notes', title: 'Notes', render: (d, t) => t === 'display' ? esc(d || '-') : d },
-              { data: null, title: 'Actions', orderable: false, render: () => `<button class="action-icon edit-icon" data-action="edit"><i class="fas fa-edit"></i></button>` + (role === 'Admin' ? `<button class="action-icon delete-icon" data-action="delete"><i class="fas fa-trash"></i></button>` : '') }
+              { data: 'date', title: 'Fecha', render: (d, t, row) => t === 'display' ? esc(d || (row.createdAt || '').slice(0, 10)) : d },
+              { data: 'category', title: 'Categoría', render: (d, t) => t === 'display' ? '<span class="type-chip">' + esc(d || '') + '</span>' : d },
+              { data: 'payee', title: 'Beneficiario', render: (d, t) => t === 'display' ? esc(d || '-') : d },
+              { data: 'amount', title: 'Monto', render: (d, t) => t === 'display' ? money(d) : d },
+              { data: 'paymentMethod', title: 'Método de Pago', render: (d, t) => t === 'display' ? esc(d || '-') : d },
+              { data: 'notes', title: 'Notas', render: (d, t) => t === 'display' ? esc(d || '-') : d },
+              { data: null, title: 'Acciones', orderable: false, render: () => `<button class="action-icon edit-icon" data-action="edit"><i class="fas fa-edit"></i></button>` + (role === 'Admin' ? `<button class="action-icon delete-icon" data-action="delete"><i class="fas fa-trash"></i></button>` : '') }
             ],
             pageLength: 10, lengthMenu: [[10, 25, 50, -1], [10, 25, 50, 'All']], responsive: true, dom: 'Blfrtip',
-            buttons: [{ extend: 'csv', text: '<i class="fas fa-file-csv"></i> CSV', exportOptions: { columns: ':not(:last-child)' } }, { extend: 'pdf', text: '<i class="fas fa-file-pdf"></i> PDF', exportOptions: { columns: ':not(:last-child)' } }, { extend: 'print', text: '<i class="fas fa-print"></i> Print', exportOptions: { columns: ':not(:last-child)' } }],
+            buttons: [{ extend: 'csv', text: '<i class="fas fa-file-csv"></i> CSV', exportOptions: { columns: ':not(:last-child)' } }, { extend: 'pdf', text: '<i class="fas fa-file-pdf"></i> PDF', exportOptions: { columns: ':not(:last-child)' } }, { extend: 'print', text: '<i class="fas fa-print"></i> Imprimir', exportOptions: { columns: ':not(:last-child)' } }],
             order: [[0, 'desc']]
           });
           tableRef.current = table;
@@ -5346,34 +5346,34 @@
       useEffect(() => () => { if (tableRef.current) { try { tableRef.current.destroy(); tableRef.current = null; } catch (e) { } } }, []);
 
       const handleSave = async (fd) => {
-        setLoad(editingId ? 'Updating expense...' : 'Saving expense...');
+        setLoad(editingId ? 'Actualizando gasto...' : 'Guardando gasto...');
         const r = editingId ? await fbUpdateExpense(editingId, fd, user) : await fbAddExpense(fd, user);
         setLoad('');
-        if (r.success) { setShowModal(false); setEditingId(null); Swal.fire({ icon: 'success', title: 'Success!', text: r.message, timer: 1600, showConfirmButton: false }); reload(); }
+        if (r.success) { setShowModal(false); setEditingId(null); Swal.fire({ icon: 'success', title: '¡Éxito!', text: r.message, timer: 1600, showConfirmButton: false }); reload(); }
         else Swal.fire({ icon: 'error', title: 'Error', text: r.message });
       };
-      const handleDelete = (ex) => Swal.fire({ icon: 'warning', title: 'Delete expense?', text: (ex.category || '') + ' ' + money(ex.amount), showCancelButton: true, confirmButtonColor: '#ea4335', confirmButtonText: 'Delete' }).then(async (res) => {
-        if (!res.isConfirmed) return; setLoad('Deleting...'); const r = await fbDeleteExpense(ex.id, (ex.category || 'Expense') + ' ' + money(ex.amount), user); setLoad('');
+      const handleDelete = (ex) => Swal.fire({ icon: 'warning', title: '¿Eliminar gasto?', text: (ex.category || '') + ' ' + money(ex.amount), showCancelButton: true, confirmButtonColor: '#ea4335', confirmButtonText: 'Eliminar' }).then(async (res) => {
+        if (!res.isConfirmed) return; setLoad('Eliminando...'); const r = await fbDeleteExpense(ex.id, (ex.category || 'Gasto') + ' ' + money(ex.amount), user); setLoad('');
         if (r.success) { Swal.fire({ icon: 'success', text: r.message, timer: 1500, showConfirmButton: false }); reload(); } else Swal.fire({ icon: 'error', title: 'Error', text: r.message });
       });
 
       return (
         <div className="data-section">
           {load && <TopLoadingBar />}
-          <div className="section-header"><h2><i className="fas fa-money-bill-trend-up"></i> Expenses</h2><div style={{ display: 'flex', gap: '10px' }}><RefreshBtn onClick={reload} /><button className="btn btn-success" onClick={() => { setEditingId(null); setShowModal(true); }}><i className="fas fa-plus"></i> Add Expense</button></div></div>
+          <div className="section-header"><h2><i className="fas fa-money-bill-trend-up"></i> Gastos</h2><div style={{ display: 'flex', gap: '10px' }}><RefreshBtn onClick={reload} /><button className="btn btn-success" onClick={() => { setEditingId(null); setShowModal(true); }}><i className="fas fa-plus"></i> Agregar Gasto</button></div></div>
           {!loading && (
             <div className="filters-section">
-              <div className="filters-header"><h3><i className="fas fa-filter"></i> Filters</h3><button className="btn btn-secondary btn-sm" onClick={() => setFilters({ dateFrom: '', dateTo: '', category: '' })}><i className="fas fa-times-circle"></i> Clear All</button></div>
+              <div className="filters-header"><h3><i className="fas fa-filter"></i> Filtros</h3><button className="btn btn-secondary btn-sm" onClick={() => setFilters({ dateFrom: '', dateTo: '', category: '' })}><i className="fas fa-times-circle"></i> Limpiar Todo</button></div>
               <div className="filters-grid">
-                <div className="filter-group"><label><i className="fas fa-calendar-alt"></i> Date From</label><input type="date" className="filter-input" value={filters.dateFrom} onChange={(e) => setFilters(f => ({ ...f, dateFrom: e.target.value }))} /></div>
-                <div className="filter-group"><label><i className="fas fa-calendar-alt"></i> Date To</label><input type="date" className="filter-input" value={filters.dateTo} onChange={(e) => setFilters(f => ({ ...f, dateTo: e.target.value }))} /></div>
-                <SearchableDropdown label="Category" icon="fas fa-tag" options={EXPENSE_CATEGORY_OPTS} value={filters.category} onChange={(v) => setFilters(f => ({ ...f, category: v }))} placeholder="All Categories" />
-                <div className="filter-group"><label>Total (filtered)</label><input type="text" className="filter-input" value={money(total)} disabled /></div>
+                <div className="filter-group"><label><i className="fas fa-calendar-alt"></i> Fecha Desde</label><input type="date" className="filter-input" value={filters.dateFrom} onChange={(e) => setFilters(f => ({ ...f, dateFrom: e.target.value }))} /></div>
+                <div className="filter-group"><label><i className="fas fa-calendar-alt"></i> Fecha Hasta</label><input type="date" className="filter-input" value={filters.dateTo} onChange={(e) => setFilters(f => ({ ...f, dateTo: e.target.value }))} /></div>
+                <SearchableDropdown label="Categoría" icon="fas fa-tag" options={EXPENSE_CATEGORY_OPTS} value={filters.category} onChange={(v) => setFilters(f => ({ ...f, category: v }))} placeholder="Todas las Categorías" />
+                <div className="filter-group"><label>Total (filtrado)</label><input type="text" className="filter-input" value={money(total)} disabled /></div>
               </div>
             </div>
           )}
           {loading && <TableSkeleton rows={8} columns={7} />}
-          <div style={{ display: loading ? 'none' : 'block' }}><table id="expensesTable" className="display" style={{ width: '100%' }}></table>{filtered.length > 0 && <SummaryBar items={[{ label: 'Entries', value: filtered.length }, { label: 'Total Expenses', value: money(total) }]} />}</div>
+          <div style={{ display: loading ? 'none' : 'block' }}><table id="expensesTable" className="display" style={{ width: '100%' }}></table>{filtered.length > 0 && <SummaryBar items={[{ label: 'Registros', value: filtered.length }, { label: 'Total Gastos', value: money(total) }]} />}</div>
           {showModal && <ExpenseModal editItem={byId[editingId]} onClose={() => { setShowModal(false); setEditingId(null); }} onSave={handleSave} />}
         </div>
       );
