@@ -5136,13 +5136,13 @@
       const logs = useMemo(() => (data && data.success ? data.data : []), [data]);
       return (
         <div className="data-section">
-          <div className="section-header"><h2><i className="fas fa-history"></i> Activity Logs</h2></div>
+          <div className="section-header"><h2><i className="fas fa-history"></i> Registro de Actividad</h2></div>
           {loading ? <TableSkeleton rows={6} columns={4} /> : (
             <div className="about-table-wrapper">
               <table className="about-roles-table">
-                <thead><tr><th>Action</th><th>Detail</th><th>User</th><th>When</th></tr></thead>
+                <thead><tr><th>Acción</th><th>Detalle</th><th>Usuario</th><th>Fecha</th></tr></thead>
                 <tbody>
-                  {logs.length === 0 ? <tr><td colSpan="4" style={{ textAlign: 'center', color: '#999' }}>No activity yet.</td></tr>
+                  {logs.length === 0 ? <tr><td colSpan="4" style={{ textAlign: 'center', color: '#999' }}>Aún no hay actividad.</td></tr>
                     : logs.map(l => <tr key={l.id}><td>{l.action}</td><td>{l.detail}</td><td>{l.user}</td><td>{formatDateForDisplay(l.ts)}</td></tr>)}
                 </tbody>
               </table>
@@ -5745,138 +5745,138 @@
       return (
         <div className="about-section">
           <div className="about-header">
-            <div className="about-logo"><img src={LOGO_URL} alt="Developer Logo" /></div>
+            <div className="about-logo"><img src={LOGO_URL} alt="Logo del Desarrollador" /></div>
             <div className="about-title">
-              <h1>Firebase Records Manager</h1>
-              <p className="about-dev">Developed by <strong>Mohammad Rameez Imdad</strong> (Rameez Scripts)</p>
+              <h1>Gestor de Registros Firebase</h1>
+              <p className="about-dev">Desarrollado por <strong>Mohammad Rameez Imdad</strong> (Rameez Scripts)</p>
             </div>
           </div>
           <div className="about-card">
-            <h2><i className="fas fa-question-circle"></i> What is this App?</h2>
-            <p>So basicaly this is a records + inventory manager that saves evrything straight into a Firebase real-time database. Its used to add/edit/delete records, manage products with printable QR labels, track warehouse Stock In/Out, and ring up QR-scanned sales that print a thermal receipt. Think of it like a digital notebook where somthing you save shows up instantly for evryone else using the app too.</p>
+            <h2><i className="fas fa-question-circle"></i> ¿Qué es esta aplicación?</h2>
+            <p>Básicamente, este es un gestor de registros e inventario que guarda todo directamente en una base de datos en tiempo real de Firebase. Se utiliza para agregar/editar/eliminar registros, administrar productos con etiquetas QR imprimibles, rastrear entradas/salidas de inventario y registrar ventas escaneadas por QR que imprimen un recibo térmico. Piense en ello como una libreta digital donde algo que guarda aparece instantáneamente para todos los demás que usan la aplicación.</p>
           </div>
           <div className="about-card">
-            <h2><i className="fas fa-clipboard-list"></i> What Can You Do With It?</h2>
+            <h2><i className="fas fa-clipboard-list"></i> ¿Qué puedes hacer con ella?</h2>
             <ul className="about-features">
-              <li><i className="fas fa-lock"></i> Secure Login</li>
-              <li><i className="fas fa-address-book"></i> Customers / CRM</li>
-              <li><i className="fas fa-trash"></i> Delete Customers (Admin)</li>
-              <li><i className="fas fa-filter"></i> Search & Filter</li>
-              <li><i className="fas fa-file-csv"></i> CSV / PDF / Print Export</li>
-              <li><i className="fas fa-chart-pie"></i> Dashboard Analytics</li>
-              <li><i className="fas fa-history"></i> Activity Logs</li>
-              <li><i className="fas fa-bolt"></i> Real-Time Firebase Sync</li>
-              <li><i className="fas fa-mobile-alt"></i> Mobile Friendly</li>
-              <li><i className="fas fa-qrcode"></i> QR Code Product Labels</li>
-              <li><i className="fas fa-dolly"></i> Stock In/Out Tracking</li>
-              <li><i className="fas fa-cash-register"></i> QR/Barcode POS Checkout</li>
-              <li><i className="fas fa-barcode"></i> Retail Barcode Lookup</li>
-              <li><i className="fas fa-receipt"></i> Thermal Receipt Printing</li>
-              <li><i className="fas fa-rotate-left"></i> Sales Returns</li>
-              <li><i className="fas fa-percent"></i> Discounts &amp; Tax</li>
-              <li><i className="fas fa-money-bill-wave"></i> Multiple Payment Methods</li>
-              <li><i className="fas fa-pause"></i> Hold / Recall Sale</li>
-              <li><i className="fas fa-file-invoice"></i> Sequential Invoices</li>
-              <li><i className="fas fa-truck-ramp-box"></i> Bulk Stock Receiving</li>
-              <li><i className="fas fa-scale-balanced"></i> Stocktake / Adjustments</li>
-              <li><i className="fas fa-money-check-dollar"></i> Landed Cost on Receiving</li>
-              <li><i className="fas fa-triangle-exclamation"></i> Reorder Report Printing</li>
-              <li><i className="fas fa-users-cog"></i> User Management</li>
-              <li><i className="fas fa-truck-field"></i> Supplier Directory</li>
-              <li><i className="fas fa-money-bill-trend-up"></i> Expense Tracking</li>
-              <li><i className="fas fa-gear"></i> Business Settings</li>
+              <li><i className="fas fa-lock"></i> Inicio de Sesión Seguro</li>
+              <li><i className="fas fa-address-book"></i> Clientes / CRM</li>
+              <li><i className="fas fa-trash"></i> Eliminar Clientes (Admin)</li>
+              <li><i className="fas fa-filter"></i> Búsqueda y Filtros</li>
+              <li><i className="fas fa-file-csv"></i> Exportar CSV / PDF / Imprimir</li>
+              <li><i className="fas fa-chart-pie"></i> Estadísticas del Panel</li>
+              <li><i className="fas fa-history"></i> Registro de Actividad</li>
+              <li><i className="fas fa-bolt"></i> Sincronización en Tiempo Real con Firebase</li>
+              <li><i className="fas fa-mobile-alt"></i> Adaptado para Móviles</li>
+              <li><i className="fas fa-qrcode"></i> Etiquetas QR para Productos</li>
+              <li><i className="fas fa-dolly"></i> Control de Entradas/Salidas de Stock</li>
+              <li><i className="fas fa-cash-register"></i> Ventas POS por QR/Código de Barras</li>
+              <li><i className="fas fa-barcode"></i> Búsqueda de Códigos de Barras Retail</li>
+              <li><i className="fas fa-receipt"></i> Impresión de Recibos Térmicos</li>
+              <li><i className="fas fa-rotate-left"></i> Devoluciones de Ventas</li>
+              <li><i className="fas fa-percent"></i> Descuentos e Impuestos</li>
+              <li><i className="fas fa-money-bill-wave"></i> Múltiples Métodos de Pago</li>
+              <li><i className="fas fa-pause"></i> Retener / Recuperar Venta</li>
+              <li><i className="fas fa-file-invoice"></i> Facturas Secuenciales</li>
+              <li><i className="fas fa-truck-ramp-box"></i> Recepción de Stock Masiva</li>
+              <li><i className="fas fa-scale-balanced"></i> Inventario Físico / Ajustes</li>
+              <li><i className="fas fa-money-check-dollar"></i> Costo de Origen al Recibir</li>
+              <li><i className="fas fa-triangle-exclamation"></i> Impresión de Reporte de Reabastecimiento</li>
+              <li><i className="fas fa-users-cog"></i> Gestión de Usuarios</li>
+              <li><i className="fas fa-truck-field"></i> Directorio de Proveedores</li>
+              <li><i className="fas fa-money-bill-trend-up"></i> Seguimiento de Gastos</li>
+              <li><i className="fas fa-gear"></i> Configuración del Negocio</li>
             </ul>
           </div>
           <div className="about-card">
-            <h2><i className="fas fa-users-cog"></i> User Roles & Permissions</h2>
-            <p className="mb-24">The system has diffrent user roles. Each role can do diffrent things based on there access level.</p>
+            <h2><i className="fas fa-users-cog"></i> Roles de Usuario y Permisos</h2>
+            <p className="mb-24">El sistema cuenta con diferentes roles de usuario. Cada rol puede hacer diferentes cosas según su nivel de acceso.</p>
             <div className="about-table-wrapper">
               <table className="about-roles-table">
-                <thead><tr><th>Feature / Action</th><th><span className="role-badge role-admin">Admin</span></th><th><span className="role-badge role-emp">User</span></th></tr></thead>
+                <thead><tr><th>Función / Acción</th><th><span className="role-badge role-admin">Admin</span></th><th><span className="role-badge role-emp">Usuario</span></th></tr></thead>
                 <tbody>
-                  <tr><td>View Dashboard</td><td><i className="fas fa-check-circle text-success"></i> Yes</td><td><i className="fas fa-times-circle text-danger"></i> No</td></tr>
-                  <tr><td>View Customers</td><td><i className="fas fa-check-circle text-success"></i> Yes</td><td><i className="fas fa-check-circle text-success"></i> Yes</td></tr>
-                  <tr><td>Add / Edit Customers</td><td><i className="fas fa-check-circle text-success"></i> Yes</td><td><i className="fas fa-check-circle text-success"></i> Yes</td></tr>
-                  <tr><td>Delete Customers</td><td><i className="fas fa-check-circle text-success"></i> Yes</td><td><i className="fas fa-times-circle text-danger"></i> No</td></tr>
-                  <tr><td>View Products</td><td><i className="fas fa-check-circle text-success"></i> Yes</td><td><i className="fas fa-check-circle text-success"></i> Yes</td></tr>
-                  <tr><td>Add / Edit Products</td><td><i className="fas fa-check-circle text-success"></i> Yes</td><td><i className="fas fa-check-circle text-success"></i> Yes</td></tr>
-                  <tr><td>Delete Products</td><td><i className="fas fa-check-circle text-success"></i> Yes</td><td><i className="fas fa-times-circle text-danger"></i> No</td></tr>
-                  <tr><td>Print QR Labels</td><td><i className="fas fa-check-circle text-success"></i> Yes</td><td><i className="fas fa-check-circle text-success"></i> Yes</td></tr>
-                  <tr><td>Record Stock In</td><td><i className="fas fa-check-circle text-success"></i> Yes</td><td><i className="fas fa-check-circle text-success"></i> Yes</td></tr>
-                  <tr><td>Record Stock Out</td><td><i className="fas fa-check-circle text-success"></i> Yes</td><td><i className="fas fa-check-circle text-success"></i> Yes</td></tr>
-                  <tr><td>Delete Stock Entries</td><td><i className="fas fa-check-circle text-success"></i> Yes</td><td><i className="fas fa-times-circle text-danger"></i> No</td></tr>
-                  <tr><td>Process Sale / POS (QR Sales)</td><td><i className="fas fa-check-circle text-success"></i> Yes</td><td><i className="fas fa-check-circle text-success"></i> Yes</td></tr>
-                  <tr><td>View Sales History</td><td><i className="fas fa-check-circle text-success"></i> Yes</td><td><i className="fas fa-check-circle text-success"></i> Yes</td></tr>
-                  <tr><td>Process Return</td><td><i className="fas fa-check-circle text-success"></i> Yes</td><td><i className="fas fa-times-circle text-danger"></i> No</td></tr>
-                  <tr><td>Bulk Receive Stock</td><td><i className="fas fa-check-circle text-success"></i> Yes</td><td><i className="fas fa-check-circle text-success"></i> Yes</td></tr>
-                  <tr><td>Manage Users</td><td><i className="fas fa-check-circle text-success"></i> Yes</td><td><i className="fas fa-times-circle text-danger"></i> No</td></tr>
-                  <tr><td>Manage Suppliers</td><td><i className="fas fa-check-circle text-success"></i> Yes</td><td><i className="fas fa-times-circle text-danger"></i> No</td></tr>
-                  <tr><td>Manage Expenses</td><td><i className="fas fa-check-circle text-success"></i> Yes</td><td><i className="fas fa-times-circle text-danger"></i> No</td></tr>
-                  <tr><td>Manage Settings &amp; Categories</td><td><i className="fas fa-check-circle text-success"></i> Yes</td><td><i className="fas fa-times-circle text-danger"></i> No</td></tr>
-                  <tr><td>View Activity Logs</td><td><i className="fas fa-check-circle text-success"></i> Yes</td><td><i className="fas fa-times-circle text-danger"></i> No</td></tr>
+                  <tr><td>Ver Panel Principal</td><td><i className="fas fa-check-circle text-success"></i> Sí</td><td><i className="fas fa-times-circle text-danger"></i> No</td></tr>
+                  <tr><td>Ver Clientes</td><td><i className="fas fa-check-circle text-success"></i> Sí</td><td><i className="fas fa-check-circle text-success"></i> Sí</td></tr>
+                  <tr><td>Agregar / Editar Clientes</td><td><i className="fas fa-check-circle text-success"></i> Sí</td><td><i className="fas fa-check-circle text-success"></i> Sí</td></tr>
+                  <tr><td>Eliminar Clientes</td><td><i className="fas fa-check-circle text-success"></i> Sí</td><td><i className="fas fa-times-circle text-danger"></i> No</td></tr>
+                  <tr><td>Ver Productos</td><td><i className="fas fa-check-circle text-success"></i> Sí</td><td><i className="fas fa-check-circle text-success"></i> Sí</td></tr>
+                  <tr><td>Agregar / Editar Productos</td><td><i className="fas fa-check-circle text-success"></i> Sí</td><td><i className="fas fa-check-circle text-success"></i> Sí</td></tr>
+                  <tr><td>Eliminar Productos</td><td><i className="fas fa-check-circle text-success"></i> Sí</td><td><i className="fas fa-times-circle text-danger"></i> No</td></tr>
+                  <tr><td>Imprimir Etiquetas QR</td><td><i className="fas fa-check-circle text-success"></i> Sí</td><td><i className="fas fa-check-circle text-success"></i> Sí</td></tr>
+                  <tr><td>Registrar Entrada de Stock</td><td><i className="fas fa-check-circle text-success"></i> Sí</td><td><i className="fas fa-check-circle text-success"></i> Sí</td></tr>
+                  <tr><td>Registrar Salida de Stock</td><td><i className="fas fa-check-circle text-success"></i> Sí</td><td><i className="fas fa-check-circle text-success"></i> Sí</td></tr>
+                  <tr><td>Eliminar Registros de Stock</td><td><i className="fas fa-check-circle text-success"></i> Sí</td><td><i className="fas fa-times-circle text-danger"></i> No</td></tr>
+                  <tr><td>Procesar Venta / POS (Ventas QR)</td><td><i className="fas fa-check-circle text-success"></i> Sí</td><td><i className="fas fa-check-circle text-success"></i> Sí</td></tr>
+                  <tr><td>Ver Historial de Ventas</td><td><i className="fas fa-check-circle text-success"></i> Sí</td><td><i className="fas fa-check-circle text-success"></i> Sí</td></tr>
+                  <tr><td>Procesar Devolución</td><td><i className="fas fa-check-circle text-success"></i> Sí</td><td><i className="fas fa-times-circle text-danger"></i> No</td></tr>
+                  <tr><td>Recepción Masiva de Stock</td><td><i className="fas fa-check-circle text-success"></i> Sí</td><td><i className="fas fa-check-circle text-success"></i> Sí</td></tr>
+                  <tr><td>Gestionar Usuarios</td><td><i className="fas fa-check-circle text-success"></i> Sí</td><td><i className="fas fa-times-circle text-danger"></i> No</td></tr>
+                  <tr><td>Gestionar Proveedores</td><td><i className="fas fa-check-circle text-success"></i> Sí</td><td><i className="fas fa-times-circle text-danger"></i> No</td></tr>
+                  <tr><td>Gestionar Gastos</td><td><i className="fas fa-check-circle text-success"></i> Sí</td><td><i className="fas fa-times-circle text-danger"></i> No</td></tr>
+                  <tr><td>Gestionar Configuración y Categorías</td><td><i className="fas fa-check-circle text-success"></i> Sí</td><td><i className="fas fa-times-circle text-danger"></i> No</td></tr>
+                  <tr><td>Ver Registro de Actividad</td><td><i className="fas fa-check-circle text-success"></i> Sí</td><td><i className="fas fa-times-circle text-danger"></i> No</td></tr>
                 </tbody>
               </table>
             </div>
           </div>
           <div className="about-card">
-            <h2><i className="fas fa-calculator"></i> Formulas & Business Logic</h2>
-            <p className="mb-24">All the calculations this app does behind the scenes — so theres no confusion later about how somthing gets computed.</p>
+            <h2><i className="fas fa-calculator"></i> Fórmulas y Lógica de Negocio</h2>
+            <p className="mb-24">Todos los cálculos que hace esta aplicación detrás de escena — para que no haya confusión luego sobre cómo se calcula algo.</p>
             <div className="about-table-wrapper">
               <table className="about-roles-table">
-                <thead><tr><th>What</th><th>Formula / Logic</th><th>Where Used</th></tr></thead>
+                <thead><tr><th>Qué</th><th>Fórmula / Lógica</th><th>Dónde se usa</th></tr></thead>
                 <tbody>
-                  <tr><td>Total Records</td><td>Count of all records in the database</td><td>Dashboard KPI</td></tr>
-                  <tr><td>Active Records</td><td>Count where active = true</td><td>Dashboard KPI</td></tr>
-                  <tr><td>Inactive Records</td><td>Total Records − Active Records</td><td>Dashboard KPI</td></tr>
-                  <tr><td>Total Amount</td><td>Σ amount across all records</td><td>Dashboard KPI</td></tr>
-                  <tr><td>Records by Category</td><td>Group + count records per category</td><td>Dashboard Chart</td></tr>
-                  <tr><td>Monthly Trend</td><td>Group + count records by created month (last 6 months)</td><td>Dashboard Chart</td></tr>
-                  <tr><td>SKU Number</td><td>'SKU-' + zero-padded 5-digit sequence from /counters/products (atomic Firebase transaction, avoids duplicate SKUs under concurrent adds)</td><td>Add Product (auto, read-only after)</td></tr>
-                  <tr><td>Qty On Hand</td><td>Σ qty where type='in' − Σ qty where type='out', per product, from the Stock In/Out ledger — never a stored counter, always recomputed live</td><td>Products list, Stock ledger, POS cart guard</td></tr>
-                  <tr><td>Low Stock Flag</td><td>Qty On Hand &lt;= Reorder Level</td><td>Products list (red badge), Stock Status filter</td></tr>
-                  <tr><td>Stock Out Negative-Qty Check</td><td>Warns (does not block) if requested qty &gt; current Qty On Hand</td><td>Stock Out flow</td></tr>
-                  <tr><td>Running Balance</td><td>Per product, cumulative Σ (in − out) applied oldest→newest; each ledger row shows the on-hand right after it</td><td>Stock In/Out ledger</td></tr>
-                  <tr><td>Stocktake Adjustment</td><td>Counted Qty − System On Hand → posts a correcting Stock In (if +) or Stock Out (if −) with reason "Adjustment"</td><td>Stocktake</td></tr>
-                  <tr><td>Receiving Unit Cost</td><td>Optional on Stock In — records the landed unit cost and, if ticked, updates the product's cost to it</td><td>Stock In</td></tr>
-                  <tr><td>Sale Line Total</td><td>qty × price, per cart line</td><td>POS Cart, Thermal Receipt</td></tr>
-                  <tr><td>Order Discount</td><td>Percent → Subtotal × %; Amount → capped at Subtotal. Spread proportionally across lines so tax is charged on the discounted amount</td><td>POS Checkout</td></tr>
-                  <tr><td>Sale Tax</td><td>Per line: discounted line × effective tax rate (product rate, else Settings default). Tax-inclusive mode extracts tax out of the price instead of adding it</td><td>POS Checkout, Receipt</td></tr>
-                  <tr><td>Sale Grand Total</td><td>Tax-exclusive: Subtotal − Discount + Tax. Tax-inclusive: Subtotal − Discount (tax already inside)</td><td>POS Checkout, Thermal Receipt</td></tr>
-                  <tr><td>Change Due</td><td>max(0, Amount Tendered − Grand Total) — cash payments only</td><td>POS Checkout, Receipt</td></tr>
-                  <tr><td>Invoice Number</td><td>Settings prefix + zero-padded 5-digit sequence from /counters/sales (atomic transaction)</td><td>Every sale</td></tr>
-                  <tr><td>Gross Profit (per sale)</td><td>(Subtotal − Discount) − Σ (line cost × qty); cost is snapshotted onto each line at checkout so later cost edits don't distort history</td><td>Sales History "Profit" column</td></tr>
-                  <tr><td>Total Expenses</td><td>Σ expense amounts over the selected date range / category</td><td>Expenses (feeds Net Profit)</td></tr>
-                  <tr><td>Scan Resolve (fast)</td><td>Scanned/typed code matched in-memory against product id, SKU or barcode (instant) — only a miss falls back to a Firebase lookup</td><td>QR Sales / POS</td></tr>
-                  <tr><td>Stock Deduction on Sale</td><td>Checkout writes one Stock Out ledger entry per cart line (reason: Sale) — stock only ever changes via the ledger, never a direct qty edit</td><td>POS Checkout → Stock ledger</td></tr>
-                  <tr><td>Refund Total</td><td>Σ (qty × price) across the returned lines of a single return; each Return also credits stock back via a Stock In entry (reason: Return)</td><td>Return, Sales History "Returned" column</td></tr>
-                  <tr><td>Returnable Qty</td><td>Sold Qty − Σ qty already returned against that sale line (across all prior returns) — caps how much can be returned again</td><td>Process Return</td></tr>
-                  <tr><td>Suggested Reorder Qty</td><td>Reorder Qty if set, else max(0, Max Stock − Qty On Hand), else max(0, Reorder Level × 2 − Qty On Hand)</td><td>Reorder Report</td></tr>
-                  <tr><td>Product Status</td><td>active / discontinued — discontinued items stay in history &amp; reports but can be filtered out of the working list (delete only as a last resort)</td><td>Products list &amp; Status filter</td></tr>
-                  <tr><td>Effective Tax Rate (product)</td><td>Product Tax Rate % if set, otherwise the Settings default tax rate</td><td>Product (POS tax uses it next)</td></tr>
-                  <tr><td>Currency Display</td><td>money() prefixes the configured currency symbol (Settings → Currency &amp; Tax); all amounts app-wide follow it</td><td>Every amount shown</td></tr>
-                  <tr><td>Categories</td><td>Loaded live from the Categories collection (Settings), not a fixed list — add/remove to fit the business</td><td>Product/Record category dropdowns &amp; filters</td></tr>
+                  <tr><td>Total de Registros</td><td>Recuento de todos los registros en la base de datos</td><td>Indicador del Panel Principal</td></tr>
+                  <tr><td>Registros Activos</td><td>Recuento donde activo = true</td><td>Indicador del Panel Principal</td></tr>
+                  <tr><td>Registros Inactivos</td><td>Total de Registros − Registros Activos</td><td>Indicador del Panel Principal</td></tr>
+                  <tr><td>Monto Total</td><td>Σ monto en todos los registros</td><td>Indicador del Panel Principal</td></tr>
+                  <tr><td>Registros por Categoría</td><td>Agrupar + contar registros por categoría</td><td>Gráfico del Panel Principal</td></tr>
+                  <tr><td>Tendencia Mensual</td><td>Agrupar + contar registros por mes de creación (últimos 6 meses)</td><td>Gráfico del Panel Principal</td></tr>
+                  <tr><td>Número SKU</td><td>'SKU-' + secuencia de 5 dígitos desde /counters/products (transacción atómica de Firebase, evita duplicados al agregar simultáneamente)</td><td>Agregar Producto (automático, luego solo lectura)</td></tr>
+                  <tr><td>Cant. Disponible</td><td>Σ cant. donde tipo='entrada' − Σ cant. donde tipo='salida', por producto, desde el libro de Entradas/Salidas — nunca es un contador fijo, siempre se recalcula</td><td>Lista de productos, Libro de stock, Guardia del carrito POS</td></tr>
+                  <tr><td>Alerta Stock Bajo</td><td>Cant. Disponible &lt;= Nivel de Reabastecimiento</td><td>Lista de productos (insignia roja), Filtro de estado de stock</td></tr>
+                  <tr><td>Revisión de Cantidad Negativa</td><td>Advierte (no bloquea) si cant. solicitada &gt; Cant. Disponible actual</td><td>Flujo de Salida de Stock</td></tr>
+                  <tr><td>Saldo Acumulado</td><td>Por producto, Σ acumulativa (entradas − salidas) aplicada del más antiguo al más nuevo; cada fila muestra el stock justo después de esta</td><td>Libro de Entrada/Salida de Stock</td></tr>
+                  <tr><td>Ajuste de Inventario Físico</td><td>Cant. Contada − Cant. en Sistema → publica una Entrada (si +) o Salida (si -) con motivo "Ajuste"</td><td>Inventario Físico</td></tr>
+                  <tr><td>Costo Unitario al Recibir</td><td>Opcional en Entrada de Stock — registra el costo de origen y, si está marcado, actualiza el costo del producto</td><td>Entrada de Stock</td></tr>
+                  <tr><td>Total de Línea de Venta</td><td>cant. × precio, por línea del carrito</td><td>Carrito POS, Recibo Térmico</td></tr>
+                  <tr><td>Descuento de Orden</td><td>Porcentaje → Subtotal × %; Monto → limitado al Subtotal. Distribuido proporcionalmente entre las líneas para cobrar impuestos sobre el monto con descuento</td><td>Caja POS</td></tr>
+                  <tr><td>Impuesto de Venta</td><td>Por línea: línea con descuento × tasa de impuesto (tasa del producto, si no la predeterminada). El modo impuesto incluido extrae el impuesto del precio en lugar de sumarlo</td><td>Caja POS, Recibo</td></tr>
+                  <tr><td>Total de Venta</td><td>Exclusivo de impuestos: Subtotal − Descuento + Impuestos. Inclusivo de impuestos: Subtotal − Descuento (el impuesto ya está adentro)</td><td>Caja POS, Recibo Térmico</td></tr>
+                  <tr><td>Cambio a Devolver</td><td>max(0, Monto Recibido − Total de Venta) — solo para pagos en efectivo</td><td>Caja POS, Recibo</td></tr>
+                  <tr><td>Número de Factura</td><td>Prefijo + secuencia de 5 dígitos desde /counters/sales (transacción atómica)</td><td>Cada venta</td></tr>
+                  <tr><td>Ganancia Bruta (por venta)</td><td>(Subtotal − Descuento) − Σ (costo de línea × cant.); el costo se toma como captura en cada línea para que ediciones futuras no alteren el historial</td><td>Columna "Ganancia" en Historial de Ventas</td></tr>
+                  <tr><td>Total de Gastos</td><td>Σ monto de gastos sobre el rango de fechas / categoría seleccionado</td><td>Gastos (Alimenta a Ganancia Neta)</td></tr>
+                  <tr><td>Resolución Rápida (Escaneo)</td><td>El código escaneado/escrito se busca en memoria por id, SKU o código de barras (instantáneo) — solo si falla se busca en Firebase</td><td>Ventas QR / POS</td></tr>
+                  <tr><td>Deducción de Stock al Vender</td><td>Al pagar se escribe una Salida de Stock por cada línea (motivo: Venta) — el stock solo cambia mediante el libro, nunca directamente</td><td>Caja POS → Libro de Stock</td></tr>
+                  <tr><td>Total Reembolsado</td><td>Σ (cant. × precio) de las líneas devueltas; cada devolución también acredita stock mediante una Entrada (motivo: Devolución)</td><td>Devoluciones, Columna "Devuelto" en Historial de Ventas</td></tr>
+                  <tr><td>Cantidad Retornable</td><td>Cant. Vendida − Σ cant. ya devuelta en esa línea (en devoluciones anteriores) — limita cuánto puede devolverse de nuevo</td><td>Procesar Devolución</td></tr>
+                  <tr><td>Cantidad Sugerida de Reabastecimiento</td><td>Cant. de Reabastecimiento (si está) sino max(0, Stock Máx − Cant. Disponible) sino max(0, Nivel de Reabastecimiento × 2 − Cant. Disponible)</td><td>Reporte de Reabastecimiento</td></tr>
+                  <tr><td>Estado del Producto</td><td>activo / descontinuado — artículos descontinuados permanecen en historial y reportes pero pueden filtrarse (eliminar solo como último recurso)</td><td>Lista de productos y Filtro de estado</td></tr>
+                  <tr><td>Tasa de Impuesto (producto)</td><td>% de Impuesto del Producto (si está), si no la tasa por defecto de la Configuración</td><td>Producto (Lo usa luego la caja POS)</td></tr>
+                  <tr><td>Visualización de Moneda</td><td>money() agrega el símbolo configurado (Configuración → Moneda e Impuestos); todas las cantidades lo siguen</td><td>Cada cantidad mostrada</td></tr>
+                  <tr><td>Categorías</td><td>Cargadas en vivo desde la colección (Configuración), no es lista fija — agrega/elimina para adaptarse al negocio</td><td>Listas y filtros de categorías</td></tr>
                 </tbody>
               </table>
             </div>
           </div>
           <div className="about-card about-developer">
-            <h2><i className="fas fa-code"></i> About the Developer</h2>
+            <h2><i className="fas fa-code"></i> Acerca del Desarrollador</h2>
             <div className="developer-info">
               <img src={LOGO_URL} alt="Mohammad Rameez Imdad" className="developer-avatar" />
               <div className="developer-details">
                 <h3>Mohammad Rameez Imdad</h3>
                 <p className="developer-brand">Rameez Scripts</p>
-                <p>I build custom web apps, dashboards, and automation tools. If you need somthing built for your buisness or project, feel free to reach out!</p>
+                <p>Construyo aplicaciones web, paneles de control y herramientas de automatización a medida. Si necesitas que te construya algo para tu negocio o proyecto, ¡no dudes en contactarme!</p>
                 <div className="developer-links">
-                  <a href="https://wa.me/923224083545" target="_blank" className="dev-link whatsapp"><i className="fab fa-whatsapp"></i> WhatsApp Me</a>
-                  <a href="https://www.youtube.com/@rameezimdad" target="_blank" className="dev-link youtube"><i className="fab fa-youtube"></i> Subscribe on YouTube</a>
+                  <a href="https://wa.me/923224083545" target="_blank" className="dev-link whatsapp"><i className="fab fa-whatsapp"></i> Escríbeme a WhatsApp</a>
+                  <a href="https://www.youtube.com/@rameezimdad" target="_blank" className="dev-link youtube"><i className="fab fa-youtube"></i> Suscríbete en YouTube</a>
                 </div>
               </div>
             </div>
           </div>
           <div className="about-footer">
-            <p>Made with <i className="fas fa-heart" style={{ color: '#ea4335' }}></i> by Rameez Scripts</p>
-            <p className="about-version">Version 1.0.0</p>
+            <p>Hecho con <i className="fas fa-heart" style={{ color: '#ea4335' }}></i> por Rameez Scripts</p>
+            <p className="about-version">Versión 1.0.0</p>
           </div>
         </div>
       );
