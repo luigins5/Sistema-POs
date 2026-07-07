@@ -4199,20 +4199,20 @@
       const handleSubmit = async (e) => {
         e.preventDefault();
         const q = Number(qty);
-        if (!productId) return Swal.fire({ icon: 'warning', title: 'Pick a Product', text: 'Select a product first' });
-        if (!Number.isInteger(q) || q < 1) return Swal.fire({ icon: 'warning', title: 'Invalid Quantity', text: 'Quantity must be a whole number, at least 1' });
+        if (!productId) return Swal.fire({ icon: 'warning', title: 'Elige un Producto', text: 'Selecciona un producto primero' });
+        if (!Number.isInteger(q) || q < 1) return Swal.fire({ icon: 'warning', title: 'Cantidad Inválida', text: 'La cantidad debe ser un número entero, al menos 1' });
         if (isOut && q > onHand) {
           const confirm = await Swal.fire({
-            icon: 'warning', title: 'Qty On Hand Warning',
-            text: `Only ${onHand} unit(s) on hand for this product. This Stock Out will push Qty On Hand to ${onHand - q}. Continue anyway?`,
-            showCancelButton: true, confirmButtonColor: '#ea4335', confirmButtonText: 'Continue', cancelButtonText: 'Cancel'
+            icon: 'warning', title: 'Advertencia de Cantidad Disponible',
+            text: `Solo hay ${onHand} unidad(es) disponible(s) para este producto. Esta Salida dejará la cantidad en ${onHand - q}. ¿Continuar de todos modos?`,
+            showCancelButton: true, confirmButtonColor: '#ea4335', confirmButtonText: 'Continuar', cancelButtonText: 'Cancelar'
           });
           if (!confirm.isConfirmed) return;
         }
         setSaving(true);
         const move = { productId, type, qty: q, reason, reference: reference.trim() || null, location: location.trim() || null, notes: notes.trim() || null };
         if (!isOut) { move.unitCost = Number(unitCost) || 0; move.supplier = supplier.trim() || null; move.batchNo = batchNo.trim() || null; move.expiryDate = expiryDate || null; move.updateCost = updateCost && Number(unitCost) > 0; }
-        await onSave(move, selectedProduct?.name || 'Unknown Product');
+        await onSave(move, selectedProduct?.name || 'Producto Desconocido');
         setSaving(false);
       };
 
@@ -4220,30 +4220,30 @@
         <div className="modal-overlay" onClick={onClose}>
           <div className="modal" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
-              <h3><i className={`fas ${isOut ? 'fa-arrow-up' : 'fa-arrow-down'}`}></i> Stock {isOut ? 'Out' : 'In'}</h3>
+              <h3><i className={`fas ${isOut ? 'fa-arrow-up' : 'fa-arrow-down'}`}></i> {isOut ? 'Salida' : 'Entrada'} de Stock</h3>
               <button className="close-btn" onClick={onClose}><i className="fas fa-times"></i></button>
             </div>
             <div className="modal-body">
               <form onSubmit={handleSubmit}>
                 <div className="form-grid">
-                  <SearchableDropdown label="Product" icon="fas fa-box" options={productOpts} value={productId} onChange={setProductId} placeholder="Search product by name or SKU..." required={true} />
-                  <div className="form-group"><label>Quantity *</label><input type="number" min="1" step="1" value={qty} onChange={(e) => setQty(e.target.value)} required /></div>
+                  <SearchableDropdown label="Producto" icon="fas fa-box" options={productOpts} value={productId} onChange={setProductId} placeholder="Buscar producto por nombre o SKU..." required={true} />
+                  <div className="form-group"><label>Cantidad *</label><input type="number" min="1" step="1" value={qty} onChange={(e) => setQty(e.target.value)} required /></div>
                 </div>
-                {productId && <p className="stock-onhand-hint">Qty on hand: <strong>{onHand}</strong>{!isOut && Number(qty) > 0 ? ` → ${onHand + Number(qty)}` : ''}</p>}
+                {productId && <p className="stock-onhand-hint">Cant. disponible: <strong>{onHand}</strong>{!isOut && Number(qty) > 0 ? ` → ${onHand + Number(qty)}` : ''}</p>}
                 <div className="form-grid">
-                  <SearchableDropdown label="Reason" icon="fas fa-clipboard-list" options={isOut ? REASON_OUT_OPTS : REASON_IN_OPTS} value={reason} onChange={setReason} placeholder="Select reason..." required={true} />
-                  <div className="form-group"><label>Reference</label><input type="text" value={reference} onChange={(e) => setReference(e.target.value)} placeholder="PO / invoice / sale ID" /></div>
-                  {!isOut && <div className="form-group"><label>Unit Cost</label><input type="number" min="0" step="0.01" value={unitCost} onChange={(e) => setUnitCost(e.target.value)} /></div>}
-                  {!isOut && <div className="form-group"><label>Supplier</label><input type="text" value={supplier} onChange={(e) => setSupplier(e.target.value)} /></div>}
-                  {!isOut && <div className="form-group"><label>Batch / Lot No</label><input type="text" value={batchNo} onChange={(e) => setBatchNo(e.target.value)} /></div>}
-                  {!isOut && <div className="form-group"><label><i className="fas fa-calendar-xmark"></i> Expiry Date</label><input type="date" value={expiryDate} onChange={(e) => setExpiryDate(e.target.value)} /></div>}
-                  <div className="form-group"><label><i className="fas fa-location-dot"></i> Location / Bin</label><input type="text" value={location} onChange={(e) => setLocation(e.target.value)} /></div>
+                  <SearchableDropdown label="Motivo" icon="fas fa-clipboard-list" options={isOut ? REASON_OUT_OPTS : REASON_IN_OPTS} value={reason} onChange={setReason} placeholder="Seleccionar motivo..." required={true} />
+                  <div className="form-group"><label>Referencia</label><input type="text" value={reference} onChange={(e) => setReference(e.target.value)} placeholder="Nº Orden / factura / venta" /></div>
+                  {!isOut && <div className="form-group"><label>Costo Unitario</label><input type="number" min="0" step="0.01" value={unitCost} onChange={(e) => setUnitCost(e.target.value)} /></div>}
+                  {!isOut && <div className="form-group"><label>Proveedor</label><input type="text" value={supplier} onChange={(e) => setSupplier(e.target.value)} /></div>}
+                  {!isOut && <div className="form-group"><label>Lote</label><input type="text" value={batchNo} onChange={(e) => setBatchNo(e.target.value)} /></div>}
+                  {!isOut && <div className="form-group"><label><i className="fas fa-calendar-xmark"></i> Fecha Caducidad</label><input type="date" value={expiryDate} onChange={(e) => setExpiryDate(e.target.value)} /></div>}
+                  <div className="form-group"><label><i className="fas fa-location-dot"></i> Ubicación</label><input type="text" value={location} onChange={(e) => setLocation(e.target.value)} /></div>
                 </div>
-                {!isOut && <div className="form-group"><label className="stock-cost-check"><input type="checkbox" checked={updateCost} onChange={(e) => setUpdateCost(e.target.checked)} /> Update product cost to this unit cost</label></div>}
-                <div className="form-group"><label>Notes</label><textarea rows="2" value={notes} onChange={(e) => setNotes(e.target.value)}></textarea></div>
+                {!isOut && <div className="form-group"><label className="stock-cost-check"><input type="checkbox" checked={updateCost} onChange={(e) => setUpdateCost(e.target.checked)} /> Actualizar el costo del producto con este costo unitario</label></div>}
+                <div className="form-group"><label>Notas</label><textarea rows="2" value={notes} onChange={(e) => setNotes(e.target.value)}></textarea></div>
                 <div className="form-actions">
-                  <button type="submit" className={`btn ${isOut ? 'btn-danger' : 'btn-success'}`} disabled={saving}>{saving ? <><i className="fas fa-spinner fa-spin"></i> Saving...</> : <><i className="fas fa-save"></i> Record Stock {isOut ? 'Out' : 'In'}</>}</button>
-                  <button type="button" className="btn btn-secondary" onClick={onClose}><i className="fas fa-times"></i> Cancel</button>
+                  <button type="submit" className={`btn ${isOut ? 'btn-danger' : 'btn-success'}`} disabled={saving}>{saving ? <><i className="fas fa-spinner fa-spin"></i> Guardando...</> : <><i className="fas fa-save"></i> Registrar {isOut ? 'Salida' : 'Entrada'}</>}</button>
+                  <button type="button" className="btn btn-secondary" onClick={onClose}><i className="fas fa-times"></i> Cancelar</button>
                 </div>
               </form>
             </div>
@@ -4268,8 +4268,8 @@
 
       const addLine = () => {
         const q = Number(qty);
-        if (!productId) return Swal.fire({ icon: 'warning', title: 'Pick a Product', text: 'Select a product first' });
-        if (!Number.isInteger(q) || q < 1) return Swal.fire({ icon: 'warning', title: 'Invalid Quantity', text: 'Quantity must be a whole number, at least 1' });
+        if (!productId) return Swal.fire({ icon: 'warning', title: 'Elige un Producto', text: 'Selecciona un producto primero' });
+        if (!Number.isInteger(q) || q < 1) return Swal.fire({ icon: 'warning', title: 'Cantidad Inválida', text: 'La cantidad debe ser un número entero, al menos 1' });
         const product = byId[productId];
         setLines(prev => {
           const existing = prev.find(l => l.productId === productId);
@@ -4283,8 +4283,8 @@
 
       const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!lines.length) return Swal.fire({ icon: 'warning', title: 'No Items', text: 'Add at least one product line' });
-        if (!reason.trim()) return Swal.fire({ icon: 'warning', title: 'Reason Required', text: 'Enter a reason, e.g. Purchase / Supplier Delivery' });
+        if (!lines.length) return Swal.fire({ icon: 'warning', title: 'Sin Artículos', text: 'Agrega al menos una línea de producto' });
+        if (!reason.trim()) return Swal.fire({ icon: 'warning', title: 'Motivo Requerido', text: 'Ingresa un motivo, ej. Compra / Entrega de Proveedor' });
         setSaving(true);
         const batchLines = lines.map(l => ({ productId: l.productId, name: l.name, qty: l.qty, reason: reason.trim(), reference: reference.trim() || null }));
         await onSave(batchLines);
@@ -4295,37 +4295,37 @@
         <div className="modal-overlay" onClick={onClose}>
           <div className="modal" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
-              <h3><i className="fas fa-truck-ramp-box"></i> Bulk Receive Stock</h3>
+              <h3><i className="fas fa-truck-ramp-box"></i> Recepción Masiva de Stock</h3>
               <button className="close-btn" onClick={onClose}><i className="fas fa-times"></i></button>
             </div>
             <div className="modal-body">
               <div className="form-grid">
-                <SearchableDropdown label="Product" icon="fas fa-box" options={productOpts} value={productId} onChange={setProductId} placeholder="Search product by name or SKU..." />
-                <div className="form-group"><label>Quantity</label><input type="number" min="1" step="1" value={qty} onChange={(e) => setQty(e.target.value)} /></div>
+                <SearchableDropdown label="Producto" icon="fas fa-box" options={productOpts} value={productId} onChange={setProductId} placeholder="Buscar producto por nombre o SKU..." />
+                <div className="form-group"><label>Cantidad</label><input type="number" min="1" step="1" value={qty} onChange={(e) => setQty(e.target.value)} /></div>
               </div>
               <div className="form-actions" style={{ marginTop: 0, marginBottom: '20px' }}>
-                <button type="button" className="btn btn-secondary btn-sm" onClick={addLine}><i className="fas fa-plus"></i> Add Line</button>
+                <button type="button" className="btn btn-secondary btn-sm" onClick={addLine}><i className="fas fa-plus"></i> Agregar Línea</button>
               </div>
               {lines.length > 0 && (
                 <div className="pos-cart-list" style={{ marginBottom: '20px' }}>
                   {lines.map(l => (
                     <div className="pos-cart-row" key={l.productId}>
                       <div className="pi-name"><strong>{l.name}</strong><small>SKU: {l.sku}</small></div>
-                      <div className="pos-line-total">Qty: {l.qty}</div>
-                      <button type="button" className="pos-remove-btn" title="Remove line" onClick={() => removeLine(l.productId)}><i className="fas fa-trash"></i></button>
+                      <div className="pos-line-total">Cant.: {l.qty}</div>
+                      <button type="button" className="pos-remove-btn" title="Quitar línea" onClick={() => removeLine(l.productId)}><i className="fas fa-trash"></i></button>
                     </div>
                   ))}
                 </div>
               )}
               <form onSubmit={handleSubmit}>
                 <div className="form-grid">
-                  <div className="form-group"><label>Reason *</label><input type="text" value={reason} onChange={(e) => setReason(e.target.value)} placeholder="e.g. Supplier Delivery, Purchase" required /></div>
-                  <div className="form-group"><label>Reference</label><input type="text" value={reference} onChange={(e) => setReference(e.target.value)} placeholder="Optional - e.g. PO number" /></div>
+                  <div className="form-group"><label>Motivo *</label><input type="text" value={reason} onChange={(e) => setReason(e.target.value)} placeholder="ej. Entrega de Proveedor, Compra" required /></div>
+                  <div className="form-group"><label>Referencia</label><input type="text" value={reference} onChange={(e) => setReference(e.target.value)} placeholder="Opcional - ej. Nº Orden Compra" /></div>
                 </div>
-                {lines.length > 0 && <p className="stock-onhand-hint">Total units to receive: <strong>{totalQty}</strong></p>}
+                {lines.length > 0 && <p className="stock-onhand-hint">Total de unidades a recibir: <strong>{totalQty}</strong></p>}
                 <div className="form-actions">
-                  <button type="submit" className="btn btn-success" disabled={saving || lines.length === 0}>{saving ? <><i className="fas fa-spinner fa-spin"></i> Saving...</> : <><i className="fas fa-save"></i> Receive Stock</>}</button>
-                  <button type="button" className="btn btn-secondary" onClick={onClose}><i className="fas fa-times"></i> Cancel</button>
+                  <button type="submit" className="btn btn-success" disabled={saving || lines.length === 0}>{saving ? <><i className="fas fa-spinner fa-spin"></i> Guardando...</> : <><i className="fas fa-save"></i> Recibir Stock</>}</button>
+                  <button type="button" className="btn btn-secondary" onClick={onClose}><i className="fas fa-times"></i> Cancelar</button>
                 </div>
               </form>
             </div>
@@ -4347,30 +4347,30 @@
 
       const submit = async (e) => {
         e.preventDefault();
-        if (!productId) return Swal.fire({ icon: 'warning', title: 'Pick a Product' });
-        if (counted === '' || Number(counted) < 0) return Swal.fire({ icon: 'warning', title: 'Enter counted qty' });
-        if (diff === 0) return Swal.fire({ icon: 'info', title: 'No change', text: 'Counted quantity matches on-hand.' });
+        if (!productId) return Swal.fire({ icon: 'warning', title: 'Elige un Producto' });
+        if (counted === '' || Number(counted) < 0) return Swal.fire({ icon: 'warning', title: 'Ingresa la cant. contada' });
+        if (diff === 0) return Swal.fire({ icon: 'info', title: 'Sin cambios', text: 'La cantidad contada coincide con la disponible.' });
         setSaving(true);
-        await onSave({ productId, type: diff > 0 ? 'in' : 'out', qty: Math.abs(diff), reason: 'Adjustment', reference: 'Stocktake', notes: notes.trim() || `Counted ${counted}, was ${onHand}` }, selected?.name || 'Unknown Product');
+        await onSave({ productId, type: diff > 0 ? 'in' : 'out', qty: Math.abs(diff), reason: 'Ajuste', reference: 'Inventario', notes: notes.trim() || `Contado ${counted}, había ${onHand}` }, selected?.name || 'Producto Desconocido');
         setSaving(false);
       };
 
       return (
         <div className="modal-overlay" onClick={onClose}>
           <div className="modal" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header"><h3><i className="fas fa-scale-balanced"></i> Stocktake / Adjustment</h3><button className="close-btn" onClick={onClose}><i className="fas fa-times"></i></button></div>
+            <div className="modal-header"><h3><i className="fas fa-scale-balanced"></i> Inventario / Ajuste</h3><button className="close-btn" onClick={onClose}><i className="fas fa-times"></i></button></div>
             <div className="modal-body">
               <form onSubmit={submit}>
-                <SearchableDropdown label="Product" icon="fas fa-box" options={productOpts} value={productId} onChange={setProductId} placeholder="Search product..." required={true} />
-                {productId && <p className="stock-onhand-hint">System on hand: <strong>{onHand}</strong></p>}
+                <SearchableDropdown label="Producto" icon="fas fa-box" options={productOpts} value={productId} onChange={setProductId} placeholder="Buscar producto..." required={true} />
+                {productId && <p className="stock-onhand-hint">En sistema: <strong>{onHand}</strong></p>}
                 <div className="form-grid">
-                  <div className="form-group"><label>Counted Quantity *</label><input type="number" min="0" step="1" value={counted} onChange={(e) => setCounted(e.target.value)} required /></div>
-                  <div className="form-group"><label>Adjustment</label><input type="text" value={productId && counted !== '' ? (diff > 0 ? '+' + diff + ' (Stock In)' : diff < 0 ? diff + ' (Stock Out)' : 'No change') : '-'} disabled /></div>
+                  <div className="form-group"><label>Cantidad Contada *</label><input type="number" min="0" step="1" value={counted} onChange={(e) => setCounted(e.target.value)} required /></div>
+                  <div className="form-group"><label>Ajuste</label><input type="text" value={productId && counted !== '' ? (diff > 0 ? '+' + diff + ' (Entrada)' : diff < 0 ? diff + ' (Salida)' : 'Sin cambios') : '-'} disabled /></div>
                 </div>
-                <div className="form-group"><label>Notes</label><textarea rows="2" value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Reason for the variance (damage, miscount...)"></textarea></div>
+                <div className="form-group"><label>Notas</label><textarea rows="2" value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Motivo de la diferencia (daño, mal conteo...)"></textarea></div>
                 <div className="form-actions">
-                  <button type="submit" className="btn btn-primary" disabled={saving}>{saving ? <><i className="fas fa-spinner fa-spin"></i> Posting...</> : <><i className="fas fa-save"></i> Post Adjustment</>}</button>
-                  <button type="button" className="btn btn-secondary" onClick={onClose}><i className="fas fa-times"></i> Cancel</button>
+                  <button type="submit" className="btn btn-primary" disabled={saving}>{saving ? <><i className="fas fa-spinner fa-spin"></i> Registrando...</> : <><i className="fas fa-save"></i> Registrar Ajuste</>}</button>
+                  <button type="button" className="btn btn-secondary" onClick={onClose}><i className="fas fa-times"></i> Cancelar</button>
                 </div>
               </form>
             </div>
@@ -4405,7 +4405,7 @@
       }, [movements, productMap]);
 
       useEffect(() => {
-        if (err || (data && data[0] && !data[0].success)) Swal.fire({ icon: 'error', title: 'Error', text: (data && data[0] && data[0].message) || 'Failed to load stock movements' });
+        if (err || (data && data[0] && !data[0].success)) Swal.fire({ icon: 'error', title: 'Error', text: (data && data[0] && data[0].message) || 'Error al cargar movimientos de stock' });
       }, [err, data]);
 
       useEffect(() => {
@@ -4418,16 +4418,16 @@
             data: tableData,
             columnDefs: [{ targets: '_all', defaultContent: '' }], // tolerate rows missing newer fields - no "unknown parameter" warning
             columns: [
-              { data: 'productName', title: 'Product', render: (d, t) => t === 'display' ? esc(d) : d },
-              { data: 'type', title: 'Type', render: (d, t) => t === 'display' ? `<span class="status-badge ${d === 'in' ? 'status-active' : 'status-inactive'}">${d === 'in' ? 'IN' : 'OUT'}</span>` : d },
-              { data: 'qty', title: 'Qty', render: (d, t) => t === 'display' ? Number(d).toLocaleString() : d },
-              { data: 'unitCost', title: 'Unit Cost', defaultContent: '-', render: (d, t) => t === 'display' ? (d ? money(d) : '-') : (d || 0) },
-              { data: 'reason', title: 'Reason', render: (d, t) => t === 'display' ? esc(d || '') : d },
-              { data: 'reference', title: 'Reference', defaultContent: '-', render: (d, t) => t === 'display' ? esc(d || '-') : d },
-              { data: 'balance', title: 'Balance', render: (d, t) => t === 'display' ? `<strong>${Number(d).toLocaleString()}</strong>` : d },
-              { data: 'performedBy', title: 'Performed By', render: (d, t) => t === 'display' ? esc(d || '') : d },
-              { data: 'createdAt', title: 'When', render: (d, t) => t === 'display' ? formatDateForDisplay(d) : d },
-              { data: null, title: 'Actions', orderable: false, render: () => role === 'Admin' ? `<button class="action-icon delete-icon" data-action="delete"><i class="fas fa-trash"></i></button>` : '' }
+              { data: 'productName', title: 'Producto', render: (d, t) => t === 'display' ? esc(d) : d },
+              { data: 'type', title: 'Tipo', render: (d, t) => t === 'display' ? `<span class="status-badge ${d === 'in' ? 'status-active' : 'status-inactive'}">${d === 'in' ? 'ENTRADA' : 'SALIDA'}</span>` : d },
+              { data: 'qty', title: 'Cant.', render: (d, t) => t === 'display' ? Number(d).toLocaleString() : d },
+              { data: 'unitCost', title: 'Costo Unit.', defaultContent: '-', render: (d, t) => t === 'display' ? (d ? money(d) : '-') : (d || 0) },
+              { data: 'reason', title: 'Motivo', render: (d, t) => t === 'display' ? esc(d || '') : d },
+              { data: 'reference', title: 'Referencia', defaultContent: '-', render: (d, t) => t === 'display' ? esc(d || '-') : d },
+              { data: 'balance', title: 'Saldo', render: (d, t) => t === 'display' ? `<strong>${Number(d).toLocaleString()}</strong>` : d },
+              { data: 'performedBy', title: 'Realizado Por', render: (d, t) => t === 'display' ? esc(d || '') : d },
+              { data: 'createdAt', title: 'Fecha', render: (d, t) => t === 'display' ? formatDateForDisplay(d) : d },
+              { data: null, title: 'Acciones', orderable: false, render: () => role === 'Admin' ? `<button class="action-icon delete-icon" data-action="delete"><i class="fas fa-trash"></i></button>` : '' }
             ],
             pageLength: 10,
             lengthMenu: [[10, 25, 50, -1], [10, 25, 50, 'All']],
@@ -4436,7 +4436,7 @@
             buttons: [
               { extend: 'csv', text: '<i class="fas fa-file-csv"></i> CSV', exportOptions: { columns: ':not(:last-child)' } },
               { extend: 'pdf', text: '<i class="fas fa-file-pdf"></i> PDF', exportOptions: { columns: ':not(:last-child)' } },
-              { extend: 'print', text: '<i class="fas fa-print"></i> Print', exportOptions: { columns: ':not(:last-child)' } }
+              { extend: 'print', text: '<i class="fas fa-print"></i> Imprimir', exportOptions: { columns: ':not(:last-child)' } }
             ],
             order: [[8, 'desc']]
           });
@@ -4454,13 +4454,13 @@
 
       const handleSave = async (moveData, productName) => {
         const { updateCost, ...move } = moveData; // updateCost is a UI flag, not stored on the ledger row
-        setLoad(move.type === 'in' ? 'Recording Stock In...' : 'Recording Stock Out...');
+        setLoad(move.type === 'in' ? 'Registrando Entrada...' : 'Registrando Salida...');
         const result = await fbAddStockMovement(move, productName, user);
         if (result.success && updateCost && move.unitCost) await fbUpdateProduct(move.productId, { cost: Number(move.unitCost) }, user);
         setLoad('');
         if (result.success) {
           setModalType(null); setShowAdjust(false);
-          Swal.fire({ icon: 'success', title: 'Success!', text: result.message, timer: 2000, showConfirmButton: false });
+          Swal.fire({ icon: 'success', title: '¡Éxito!', text: result.message, timer: 2000, showConfirmButton: false });
           reload();
         } else {
           Swal.fire({ icon: 'error', title: 'Error', text: result.message });
@@ -4469,9 +4469,9 @@
 
       const handleDelete = (mv) => {
         const productName = productMap[mv.productId]?.name || mv.productId;
-        Swal.fire({ icon: 'warning', title: 'Delete Stock Entry?', text: 'This retroactively changes historical Qty On Hand. This cannot be undone', showCancelButton: true, confirmButtonColor: '#ea4335', confirmButtonText: 'Delete' }).then(async (result) => {
+        Swal.fire({ icon: 'warning', title: '¿Eliminar Movimiento?', text: 'Esto cambiará retroactivamente el historial de Cant. Disponible. No se puede deshacer.', showCancelButton: true, confirmButtonColor: '#ea4335', confirmButtonText: 'Eliminar', cancelButtonText: 'Cancelar' }).then(async (result) => {
           if (!result.isConfirmed) return;
-          setLoad('Deleting stock entry...');
+          setLoad('Eliminando movimiento...');
           const r = await fbDeleteStockMovement(mv.id, `${mv.qty} x ${productName}`, user);
           setLoad('');
           if (r.success) { Swal.fire({ icon: 'success', text: r.message, timer: 2000, showConfirmButton: false }); reload(); }
@@ -4480,12 +4480,12 @@
       };
 
       const handleBulkSave = async (lines) => {
-        setLoad('Receiving stock...');
+        setLoad('Recibiendo stock...');
         const result = await fbBulkStockIn(lines, user);
         setLoad('');
         if (result.success) {
           setShowBulkIn(false);
-          Swal.fire({ icon: 'success', title: 'Success!', text: result.message, timer: 2000, showConfirmButton: false });
+          Swal.fire({ icon: 'success', title: '¡Éxito!', text: result.message, timer: 2000, showConfirmButton: false });
           reload();
         } else {
           Swal.fire({ icon: 'error', title: 'Error', text: result.message });
@@ -4496,13 +4496,13 @@
         <div className="data-section">
           {load && <TopLoadingBar />}
           <div className="section-header">
-            <h2><i className="fas fa-dolly"></i> Stock In / Out</h2>
+            <h2><i className="fas fa-dolly"></i> Movimientos de Stock</h2>
             <div className="stock-btns">
               <RefreshBtn onClick={reload} />
-              <button className="btn btn-success" disabled={loading} onClick={() => setModalType('in')}><i className="fas fa-arrow-down"></i> Stock In</button>
-              <button className="btn btn-danger" disabled={loading} onClick={() => setModalType('out')}><i className="fas fa-arrow-up"></i> Stock Out</button>
-              <button className="btn btn-secondary" disabled={loading} onClick={() => setShowBulkIn(true)}><i className="fas fa-truck-ramp-box"></i> Bulk Receive</button>
-              <button className="btn btn-secondary" disabled={loading} onClick={() => setShowAdjust(true)}><i className="fas fa-scale-balanced"></i> Stocktake</button>
+              <button className="btn btn-success" disabled={loading} onClick={() => setModalType('in')}><i className="fas fa-arrow-down"></i> Entrada</button>
+              <button className="btn btn-danger" disabled={loading} onClick={() => setModalType('out')}><i className="fas fa-arrow-up"></i> Salida</button>
+              <button className="btn btn-secondary" disabled={loading} onClick={() => setShowBulkIn(true)}><i className="fas fa-truck-ramp-box"></i> Recepción Masiva</button>
+              <button className="btn btn-secondary" disabled={loading} onClick={() => setShowAdjust(true)}><i className="fas fa-scale-balanced"></i> Inventario</button>
             </div>
           </div>
           {loading && <TableSkeleton rows={8} columns={10} />}
