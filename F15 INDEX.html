@@ -5904,19 +5904,19 @@
         };
         const r = await fbSaveSettings(payload, user);
         setSaving(false);
-        if (r.success) { applySettings(payload); refreshConfig(); Swal.fire({ icon: 'success', title: 'Saved', text: 'Settings updated', timer: 1600, showConfirmButton: false }); }
+        if (r.success) { applySettings(payload); refreshConfig(); Swal.fire({ icon: 'success', title: 'Guardado', text: 'Configuración actualizada', timer: 1600, showConfirmButton: false }); }
         else Swal.fire({ icon: 'error', title: 'Error', text: r.message });
       };
 
       const addCat = async () => {
         const nm = newCat.trim(); if (!nm) return;
-        setLoad('Adding category...');
+        setLoad('Agregando categoría...');
         const r = await fbAddCategory(nm, user); setLoad('');
         if (r.success) { setNewCat(''); refreshConfig(); } else Swal.fire({ icon: 'error', title: 'Error', text: r.message });
       };
-      const delCat = (c) => Swal.fire({ icon: 'warning', title: 'Delete category?', text: c.name, showCancelButton: true, confirmButtonColor: '#ea4335', confirmButtonText: 'Delete' }).then(async (res) => {
+      const delCat = (c) => Swal.fire({ icon: 'warning', title: '¿Eliminar categoría?', text: c.name, showCancelButton: true, confirmButtonColor: '#ea4335', confirmButtonText: 'Eliminar', cancelButtonText: 'Cancelar' }).then(async (res) => {
         if (!res.isConfirmed) return;
-        setLoad('Deleting...'); const r = await fbDeleteCategory(c.id, c.name, user); setLoad('');
+        setLoad('Eliminando...'); const r = await fbDeleteCategory(c.id, c.name, user); setLoad('');
         if (r.success) refreshConfig(); else Swal.fire({ icon: 'error', title: 'Error', text: r.message });
       });
 
@@ -5924,46 +5924,46 @@
         <div className="data-section">
           {load && <TopLoadingBar />}
           <div className="section-header">
-            <h2><i className="fas fa-gear"></i> Settings</h2>
-            <button className="btn btn-primary" onClick={save} disabled={saving}>{saving ? <><i className="fas fa-spinner fa-spin"></i> Saving...</> : <><i className="fas fa-save"></i> Save Settings</>}</button>
+            <h2><i className="fas fa-gear"></i> Configuración</h2>
+            <button className="btn btn-primary" onClick={save} disabled={saving}>{saving ? <><i className="fas fa-spinner fa-spin"></i> Guardando...</> : <><i className="fas fa-save"></i> Guardar Configuración</>}</button>
           </div>
 
-          <LteCard title="Business Info" icon="fa-store">
+          <LteCard title="Información del Negocio" icon="fa-store">
             <div className="form-grid">
-              <div className="form-group"><label>Business Name</label><input type="text" value={form.businessName || ''} onChange={(e) => upd('businessName', e.target.value)} /></div>
-              <div className="form-group"><label>Phone</label><input type="text" value={form.phone || ''} onChange={(e) => upd('phone', e.target.value)} /></div>
-              <div className="form-group"><label>Email</label><input type="email" value={form.email || ''} onChange={(e) => upd('email', e.target.value)} /></div>
-              <div className="form-group"><label>Logo URL</label><input type="text" value={form.logoUrl || ''} onChange={(e) => upd('logoUrl', e.target.value)} placeholder="https://..." /></div>
+              <div className="form-group"><label>Nombre del Negocio</label><input type="text" value={form.businessName || ''} onChange={(e) => upd('businessName', e.target.value)} /></div>
+              <div className="form-group"><label>Teléfono</label><input type="text" value={form.phone || ''} onChange={(e) => upd('phone', e.target.value)} /></div>
+              <div className="form-group"><label>Correo Electrónico</label><input type="email" value={form.email || ''} onChange={(e) => upd('email', e.target.value)} /></div>
+              <div className="form-group"><label>URL del Logo</label><input type="text" value={form.logoUrl || ''} onChange={(e) => upd('logoUrl', e.target.value)} placeholder="https://..." /></div>
             </div>
-            <div className="form-group"><label>Address</label><textarea rows="2" value={form.address || ''} onChange={(e) => upd('address', e.target.value)}></textarea></div>
+            <div className="form-group"><label>Dirección</label><textarea rows="2" value={form.address || ''} onChange={(e) => upd('address', e.target.value)}></textarea></div>
           </LteCard>
 
-          <LteCard title="Currency & Tax" icon="fa-coins">
+          <LteCard title="Moneda e Impuestos" icon="fa-coins">
             <div className="form-grid">
-              <div className="form-group"><label>Currency Symbol</label><input type="text" value={form.currencySymbol || ''} onChange={(e) => upd('currencySymbol', e.target.value)} placeholder="$, Rs, ₹, £..." /></div>
-              <div className="form-group"><label>Currency Code</label><input type="text" value={form.currencyCode || ''} onChange={(e) => upd('currencyCode', e.target.value)} placeholder="USD, PKR, INR..." /></div>
-              <div className="form-group"><label>Default Tax Rate (%)</label><input type="number" step="0.01" min="0" value={form.taxRate ?? ''} onChange={(e) => upd('taxRate', e.target.value)} /></div>
-              <div className="form-group"><label>Low Stock Default</label><input type="number" step="1" min="0" value={form.lowStockDefault ?? ''} onChange={(e) => upd('lowStockDefault', e.target.value)} /></div>
-              <div className="form-group"><label><i className="fas fa-toggle-on"></i> Prices Include Tax</label><div><input type="checkbox" className="toggle" checked={!!form.taxInclusive} onChange={(e) => upd('taxInclusive', e.target.checked)} /></div></div>
+              <div className="form-group"><label>Símbolo de Moneda</label><input type="text" value={form.currencySymbol || ''} onChange={(e) => upd('currencySymbol', e.target.value)} placeholder="$, Rs, ₹, £..." /></div>
+              <div className="form-group"><label>Código de Moneda</label><input type="text" value={form.currencyCode || ''} onChange={(e) => upd('currencyCode', e.target.value)} placeholder="USD, PKR, INR..." /></div>
+              <div className="form-group"><label>Tasa de Impuesto por Defecto (%)</label><input type="number" step="0.01" min="0" value={form.taxRate ?? ''} onChange={(e) => upd('taxRate', e.target.value)} /></div>
+              <div className="form-group"><label>Alerta de Stock Bajo</label><input type="number" step="1" min="0" value={form.lowStockDefault ?? ''} onChange={(e) => upd('lowStockDefault', e.target.value)} /></div>
+              <div className="form-group"><label><i className="fas fa-toggle-on"></i> Precios Incluyen Impuestos</label><div><input type="checkbox" className="toggle" checked={!!form.taxInclusive} onChange={(e) => upd('taxInclusive', e.target.checked)} /></div></div>
             </div>
           </LteCard>
 
-          <LteCard title="Receipt / Invoice" icon="fa-receipt">
+          <LteCard title="Recibo / Factura" icon="fa-receipt">
             <div className="form-grid">
-              <div className="form-group"><label>Invoice Prefix</label><input type="text" value={form.invoicePrefix || ''} onChange={(e) => upd('invoicePrefix', e.target.value)} placeholder="INV-" /></div>
+              <div className="form-group"><label>Prefijo de Factura</label><input type="text" value={form.invoicePrefix || ''} onChange={(e) => upd('invoicePrefix', e.target.value)} placeholder="INV-" /></div>
             </div>
-            <div className="form-group"><label>Receipt Header</label><textarea rows="2" value={form.receiptHeader || ''} onChange={(e) => upd('receiptHeader', e.target.value)} placeholder="Shown above receipt items"></textarea></div>
-            <div className="form-group"><label>Receipt Footer</label><textarea rows="2" value={form.receiptFooter || ''} onChange={(e) => upd('receiptFooter', e.target.value)} placeholder="Thank you message"></textarea></div>
+            <div className="form-group"><label>Encabezado del Recibo</label><textarea rows="2" value={form.receiptHeader || ''} onChange={(e) => upd('receiptHeader', e.target.value)} placeholder="Se muestra arriba de los artículos del recibo"></textarea></div>
+            <div className="form-group"><label>Pie del Recibo</label><textarea rows="2" value={form.receiptFooter || ''} onChange={(e) => upd('receiptFooter', e.target.value)} placeholder="Mensaje de agradecimiento"></textarea></div>
           </LteCard>
 
-          <LteCard title="Product Categories" icon="fa-tags">
+          <LteCard title="Categorías de Productos" icon="fa-tags">
             <div className="pos-scan-box" style={{ marginBottom: 14 }}>
-              <div className="form-group" style={{ flex: 1, marginBottom: 0 }}><label>New Category</label><input type="text" value={newCat} onChange={(e) => setNewCat(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); addCat(); } }} placeholder="e.g. Beverages" /></div>
-              <button className="btn btn-success" onClick={addCat}><i className="fas fa-plus"></i> Add</button>
+              <div className="form-group" style={{ flex: 1, marginBottom: 0 }}><label>Nueva Categoría</label><input type="text" value={newCat} onChange={(e) => setNewCat(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); addCat(); } }} placeholder="ej. Bebidas" /></div>
+              <button className="btn btn-success" onClick={addCat}><i className="fas fa-plus"></i> Agregar</button>
             </div>
             <div className="cat-chip-wrap">
-              {categories.length === 0 ? <p style={{ color: '#999' }}>No categories yet.</p> : categories.map(c => (
-                <span className="cat-chip" key={c.id}><i className="fas fa-tag"></i> {c.name}<button onClick={() => delCat(c)} title="Delete"><i className="fas fa-times"></i></button></span>
+              {categories.length === 0 ? <p style={{ color: '#999' }}>Aún no hay categorías.</p> : categories.map(c => (
+                <span className="cat-chip" key={c.id}><i className="fas fa-tag"></i> {c.name}<button onClick={() => delCat(c)} title="Eliminar"><i className="fas fa-times"></i></button></span>
               ))}
             </div>
           </LteCard>
