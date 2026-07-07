@@ -5151,22 +5151,22 @@
       return (
         <div className="modal-overlay" onClick={onClose}>
           <div className="modal" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header"><h3><i className="fas fa-truck-field"></i> {editItem ? 'Edit' : 'Add'} Supplier</h3><button className="close-btn" onClick={onClose}><i className="fas fa-times"></i></button></div>
+            <div className="modal-header"><h3><i className="fas fa-truck-field"></i> {editItem ? 'Editar' : 'Agregar'} Proveedor</h3><button className="close-btn" onClick={onClose}><i className="fas fa-times"></i></button></div>
             <div className="modal-body">
               <form onSubmit={(e) => { e.preventDefault(); setSaving(true); onSave({ ...f, openingBalance: Number(f.openingBalance) || 0 }); }}>
                 <div className="form-grid">
-                  <div className="form-group"><label>Supplier Name *</label><input type="text" value={f.name} onChange={(e) => upd('name', e.target.value)} required /></div>
-                  <div className="form-group"><label>Contact Person</label><input type="text" value={f.contact} onChange={(e) => upd('contact', e.target.value)} /></div>
-                  <div className="form-group"><label>Phone</label><input type="text" value={f.phone} onChange={(e) => upd('phone', e.target.value)} /></div>
-                  <div className="form-group"><label>Email</label><input type="email" value={f.email} onChange={(e) => upd('email', e.target.value)} /></div>
-                  <div className="form-group"><label>Payment Terms</label><input type="text" placeholder="Net 30, COD..." value={f.terms} onChange={(e) => upd('terms', e.target.value)} /></div>
-                  <div className="form-group"><label>Opening Balance (payable)</label><input type="number" step="0.01" value={f.openingBalance} onChange={(e) => upd('openingBalance', e.target.value)} /></div>
+                  <div className="form-group"><label>Nombre del Proveedor *</label><input type="text" value={f.name} onChange={(e) => upd('name', e.target.value)} required /></div>
+                  <div className="form-group"><label>Persona de Contacto</label><input type="text" value={f.contact} onChange={(e) => upd('contact', e.target.value)} /></div>
+                  <div className="form-group"><label>Teléfono</label><input type="text" value={f.phone} onChange={(e) => upd('phone', e.target.value)} /></div>
+                  <div className="form-group"><label>Correo Electrónico</label><input type="email" value={f.email} onChange={(e) => upd('email', e.target.value)} /></div>
+                  <div className="form-group"><label>Condiciones de Pago</label><input type="text" placeholder="Neto 30, Contado..." value={f.terms} onChange={(e) => upd('terms', e.target.value)} /></div>
+                  <div className="form-group"><label>Saldo Inicial (por pagar)</label><input type="number" step="0.01" value={f.openingBalance} onChange={(e) => upd('openingBalance', e.target.value)} /></div>
                 </div>
-                <div className="form-group"><label>Address</label><textarea rows="2" value={f.address} onChange={(e) => upd('address', e.target.value)}></textarea></div>
-                <div className="form-group"><label>Notes</label><textarea rows="2" value={f.notes} onChange={(e) => upd('notes', e.target.value)}></textarea></div>
+                <div className="form-group"><label>Dirección</label><textarea rows="2" value={f.address} onChange={(e) => upd('address', e.target.value)}></textarea></div>
+                <div className="form-group"><label>Notas</label><textarea rows="2" value={f.notes} onChange={(e) => upd('notes', e.target.value)}></textarea></div>
                 <div className="form-actions">
-                  <button type="submit" className="btn btn-primary" disabled={saving}>{saving ? <><i className="fas fa-spinner fa-spin"></i> Saving...</> : <><i className="fas fa-save"></i> Save</>}</button>
-                  <button type="button" className="btn btn-secondary" onClick={onClose}><i className="fas fa-times"></i> Cancel</button>
+                  <button type="submit" className="btn btn-primary" disabled={saving}>{saving ? <><i className="fas fa-spinner fa-spin"></i> Guardando...</> : <><i className="fas fa-save"></i> Guardar</>}</button>
+                  <button type="button" className="btn btn-secondary" onClick={onClose}><i className="fas fa-times"></i> Cancelar</button>
                 </div>
               </form>
             </div>
@@ -5189,7 +5189,7 @@
       const totalPayable = useMemo(() => suppliers.reduce((s, x) => s + Number(x.openingBalance || 0), 0), [suppliers]);
       const [viewSup, setViewSup] = useState(null);
 
-      useEffect(() => { if (err || (data && !data.success)) Swal.fire({ icon: 'error', title: 'Error', text: (data && data.message) || 'Failed to load suppliers' }); }, [err, data]);
+      useEffect(() => { if (err || (data && !data.success)) Swal.fire({ icon: 'error', title: 'Error', text: (data && data.message) || 'Error al cargar proveedores' }); }, [err, data]);
 
       useEffect(() => {
         if (loading) return;
@@ -5201,16 +5201,16 @@
             columnDefs: [{ targets: '_all', defaultContent: '' }], // tolerate rows missing newer fields - no "unknown parameter" warning
             createdRow: (row, d) => { if (Number(d.openingBalance) > 0) $(row).addClass('row-warn'); }, // outstanding payable
             columns: [
-              { data: 'name', title: 'Name', render: (d, t) => t === 'display' ? esc(d) : d },
-              { data: 'contact', title: 'Contact', render: (d, t) => t === 'display' ? esc(d || '-') : d },
-              { data: 'phone', title: 'Phone', render: (d, t) => t === 'display' ? esc(d || '-') : d },
-              { data: 'email', title: 'Email', render: (d, t) => t === 'display' ? esc(d || '-') : d },
-              { data: 'terms', title: 'Terms', render: (d, t) => t === 'display' ? esc(d || '-') : d },
-              { data: 'openingBalance', title: 'Payable', render: (d, t) => t === 'display' ? money(d) : d },
-              { data: null, title: 'Actions', orderable: false, render: () => `<button class="action-icon" data-action="view" title="View"><i class="fas fa-eye"></i></button><button class="action-icon edit-icon" data-action="edit" title="Edit"><i class="fas fa-edit"></i></button>` + (role === 'Admin' ? `<button class="action-icon delete-icon" data-action="delete" title="Delete"><i class="fas fa-trash"></i></button>` : '') }
+              { data: 'name', title: 'Nombre', render: (d, t) => t === 'display' ? esc(d) : d },
+              { data: 'contact', title: 'Contacto', render: (d, t) => t === 'display' ? esc(d || '-') : d },
+              { data: 'phone', title: 'Teléfono', render: (d, t) => t === 'display' ? esc(d || '-') : d },
+              { data: 'email', title: 'Correo', render: (d, t) => t === 'display' ? esc(d || '-') : d },
+              { data: 'terms', title: 'Condiciones', render: (d, t) => t === 'display' ? esc(d || '-') : d },
+              { data: 'openingBalance', title: 'Por Pagar', render: (d, t) => t === 'display' ? money(d) : d },
+              { data: null, title: 'Acciones', orderable: false, render: () => `<button class="action-icon" data-action="view" title="Ver"><i class="fas fa-eye"></i></button><button class="action-icon edit-icon" data-action="edit" title="Editar"><i class="fas fa-edit"></i></button>` + (role === 'Admin' ? `<button class="action-icon delete-icon" data-action="delete" title="Eliminar"><i class="fas fa-trash"></i></button>` : '') }
             ],
             pageLength: 10, lengthMenu: [[10, 25, 50, -1], [10, 25, 50, 'All']], responsive: true, dom: 'Blfrtip',
-            buttons: [{ extend: 'csv', text: '<i class="fas fa-file-csv"></i> CSV', exportOptions: { columns: ':not(:last-child)' } }, { extend: 'pdf', text: '<i class="fas fa-file-pdf"></i> PDF', exportOptions: { columns: ':not(:last-child)' } }, { extend: 'print', text: '<i class="fas fa-print"></i> Print', exportOptions: { columns: ':not(:last-child)' } }],
+            buttons: [{ extend: 'csv', text: '<i class="fas fa-file-csv"></i> CSV', exportOptions: { columns: ':not(:last-child)' } }, { extend: 'pdf', text: '<i class="fas fa-file-pdf"></i> PDF', exportOptions: { columns: ':not(:last-child)' } }, { extend: 'print', text: '<i class="fas fa-print"></i> Imprimir', exportOptions: { columns: ':not(:last-child)' } }],
             order: [[0, 'asc']]
           });
           tableRef.current = table;
@@ -5227,23 +5227,23 @@
       useEffect(() => () => { if (tableRef.current) { try { tableRef.current.destroy(); tableRef.current = null; } catch (e) { } } }, []);
 
       const handleSave = async (fd) => {
-        setLoad(editingId ? 'Updating supplier...' : 'Saving supplier...');
+        setLoad(editingId ? 'Actualizando proveedor...' : 'Guardando proveedor...');
         const r = editingId ? await fbUpdateSupplier(editingId, fd, user) : await fbAddSupplier(fd, user);
         setLoad('');
-        if (r.success) { setShowModal(false); setEditingId(null); Swal.fire({ icon: 'success', title: 'Success!', text: r.message, timer: 1800, showConfirmButton: false }); reload(); }
+        if (r.success) { setShowModal(false); setEditingId(null); Swal.fire({ icon: 'success', title: '¡Éxito!', text: r.message, timer: 1800, showConfirmButton: false }); reload(); }
         else Swal.fire({ icon: 'error', title: 'Error', text: r.message });
       };
-      const handleDelete = (s) => Swal.fire({ icon: 'warning', title: 'Delete supplier?', text: s.name, showCancelButton: true, confirmButtonColor: '#ea4335', confirmButtonText: 'Delete' }).then(async (res) => {
-        if (!res.isConfirmed) return; setLoad('Deleting...'); const r = await fbDeleteSupplier(s.id, s.name, user); setLoad('');
+      const handleDelete = (s) => Swal.fire({ icon: 'warning', title: '¿Eliminar proveedor?', text: s.name, showCancelButton: true, confirmButtonColor: '#ea4335', confirmButtonText: 'Eliminar', cancelButtonText: 'Cancelar' }).then(async (res) => {
+        if (!res.isConfirmed) return; setLoad('Eliminando...'); const r = await fbDeleteSupplier(s.id, s.name, user); setLoad('');
         if (r.success) { Swal.fire({ icon: 'success', text: r.message, timer: 1600, showConfirmButton: false }); reload(); } else Swal.fire({ icon: 'error', title: 'Error', text: r.message });
       });
 
       return (
         <div className="data-section">
           {load && <TopLoadingBar />}
-          <div className="section-header"><h2><i className="fas fa-truck-field"></i> Suppliers</h2><div style={{ display: 'flex', gap: '10px' }}><RefreshBtn onClick={reload} /><button className="btn btn-success" onClick={() => { setEditingId(null); setShowModal(true); }}><i className="fas fa-plus"></i> Add Supplier</button></div></div>
+          <div className="section-header"><h2><i className="fas fa-truck-field"></i> Proveedores</h2><div style={{ display: 'flex', gap: '10px' }}><RefreshBtn onClick={reload} /><button className="btn btn-success" onClick={() => { setEditingId(null); setShowModal(true); }}><i className="fas fa-plus"></i> Agregar Proveedor</button></div></div>
           {loading && <TableSkeleton rows={8} columns={7} />}
-          <div style={{ display: loading ? 'none' : 'block' }}><table id="suppliersTable" className="display" style={{ width: '100%' }}></table>{suppliers.length > 0 && <SummaryBar items={[{ label: 'Suppliers', value: suppliers.length }, { label: 'Total Payable', value: money(totalPayable) }]} />}</div>
+          <div style={{ display: loading ? 'none' : 'block' }}><table id="suppliersTable" className="display" style={{ width: '100%' }}></table>{suppliers.length > 0 && <SummaryBar items={[{ label: 'Proveedores', value: suppliers.length }, { label: 'Total por Pagar', value: money(totalPayable) }]} />}</div>
           {viewSup && <SupplierHubModal supplier={viewSup} onClose={() => setViewSup(null)} />}
           {showModal && <SupplierModal editItem={byId[editingId]} onClose={() => { setShowModal(false); setEditingId(null); }} onSave={handleSave} />}
         </div>
@@ -5388,8 +5388,8 @@
 
       const addLine = () => {
         const q = Number(qty), c = Number(unitCost);
-        if (!productId) return Swal.fire({ icon: 'warning', title: 'Pick a product' });
-        if (!Number.isInteger(q) || q < 1) return Swal.fire({ icon: 'warning', title: 'Invalid quantity' });
+        if (!productId) return Swal.fire({ icon: 'warning', title: 'Elige un producto' });
+        if (!Number.isInteger(q) || q < 1) return Swal.fire({ icon: 'warning', title: 'Cantidad inválida' });
         const p = byId[productId];
         setLines(prev => {
           const ex = prev.find(l => l.productId === productId);
@@ -5401,8 +5401,8 @@
       const removeLine = (id) => setLines(prev => prev.filter(l => l.productId !== id));
 
       const submit = async (status) => {
-        if (!supplierId) return Swal.fire({ icon: 'warning', title: 'Pick a supplier' });
-        if (!lines.length) return Swal.fire({ icon: 'warning', title: 'Add at least one line' });
+        if (!supplierId) return Swal.fire({ icon: 'warning', title: 'Elige un proveedor' });
+        if (!lines.length) return Swal.fire({ icon: 'warning', title: 'Agrega al menos una línea' });
         const sup = (suppliers || []).find(s => s.id === supplierId);
         setSaving(true);
         await onSave({ supplierId, supplierName: sup ? sup.name : '', items: lines.map(l => ({ ...l, lineTotal: round2(l.qty * l.unitCost) })), total: round2(total), notes: notes.trim() || null, expectedDate: expectedDate || null, status });
@@ -5412,22 +5412,22 @@
       return (
         <div className="modal-overlay" onClick={onClose}>
           <div className="modal modal-lg" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header"><h3><i className="fas fa-file-invoice-dollar"></i> New Purchase Order</h3><button className="close-btn" onClick={onClose}><i className="fas fa-times"></i></button></div>
+            <div className="modal-header"><h3><i className="fas fa-file-invoice-dollar"></i> Nueva Orden de Compra</h3><button className="close-btn" onClick={onClose}><i className="fas fa-times"></i></button></div>
             <div className="modal-body">
               <div className="form-grid">
-                <SearchableDropdown label="Supplier" icon="fas fa-truck-field" options={supplierOpts} value={supplierId} onChange={setSupplierId} placeholder="Select supplier..." required={true} />
-                <div className="form-group"><label><i className="fas fa-calendar-day"></i> Expected Date</label><input type="date" value={expectedDate} onChange={(e) => setExpectedDate(e.target.value)} /></div>
+                <SearchableDropdown label="Proveedor" icon="fas fa-truck-field" options={supplierOpts} value={supplierId} onChange={setSupplierId} placeholder="Seleccionar proveedor..." required={true} />
+                <div className="form-group"><label><i className="fas fa-calendar-day"></i> Fecha Esperada</label><input type="date" value={expectedDate} onChange={(e) => setExpectedDate(e.target.value)} /></div>
               </div>
               <div className="pos-disc-row" style={{ gridTemplateColumns: '2fr 1fr 1fr auto', alignItems: 'end' }}>
-                <SearchableDropdown label="Product" icon="fas fa-box" options={productOpts} value={productId} onChange={setProductId} placeholder="Add product..." />
-                <div className="form-group"><label>Qty</label><input type="number" min="1" step="1" value={qty} onChange={(e) => setQty(e.target.value)} /></div>
-                <div className="form-group"><label>Unit Cost</label><input type="number" min="0" step="0.01" value={unitCost} onChange={(e) => setUnitCost(e.target.value)} /></div>
-                <div className="form-group"><label>&nbsp;</label><button type="button" className="btn btn-secondary" onClick={addLine}><i className="fas fa-plus"></i> Add</button></div>
+                <SearchableDropdown label="Producto" icon="fas fa-box" options={productOpts} value={productId} onChange={setProductId} placeholder="Agregar producto..." />
+                <div className="form-group"><label>Cant.</label><input type="number" min="1" step="1" value={qty} onChange={(e) => setQty(e.target.value)} /></div>
+                <div className="form-group"><label>Costo Unitario</label><input type="number" min="0" step="0.01" value={unitCost} onChange={(e) => setUnitCost(e.target.value)} /></div>
+                <div className="form-group"><label>&nbsp;</label><button type="button" className="btn btn-secondary" onClick={addLine}><i className="fas fa-plus"></i> Agregar</button></div>
               </div>
               {lines.length > 0 && (
                 <div className="about-table-wrapper" style={{ marginTop: 12 }}>
                   <table className="about-roles-table">
-                    <thead><tr><th>Item</th><th>Qty</th><th>Unit Cost</th><th>Line Total</th><th></th></tr></thead>
+                    <thead><tr><th>Artículo</th><th>Cant.</th><th>Costo Unitario</th><th>Total Línea</th><th></th></tr></thead>
                     <tbody>
                       {lines.map(l => (
                         <tr key={l.productId}>
@@ -5439,12 +5439,12 @@
                   </table>
                 </div>
               )}
-              <p className="stock-onhand-hint" style={{ marginTop: 12 }}>PO Total: <strong>{money(total)}</strong></p>
-              <div className="form-group"><label>Notes</label><textarea rows="2" value={notes} onChange={(e) => setNotes(e.target.value)}></textarea></div>
+              <p className="stock-onhand-hint" style={{ marginTop: 12 }}>Total OC: <strong>{money(total)}</strong></p>
+              <div className="form-group"><label>Notas</label><textarea rows="2" value={notes} onChange={(e) => setNotes(e.target.value)}></textarea></div>
               <div className="form-actions">
-                <button type="button" className="btn btn-primary" disabled={saving} onClick={() => submit('ordered')}><i className="fas fa-paper-plane"></i> Save &amp; Order</button>
-                <button type="button" className="btn btn-secondary" disabled={saving} onClick={() => submit('draft')}><i className="fas fa-floppy-disk"></i> Save Draft</button>
-                <button type="button" className="btn btn-secondary" onClick={onClose}><i className="fas fa-times"></i> Cancel</button>
+                <button type="button" className="btn btn-primary" disabled={saving} onClick={() => submit('ordered')}><i className="fas fa-paper-plane"></i> Guardar y Ordenar</button>
+                <button type="button" className="btn btn-secondary" disabled={saving} onClick={() => submit('draft')}><i className="fas fa-floppy-disk"></i> Guardar Borrador</button>
+                <button type="button" className="btn btn-secondary" onClick={onClose}><i className="fas fa-times"></i> Cancelar</button>
               </div>
             </div>
           </div>
@@ -5462,22 +5462,22 @@
             <div className="modal-header"><h3><i className="fas fa-file-invoice-dollar"></i> {po.poNumber}</h3><button className="close-btn" onClick={onClose}><i className="fas fa-times"></i></button></div>
             <div className="modal-body">
               <div className="ts-meta" style={{ marginBottom: 12 }}>
-                <div className="ts-meta-row"><span>Supplier:</span><span>{po.supplierName || '-'}</span></div>
-                <div className="ts-meta-row"><span>Status:</span><span>{po.status}</span></div>
-                <div className="ts-meta-row"><span>Expected:</span><span>{po.expectedDate || '-'}</span></div>
-                <div className="ts-meta-row"><span>Created:</span><span>{formatDateForDisplay(po.createdAt)}</span></div>
+                <div className="ts-meta-row"><span>Proveedor:</span><span>{po.supplierName || '-'}</span></div>
+                <div className="ts-meta-row"><span>Estado:</span><span>{po.status}</span></div>
+                <div className="ts-meta-row"><span>Esperado:</span><span>{po.expectedDate || '-'}</span></div>
+                <div className="ts-meta-row"><span>Creado:</span><span>{formatDateForDisplay(po.createdAt)}</span></div>
               </div>
               <div className="about-table-wrapper">
                 <table className="about-roles-table">
-                  <thead><tr><th>Item</th><th>Qty</th><th>Unit Cost</th><th>Line Total</th></tr></thead>
+                  <thead><tr><th>Artículo</th><th>Cant.</th><th>Costo Unitario</th><th>Total Línea</th></tr></thead>
                   <tbody>{(po.items || []).map((it, i) => <tr key={it.sku || i}><td>{it.name}<div className="cell-sub">{it.sku}</div></td><td>{it.qty}</td><td>{money(it.unitCost)}</td><td>{money(it.lineTotal != null ? it.lineTotal : it.qty * it.unitCost)}</td></tr>)}</tbody>
                 </table>
               </div>
-              <p className="stock-onhand-hint" style={{ marginTop: 12 }}>PO Total: <strong>{money(po.total)}</strong></p>
+              <p className="stock-onhand-hint" style={{ marginTop: 12 }}>Total OC: <strong>{money(po.total)}</strong></p>
               {po.notes ? <p style={{ color: '#666', marginTop: 8 }}>{po.notes}</p> : null}
               <div className="form-actions">
-                {receivable && <button className="btn btn-success" onClick={() => onReceive(po)}><i className="fas fa-dolly"></i> Receive into Stock</button>}
-                <button className="btn btn-secondary" onClick={onClose}><i className="fas fa-times"></i> Close</button>
+                {receivable && <button className="btn btn-success" onClick={() => onReceive(po)}><i className="fas fa-dolly"></i> Recibir en Stock</button>}
+                <button className="btn btn-secondary" onClick={onClose}><i className="fas fa-times"></i> Cerrar</button>
               </div>
             </div>
           </div>
@@ -5511,7 +5511,7 @@
         return `<span class="${cls === 'type-chip' ? 'type-chip' : 'status-badge ' + cls}">${esc(s || 'draft')}</span>`;
       };
 
-      useEffect(() => { if (err || (data && data[0] && !data[0].success)) Swal.fire({ icon: 'error', title: 'Error', text: (data && data[0] && data[0].message) || 'Failed to load POs' }); }, [err, data]);
+      useEffect(() => { if (err || (data && data[0] && !data[0].success)) Swal.fire({ icon: 'error', title: 'Error', text: (data && data[0] && data[0].message) || 'Error al cargar OC' }); }, [err, data]);
 
       useEffect(() => {
         if (loading) return;
@@ -5523,17 +5523,17 @@
             columnDefs: [{ targets: '_all', defaultContent: '' }], // tolerate rows missing newer fields - no "unknown parameter" warning
             createdRow: (row, d) => { if (d.status === 'received') $(row).addClass('row-ok'); else if (d.status === 'cancelled') $(row).addClass('row-muted'); else $(row).addClass('row-warn'); }, // received=green, cancelled=grey, open=amber
             columns: [
-              { data: 'poNumber', title: 'PO #', render: (d, t) => t === 'display' ? '<code>' + esc(d || '') + '</code>' : d },
-              { data: 'createdAt', title: 'Date', render: (d, t) => t === 'display' ? formatDateForDisplay(d) : d },
-              { data: 'supplierName', title: 'Supplier', render: (d, t) => t === 'display' ? esc(d || '-') : d },
-              { data: 'itemCount', title: 'Lines' },
+              { data: 'poNumber', title: 'OC #', render: (d, t) => t === 'display' ? '<code>' + esc(d || '') + '</code>' : d },
+              { data: 'createdAt', title: 'Fecha', render: (d, t) => t === 'display' ? formatDateForDisplay(d) : d },
+              { data: 'supplierName', title: 'Proveedor', render: (d, t) => t === 'display' ? esc(d || '-') : d },
+              { data: 'itemCount', title: 'Líneas' },
               { data: 'total', title: 'Total', render: (d, t) => t === 'display' ? money(d) : d },
-              { data: 'status', title: 'Status', render: (d, t) => t === 'display' ? statusBadge(d) : d },
-              { data: 'expectedDate', title: 'Expected', render: (d, t) => t === 'display' ? esc(d || '-') : d },
-              { data: null, title: 'Actions', orderable: false, render: (d, t, row) => `<button class="action-icon edit-icon" data-action="view"><i class="fas fa-eye"></i></button>` + (row.status !== 'received' && row.status !== 'cancelled' ? `<button class="action-icon qr-icon" data-action="receive"><i class="fas fa-dolly"></i></button>` : '') + (role === 'Admin' ? `<button class="action-icon delete-icon" data-action="delete"><i class="fas fa-trash"></i></button>` : '') }
+              { data: 'status', title: 'Estado', render: (d, t) => t === 'display' ? statusBadge(d) : d },
+              { data: 'expectedDate', title: 'Esperado', render: (d, t) => t === 'display' ? esc(d || '-') : d },
+              { data: null, title: 'Acciones', orderable: false, render: (d, t, row) => `<button class="action-icon edit-icon" data-action="view"><i class="fas fa-eye"></i></button>` + (row.status !== 'received' && row.status !== 'cancelled' ? `<button class="action-icon qr-icon" data-action="receive"><i class="fas fa-dolly"></i></button>` : '') + (role === 'Admin' ? `<button class="action-icon delete-icon" data-action="delete"><i class="fas fa-trash"></i></button>` : '') }
             ],
             pageLength: 10, lengthMenu: [[10, 25, 50, -1], [10, 25, 50, 'All']], responsive: true, dom: 'Blfrtip',
-            buttons: [{ extend: 'csv', text: '<i class="fas fa-file-csv"></i> CSV', exportOptions: { columns: ':not(:last-child)' } }, { extend: 'pdf', text: '<i class="fas fa-file-pdf"></i> PDF', exportOptions: { columns: ':not(:last-child)' } }, { extend: 'print', text: '<i class="fas fa-print"></i> Print', exportOptions: { columns: ':not(:last-child)' } }],
+            buttons: [{ extend: 'csv', text: '<i class="fas fa-file-csv"></i> CSV', exportOptions: { columns: ':not(:last-child)' } }, { extend: 'pdf', text: '<i class="fas fa-file-pdf"></i> PDF', exportOptions: { columns: ':not(:last-child)' } }, { extend: 'print', text: '<i class="fas fa-print"></i> Imprimir', exportOptions: { columns: ':not(:last-child)' } }],
             order: [[1, 'desc']]
           });
           tableRef.current = table;
@@ -5550,35 +5550,35 @@
       useEffect(() => () => { if (tableRef.current) { try { tableRef.current.destroy(); tableRef.current = null; } catch (e) { } } }, []);
 
       const handleSave = async (po) => {
-        setLoad('Creating PO...');
+        setLoad('Creando OC...');
         const r = await fbCreatePurchaseOrder(po, user);
         setLoad('');
-        if (r.success) { setShowModal(false); Swal.fire({ icon: 'success', title: 'Success!', text: r.message, timer: 1800, showConfirmButton: false }); reload(); }
+        if (r.success) { setShowModal(false); Swal.fire({ icon: 'success', title: '¡Éxito!', text: r.message, timer: 1800, showConfirmButton: false }); reload(); }
         else Swal.fire({ icon: 'error', title: 'Error', text: r.message });
       };
 
       const doReceive = async (po) => {
         if (!po) return;
-        const res = await Swal.fire({ icon: 'question', title: 'Receive PO?', text: `Post ${(po.items || []).length} line(s) as Stock In and mark ${po.poNumber} received?`, showCancelButton: true, confirmButtonText: 'Receive', input: 'checkbox', inputValue: 1, inputPlaceholder: 'Also update product costs' });
+        const res = await Swal.fire({ icon: 'question', title: '¿Recibir OC?', text: `¿Registrar ${(po.items || []).length} línea(s) como Entrada y marcar ${po.poNumber} como recibida?`, showCancelButton: true, confirmButtonText: 'Recibir', cancelButtonText: 'Cancelar', input: 'checkbox', inputValue: 1, inputPlaceholder: 'También actualizar costos de productos' });
         if (!res.isConfirmed) return;
-        setViewPo(null); setLoad('Receiving stock...');
+        setViewPo(null); setLoad('Recibiendo stock...');
         const r = await fbReceivePurchaseOrder(po, user, !!res.value);
         setLoad('');
-        if (r.success) { Swal.fire({ icon: 'success', title: 'Received', text: r.message, timer: 1800, showConfirmButton: false }); reload(); }
+        if (r.success) { Swal.fire({ icon: 'success', title: 'Recibido', text: r.message, timer: 1800, showConfirmButton: false }); reload(); }
         else Swal.fire({ icon: 'error', title: 'Error', text: r.message });
       };
 
-      const handleDelete = (po) => Swal.fire({ icon: 'warning', title: 'Delete PO?', text: po.poNumber, showCancelButton: true, confirmButtonColor: '#ea4335', confirmButtonText: 'Delete' }).then(async (res) => {
-        if (!res.isConfirmed) return; setLoad('Deleting...'); const r = await fbDeletePurchaseOrder(po.id, po.poNumber, user); setLoad('');
+      const handleDelete = (po) => Swal.fire({ icon: 'warning', title: '¿Eliminar OC?', text: po.poNumber, showCancelButton: true, confirmButtonColor: '#ea4335', confirmButtonText: 'Eliminar', cancelButtonText: 'Cancelar' }).then(async (res) => {
+        if (!res.isConfirmed) return; setLoad('Eliminando...'); const r = await fbDeletePurchaseOrder(po.id, po.poNumber, user); setLoad('');
         if (r.success) { Swal.fire({ icon: 'success', text: r.message, timer: 1500, showConfirmButton: false }); reload(); } else Swal.fire({ icon: 'error', title: 'Error', text: r.message });
       });
 
       return (
         <div className="data-section">
           {load && <TopLoadingBar />}
-          <div className="section-header"><h2><i className="fas fa-file-invoice-dollar"></i> Purchase Orders</h2><div style={{ display: 'flex', gap: '10px' }}><RefreshBtn onClick={reload} /><button className="btn btn-success" disabled={loading} onClick={() => setShowModal(true)}><i className="fas fa-plus"></i> New PO</button></div></div>
+          <div className="section-header"><h2><i className="fas fa-file-invoice-dollar"></i> Órdenes de Compra</h2><div style={{ display: 'flex', gap: '10px' }}><RefreshBtn onClick={reload} /><button className="btn btn-success" disabled={loading} onClick={() => setShowModal(true)}><i className="fas fa-plus"></i> Nueva OC</button></div></div>
           {loading && <TableSkeleton rows={8} columns={8} />}
-          <div style={{ display: loading ? 'none' : 'block' }}><table id="poTable" className="display" style={{ width: '100%' }}></table>{pos.length > 0 && <SummaryBar items={[{ label: 'POs', value: poSummary.count }, { label: 'Total Value', value: money(poSummary.total) }, { label: 'Open (unreceived)', value: money(poSummary.open) }]} />}</div>
+          <div style={{ display: loading ? 'none' : 'block' }}><table id="poTable" className="display" style={{ width: '100%' }}></table>{pos.length > 0 && <SummaryBar items={[{ label: 'OCs', value: poSummary.count }, { label: 'Valor Total', value: money(poSummary.total) }, { label: 'Abiertas (sin recibir)', value: money(poSummary.open) }]} />}</div>
           {showModal && <PurchaseOrderModal suppliers={suppliers} products={products} onClose={() => setShowModal(false)} onSave={handleSave} />}
           {viewPo && <PoDetailModal po={viewPo} onClose={() => setViewPo(null)} onReceive={doReceive} />}
         </div>
