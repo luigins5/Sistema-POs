@@ -4519,7 +4519,7 @@
     // --- Cart (POS line items) ---
     function Cart({ items, onInc, onDec, onRemove }) {
       if (items.length === 0) {
-        return <div className="pos-empty"><i className="fas fa-cart-shopping"></i><p>Cart is empty — scan or type a product code to begin.</p></div>;
+        return <div className="pos-empty"><i className="fas fa-cart-shopping"></i><p>El carrito está vacío — escanea o ingresa un código de producto para comenzar.</p></div>;
       }
       return (
         <div className="pos-cart-list">
@@ -4532,7 +4532,7 @@
                 <button type="button" onClick={() => onInc(it.productId)}><i className="fas fa-plus"></i></button>
               </div>
               <div className="pos-line-total">{money(it.qty * it.price)}</div>
-              <button type="button" className="pos-remove-btn" title="Remove line" onClick={() => onRemove(it.productId)}><i className="fas fa-trash"></i></button>
+              <button type="button" className="pos-remove-btn" title="Quitar línea" onClick={() => onRemove(it.productId)}><i className="fas fa-trash"></i></button>
             </div>
           ))}
         </div>
@@ -4580,12 +4580,12 @@
         <div className="modal-overlay" onClick={onClose}>
           <div className="modal" style={{ maxWidth: '480px' }} onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
-              <h3><i className="fas fa-camera"></i> Scan with Camera</h3>
+              <h3><i className="fas fa-camera"></i> Escanear con Cámara</h3>
               <button className="close-btn" onClick={onClose}><i className="fas fa-times"></i></button>
             </div>
             <div className="modal-body">
               <div className="pos-camera-frame"><div id="pos-qr-reader"></div></div>
-              <p style={{ textAlign: 'center', color: '#888', fontSize: 13, marginTop: 12 }}>Point the camera at the product's QR code or barcode</p>
+              <p style={{ textAlign: 'center', color: '#888', fontSize: 13, marginTop: 12 }}>Apunta la cámara al código QR o de barras del producto</p>
             </div>
           </div>
         </div>
@@ -4604,18 +4604,18 @@
             {CFG.business?.address ? <div className="ts-sub">{CFG.business.address}</div> : null}
             {CFG.business?.phone ? <div className="ts-sub">{CFG.business.phone}</div> : null}
             {CFG.receiptHeader ? <div className="ts-sub">{CFG.receiptHeader}</div> : null}
-            <div className="ts-sub">Sales Receipt</div>
+            <div className="ts-sub">Recibo de Venta</div>
           </div>
           <div className="ts-meta">
-            <div className="ts-meta-row"><span>Date:</span><span>{formatDateForDisplay(sale.createdAt)}</span></div>
-            {sale.invoiceNo ? <div className="ts-meta-row"><span>Invoice:</span><span>{sale.invoiceNo}</span></div> : null}
-            <div className="ts-meta-row"><span>Sale #:</span><span>{String(sale.id).slice(-6).toUpperCase()}</span></div>
-            {sale.customerName && sale.customerName !== 'Walk-in' ? <div className="ts-meta-row"><span>Customer:</span><span>{sale.customerName}</span></div> : null}
-            <div className="ts-meta-row"><span>Cashier:</span><span>{sale.cashier}</span></div>
+            <div className="ts-meta-row"><span>Fecha:</span><span>{formatDateForDisplay(sale.createdAt)}</span></div>
+            {sale.invoiceNo ? <div className="ts-meta-row"><span>Factura:</span><span>{sale.invoiceNo}</span></div> : null}
+            <div className="ts-meta-row"><span>Venta #:</span><span>{String(sale.id).slice(-6).toUpperCase()}</span></div>
+            {sale.customerName && sale.customerName !== 'Walk-in' ? <div className="ts-meta-row"><span>Cliente:</span><span>{sale.customerName}</span></div> : null}
+            <div className="ts-meta-row"><span>Cajero:</span><span>{sale.cashier}</span></div>
           </div>
           <div className="ts-divider"></div>
           <div className="ts-items">
-            <div className="ts-item-row ts-item-head"><span>Item</span><span>Qty x Price = Total</span></div>
+            <div className="ts-item-row ts-item-head"><span>Artículo</span><span>Cant x Precio = Total</span></div>
             {items.map((it, i) => (
               <div className="ts-item-row" key={it.sku || i}>
                 <div className="ts-item-name-col">
@@ -4629,17 +4629,17 @@
           <div className="ts-divider"></div>
           <div className="ts-totals">
             <div className="ts-row"><span>Subtotal</span><span>{money(sale.subtotal)}</span></div>
-            {Number(sale.discount) > 0 ? <div className="ts-row"><span>Discount</span><span>- {money(sale.discount)}</span></div> : null}
-            {Number(sale.tax) > 0 ? <div className="ts-row"><span>Tax{CFG.taxInclusive ? ' (incl)' : ''}</span><span>{money(sale.tax)}</span></div> : null}
+            {Number(sale.discount) > 0 ? <div className="ts-row"><span>Descuento</span><span>- {money(sale.discount)}</span></div> : null}
+            {Number(sale.tax) > 0 ? <div className="ts-row"><span>Impuesto{CFG.taxInclusive ? ' (incl)' : ''}</span><span>{money(sale.tax)}</span></div> : null}
             <div className="ts-row ts-total"><span>Total</span><span>{money(sale.total)}</span></div>
-            {sale.paymentMethod ? <div className="ts-row"><span>Paid ({sale.paymentMethod})</span><span>{money(sale.amountTendered != null ? sale.amountTendered : sale.total)}</span></div> : null}
-            {Number(sale.changeDue) > 0 ? <div className="ts-row"><span>Change</span><span>{money(sale.changeDue)}</span></div> : null}
-            {sale.status === 'credit' ? <div className="ts-row"><span>Status</span><span>CREDIT / UNPAID</span></div> : null}
+            {sale.paymentMethod ? <div className="ts-row"><span>Pagado ({sale.paymentMethod})</span><span>{money(sale.amountTendered != null ? sale.amountTendered : sale.total)}</span></div> : null}
+            {Number(sale.changeDue) > 0 ? <div className="ts-row"><span>Cambio</span><span>{money(sale.changeDue)}</span></div> : null}
+            {sale.status === 'credit' ? <div className="ts-row"><span>Estado</span><span>CRÉDITO / NO PAGADO</span></div> : null}
           </div>
           <div className="ts-divider"></div>
           <div className="ts-footer">
-            <div>{CFG.receiptFooter || 'Thank you for your purchase!'}</div>
-            <div className="ts-cashier">Served by: {sale.cashier}</div>
+            <div>{CFG.receiptFooter || '¡Gracias por tu compra!'}</div>
+            <div className="ts-cashier">Atendido por: {sale.cashier}</div>
           </div>
         </div>
       );
@@ -4652,14 +4652,14 @@
         <div className="modal-overlay" onClick={onClose}>
           <div className="modal thermal-slip-modal" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
-              <h3><i className="fas fa-receipt"></i> Receipt</h3>
+              <h3><i className="fas fa-receipt"></i> Recibo</h3>
               <button className="close-btn" onClick={onClose}><i className="fas fa-times"></i></button>
             </div>
             <div className="modal-body thermal-slip-modal-body">
               <ThermalSlip sale={sale} />
               <div className="form-actions thermal-slip-actions">
-                <button type="button" className="btn btn-primary" onClick={() => window.print()}><i className="fas fa-print"></i> Print</button>
-                <button type="button" className="btn btn-secondary" onClick={onClose}><i className="fas fa-times"></i> Close</button>
+                <button type="button" className="btn btn-primary" onClick={() => window.print()}><i className="fas fa-print"></i> Imprimir</button>
+                <button type="button" className="btn btn-secondary" onClick={onClose}><i className="fas fa-times"></i> Cerrar</button>
               </div>
             </div>
           </div>
@@ -4701,7 +4701,7 @@
       const capacityCheck = useCallback((productId, name, nextQty) => {
         const onHand = computeQtyOnHand(productId, movements);
         if (nextQty > onHand) {
-          Swal.fire({ icon: 'warning', title: 'Not enough stock', text: `Only ${onHand} unit(s) of ${name} in stock.` });
+          Swal.fire({ icon: 'warning', title: 'Stock insuficiente', text: `Solo ${onHand} unidad(es) de ${name} en stock.` });
           return false;
         }
         return true;
@@ -4720,11 +4720,11 @@
       const resolveAndAddToCart = useCallback(async (rawCode) => {
         const code = String(rawCode || '').trim();
         if (!code) return;
-        if (!catalogReady) { Swal.fire({ icon: 'warning', title: 'Still Loading', text: 'Catalog is still loading, try again in a moment.' }); return; }
+        if (!catalogReady) { Swal.fire({ icon: 'warning', title: 'Cargando', text: 'El catálogo sigue cargando, inténtalo en un momento.' }); return; }
         const local = codeIndex.get(code.toLowerCase()); // instant - no network round-trip per scan
         if (local) { addToCart(local, 1); return; }
         const res = await fbFindProductByCode(code); // miss: product may be newer than our cached catalog
-        if (!res.success) { Swal.fire({ icon: 'error', title: 'Not Found', text: res.message || `No product matches "${code}"` }); return; }
+        if (!res.success) { Swal.fire({ icon: 'error', title: 'No Encontrado', text: res.message || `Ningún producto coincide con "${code}"` }); return; }
         addToCart(res.data, 1);
       }, [addToCart, catalogReady, codeIndex]);
 
@@ -4761,16 +4761,16 @@
       const holdSale = () => {
         if (!cart.length) return;
         const cust = customers.find(c => c.id === customerId);
-        const label = (cust ? cust.name : 'Walk-in') + ' · ' + cart.reduce((n, l) => n + l.qty, 0) + ' item(s) · ' + money(totals.grand);
+        const label = (cust ? cust.name : 'Mostrador') + ' · ' + cart.reduce((n, l) => n + l.qty, 0) + ' art(s) · ' + money(totals.grand);
         persistHeld([...held, { id: Date.now(), label, cart, customerId, discountType, discountValue, ts: nowIso() }]);
         resetSale();
-        Swal.fire({ icon: 'success', title: 'Held', text: 'Sale parked — recall it anytime.', timer: 1400, showConfirmButton: false });
+        Swal.fire({ icon: 'success', title: 'En Espera', text: 'Venta puesta en espera — recupérala en cualquier momento.', timer: 1400, showConfirmButton: false });
       };
 
       const recallHeld = async () => {
-        if (!held.length) { Swal.fire({ icon: 'info', title: 'No held sales' }); return; }
+        if (!held.length) { Swal.fire({ icon: 'info', title: 'No hay ventas en espera' }); return; }
         const opts = {}; held.forEach((h, i) => opts[i] = h.label);
-        const { value } = await Swal.fire({ title: 'Recall a held sale', input: 'select', inputOptions: opts, inputPlaceholder: 'Pick one', showCancelButton: true, confirmButtonText: 'Recall' });
+        const { value } = await Swal.fire({ title: 'Recuperar venta en espera', input: 'select', inputOptions: opts, inputPlaceholder: 'Selecciona una', showCancelButton: true, confirmButtonText: 'Recuperar' });
         if (value == null) return;
         const h = held[Number(value)]; if (!h) return;
         setCart(h.cart || []); setCustomerId(h.customerId || ''); setDiscountType(h.discountType || 'flat'); setDiscountValue(h.discountValue || '');
@@ -4780,11 +4780,11 @@
       const handleCheckout = async () => {
         if (cart.length === 0) return;
         if (paymentMethod === 'Cash' && (Number(tendered) || 0) < totals.grand) {
-          const go = await Swal.fire({ icon: 'warning', title: 'Short payment', text: `Tendered is less than ${money(totals.grand)}. Continue anyway?`, showCancelButton: true, confirmButtonText: 'Yes, continue' });
+          const go = await Swal.fire({ icon: 'warning', title: 'Pago insuficiente', text: `El pago es menor que ${money(totals.grand)}. ¿Continuar de todos modos?`, showCancelButton: true, confirmButtonText: 'Sí, continuar' });
           if (!go.isConfirmed) return;
         }
-        if (paymentMethod === 'Credit' && !customerId) { Swal.fire({ icon: 'warning', title: 'Pick a customer', text: 'Credit sales must be tied to a customer.' }); return; }
-        setLoad('Processing sale...');
+        if (paymentMethod === 'Credit' && !customerId) { Swal.fire({ icon: 'warning', title: 'Elige un cliente', text: 'Las ventas a crédito deben asociarse a un cliente.' }); return; }
+        setLoad('Procesando venta...');
         const cust = customers.find(c => c.id === customerId);
         const sale = {
           items: totals.lines, subtotal: totals.subtotal, discount: totals.discount, discountType, tax: totals.tax, total: totals.grand,
@@ -4797,9 +4797,9 @@
           setCompletedSale(res.data);
           resetSale();
           setReloadKey(k => k + 1);
-          Swal.fire({ icon: 'success', title: 'Sale Complete', text: `${res.data.invoiceNo || ''} — ${money(res.data.total)}`, timer: 1800, showConfirmButton: false });
+          Swal.fire({ icon: 'success', title: 'Venta Completada', text: `${res.data.invoiceNo || ''} — ${money(res.data.total)}`, timer: 1800, showConfirmButton: false });
         } else {
-          Swal.fire({ icon: 'error', title: 'Checkout Failed', text: res.message });
+          Swal.fire({ icon: 'error', title: 'Error al procesar', text: res.message });
         }
       };
 
@@ -4807,20 +4807,20 @@
         <div className="data-section">
           {load && <TopLoadingBar />}
           <div className="section-header">
-            <h2><i className="fas fa-cash-register"></i> QR Sales / POS</h2>
+            <h2><i className="fas fa-cash-register"></i> Punto de Venta (POS)</h2>
             <div className="pos-scan-actions">
-              <button className="btn btn-secondary" disabled={!catalogReady} onClick={() => setShowCamera(true)}><i className="fas fa-camera"></i> Camera</button>
-              <button className="btn btn-secondary" onClick={recallHeld}><i className="fas fa-clock-rotate-left"></i> Held{held.length ? ` (${held.length})` : ''}</button>
+              <button className="btn btn-secondary" disabled={!catalogReady} onClick={() => setShowCamera(true)}><i className="fas fa-camera"></i> Cámara</button>
+              <button className="btn btn-secondary" onClick={recallHeld}><i className="fas fa-clock-rotate-left"></i> En Espera{held.length ? ` (${held.length})` : ''}</button>
             </div>
           </div>
 
           <form className="pos-scan-box" onSubmit={handleScanSubmit}>
             <div className="form-group">
-              <label><i className="fas fa-barcode"></i> Scan or type SKU / Product Code</label>
+              <label><i className="fas fa-barcode"></i> Escanea o escribe SKU / Código de Producto</label>
               <input ref={scanRef} type="text" className="pos-scan-input" autoFocus disabled={!catalogReady} value={scanValue}
-                onChange={(e) => setScanValue(e.target.value)} placeholder={catalogReady ? 'Scan barcode/QR or type code, then press Enter' : 'Loading catalog...'} />
+                onChange={(e) => setScanValue(e.target.value)} placeholder={catalogReady ? 'Escanea código o ingresa SKU, luego presiona Enter' : 'Cargando catálogo...'} />
             </div>
-            <button type="submit" className="btn btn-primary" disabled={!catalogReady}><i className="fas fa-plus"></i> Add</button>
+            <button type="submit" className="btn btn-primary" disabled={!catalogReady}><i className="fas fa-plus"></i> Agregar</button>
           </form>
 
           <div className="pos-grid">
@@ -4828,22 +4828,22 @@
               {loadingProducts ? <TableSkeleton rows={4} columns={4} /> : <Cart items={cart} onInc={(id) => changeQty(id, 1)} onDec={(id) => changeQty(id, -1)} onRemove={removeLine} />}
             </div>
             <div className="pos-summary">
-              <SearchableDropdown label="Customer" icon="fas fa-user" options={customerOpts} value={customerId} onChange={setCustomerId} placeholder="Walk-in customer" />
+              <SearchableDropdown label="Cliente" icon="fas fa-user" options={customerOpts} value={customerId} onChange={setCustomerId} placeholder="Cliente mostrador" />
               <div className="pos-disc-row">
-                <SearchableDropdown label="Discount" icon="fas fa-tags" options={DISCOUNT_TYPE_OPTS} value={discountType} onChange={setDiscountType} placeholder="Amount" />
-                <div className="form-group"><label>Value</label><input type="number" min="0" step="0.01" placeholder="0" value={discountValue} onChange={(e) => setDiscountValue(e.target.value)} /></div>
+                <SearchableDropdown label="Descuento" icon="fas fa-tags" options={DISCOUNT_TYPE_OPTS} value={discountType} onChange={setDiscountType} placeholder="Monto" />
+                <div className="form-group"><label>Valor</label><input type="number" min="0" step="0.01" placeholder="0" value={discountValue} onChange={(e) => setDiscountValue(e.target.value)} /></div>
               </div>
-              <SearchableDropdown label="Payment" icon="fas fa-money-bill-wave" options={PAYMENT_OPTS} value={paymentMethod} onChange={setPaymentMethod} placeholder="Cash" />
-              {paymentMethod === 'Cash' && <div className="form-group"><label>Amount Tendered</label><input type="number" min="0" step="0.01" value={tendered} onChange={(e) => setTendered(e.target.value)} /></div>}
-              <div className="pos-summary-row"><span>Items</span><span>{itemCount}</span></div>
+              <SearchableDropdown label="Método de Pago" icon="fas fa-money-bill-wave" options={PAYMENT_OPTS} value={paymentMethod} onChange={setPaymentMethod} placeholder="Efectivo" />
+              {paymentMethod === 'Cash' && <div className="form-group"><label>Monto Recibido</label><input type="number" min="0" step="0.01" value={tendered} onChange={(e) => setTendered(e.target.value)} /></div>}
+              <div className="pos-summary-row"><span>Artículos</span><span>{itemCount}</span></div>
               <div className="pos-summary-row"><span>Subtotal</span><span>{money(totals.subtotal)}</span></div>
-              {totals.discount > 0 && <div className="pos-summary-row"><span>Discount</span><span>- {money(totals.discount)}</span></div>}
-              {totals.tax > 0 && <div className="pos-summary-row"><span>Tax{CFG.taxInclusive ? ' (incl)' : ''}</span><span>{money(totals.tax)}</span></div>}
-              <div className="pos-summary-row grand"><span>Grand Total</span><span>{money(totals.grand)}</span></div>
-              {paymentMethod === 'Cash' && (Number(tendered) || 0) > 0 && <div className="pos-summary-row"><span>Change</span><span>{money(changeDue)}</span></div>}
+              {totals.discount > 0 && <div className="pos-summary-row"><span>Descuento</span><span>- {money(totals.discount)}</span></div>}
+              {totals.tax > 0 && <div className="pos-summary-row"><span>Impuesto{CFG.taxInclusive ? ' (incl)' : ''}</span><span>{money(totals.tax)}</span></div>}
+              <div className="pos-summary-row grand"><span>Total Final</span><span>{money(totals.grand)}</span></div>
+              {paymentMethod === 'Cash' && (Number(tendered) || 0) > 0 && <div className="pos-summary-row"><span>Cambio</span><span>{money(changeDue)}</span></div>}
               <div className="pos-checkout-actions">
-                <button className="btn btn-secondary" disabled={cart.length === 0} onClick={holdSale}><i className="fas fa-pause"></i> Hold</button>
-                <button className="btn btn-success" disabled={cart.length === 0} onClick={handleCheckout}><i className="fas fa-check"></i> Checkout</button>
+                <button className="btn btn-secondary" disabled={cart.length === 0} onClick={holdSale}><i className="fas fa-pause"></i> Poner en Espera</button>
+                <button className="btn btn-success" disabled={cart.length === 0} onClick={handleCheckout}><i className="fas fa-check"></i> Cobrar</button>
               </div>
             </div>
           </div>
@@ -4874,12 +4874,12 @@
         const items = sale.items
           .map((it, i) => ({ productId: it.productId, name: it.name, sku: it.sku, qty: qtys[i], price: it.price, lineTotal: qtys[i] * it.price }))
           .filter(it => it.qty > 0);
-        if (!items.length) return Swal.fire({ icon: 'warning', title: 'Nothing Selected', text: 'Enter a return quantity for at least one item' });
+        if (!items.length) return Swal.fire({ icon: 'warning', title: 'Nada Seleccionado', text: 'Ingresa una cantidad de devolución para al menos un artículo' });
         setSaving(true);
         const result = await fbCreateReturn(sale.id, items, user);
         setSaving(false);
         if (result.success) {
-          Swal.fire({ icon: 'success', title: 'Return Processed', text: 'Refund: ' + money(totalRefund), timer: 2000, showConfirmButton: false });
+          Swal.fire({ icon: 'success', title: 'Devolución Procesada', text: 'Reembolso: ' + money(totalRefund), timer: 2000, showConfirmButton: false });
           onDone();
         } else {
           Swal.fire({ icon: 'error', title: 'Error', text: result.message });
@@ -4890,14 +4890,14 @@
         <div className="modal-overlay" onClick={onClose}>
           <div className="modal" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
-              <h3><i className="fas fa-rotate-left"></i> Process Return - Sale {String(sale.id).slice(-6).toUpperCase()}</h3>
+              <h3><i className="fas fa-rotate-left"></i> Procesar Devolución - Venta {String(sale.id).slice(-6).toUpperCase()}</h3>
               <button className="close-btn" onClick={onClose}><i className="fas fa-times"></i></button>
             </div>
             <div className="modal-body">
               <form onSubmit={handleSubmit}>
                 <div className="about-table-wrapper">
                   <table className="about-roles-table">
-                    <thead><tr><th>Item</th><th>Sold</th><th>Already Returned</th><th>Return Qty</th><th>Refund</th></tr></thead>
+                    <thead><tr><th>Artículo</th><th>Vendido</th><th>Ya Devuelto</th><th>Cant. a Devolver</th><th>Reembolso</th></tr></thead>
                     <tbody>
                       {sale.items.map((it, i) => (
                         <tr key={it.sku || i}>
@@ -4911,10 +4911,10 @@
                     </tbody>
                   </table>
                 </div>
-                <p className="stock-onhand-hint" style={{ marginTop: '16px' }}>Total Refund: <strong>{money(totalRefund)}</strong></p>
+                <p className="stock-onhand-hint" style={{ marginTop: '16px' }}>Reembolso Total: <strong>{money(totalRefund)}</strong></p>
                 <div className="form-actions">
-                  <button type="submit" className="btn btn-danger" disabled={saving}>{saving ? <><i className="fas fa-spinner fa-spin"></i> Processing...</> : <><i className="fas fa-rotate-left"></i> Process Return</>}</button>
-                  <button type="button" className="btn btn-secondary" onClick={onClose}><i className="fas fa-times"></i> Cancel</button>
+                  <button type="submit" className="btn btn-danger" disabled={saving}>{saving ? <><i className="fas fa-spinner fa-spin"></i> Procesando...</> : <><i className="fas fa-rotate-left"></i> Procesar Devolución</>}</button>
+                  <button type="button" className="btn btn-secondary" onClick={onClose}><i className="fas fa-times"></i> Cancelar</button>
                 </div>
               </form>
             </div>
@@ -4952,7 +4952,7 @@
       }), [tableData, sales.length]);
 
       useEffect(() => {
-        if (err || (data && data[0] && !data[0].success)) Swal.fire({ icon: 'error', title: 'Error', text: (data && data[0] && data[0].message) || 'Failed to load sales' });
+        if (err || (data && data[0] && !data[0].success)) Swal.fire({ icon: 'error', title: 'Error', text: (data && data[0] && data[0].message) || 'Error al cargar ventas' });
       }, [err, data]);
 
       useEffect(() => {
@@ -4966,16 +4966,16 @@
             columnDefs: [{ targets: '_all', defaultContent: '' }], // tolerate rows missing newer fields - no "unknown parameter" warning
             createdRow: (row, d) => { if (d.status === 'credit') $(row).addClass('row-danger'); else if (Number(d.returnedTotal) > 0) $(row).addClass('row-warn'); }, // credit=red, has-return=amber
             columns: [
-              { data: 'invoiceNo', title: 'Invoice', render: (d, t, row) => t === 'display' ? '<code>' + esc(d || String(row.id).slice(-6).toUpperCase()) + '</code>' : (d || row.id) },
-              { data: 'createdAt', title: 'Date', render: (d, t) => t === 'display' ? formatDateForDisplay(d) : d },
-              { data: 'customerName', title: 'Customer', render: (d, t) => t === 'display' ? esc(d || 'Walk-in') : d },
-              { data: 'cashier', title: 'Cashier', render: (d, t) => t === 'display' ? esc(d || '') : d },
-              { data: 'itemCount', title: 'Items' },
+              { data: 'invoiceNo', title: 'Factura', render: (d, t, row) => t === 'display' ? '<code>' + esc(d || String(row.id).slice(-6).toUpperCase()) + '</code>' : (d || row.id) },
+              { data: 'createdAt', title: 'Fecha', render: (d, t) => t === 'display' ? formatDateForDisplay(d) : d },
+              { data: 'customerName', title: 'Cliente', render: (d, t) => t === 'display' ? esc(d || 'Mostrador') : d },
+              { data: 'cashier', title: 'Cajero', render: (d, t) => t === 'display' ? esc(d || '') : d },
+              { data: 'itemCount', title: 'Artículos' },
               { data: 'total', title: 'Total', render: (d, t) => t === 'display' ? money(d) : d },
-              { data: 'paymentMethod', title: 'Payment', render: (d, t) => t === 'display' ? (d ? '<span class="type-chip">' + esc(d) + '</span>' : '-') : (d || '') },
-              { data: 'profit', title: 'Profit', render: (d, t) => t === 'display' ? `<span style="color:${Number(d) >= 0 ? '#155724' : '#721c24'};font-weight:600">${money(d)}</span>` : d },
-              { data: 'returnedTotal', title: 'Returned', render: (d, t) => t === 'display' ? (d > 0 ? '<span class="status-badge status-inactive">' + money(d) + '</span>' : '-') : d },
-              { data: null, title: 'Actions', orderable: false, render: () => `<button class="action-icon edit-icon" data-action="view"><i class="fas fa-receipt"></i></button>` + (role === 'Admin' ? `<button class="action-icon qr-icon" data-action="return"><i class="fas fa-rotate-left"></i></button>` : '') }
+              { data: 'paymentMethod', title: 'Pago', render: (d, t) => t === 'display' ? (d ? '<span class="type-chip">' + esc(d) + '</span>' : '-') : (d || '') },
+              { data: 'profit', title: 'Ganancia', render: (d, t) => t === 'display' ? `<span style="color:${Number(d) >= 0 ? '#155724' : '#721c24'};font-weight:600">${money(d)}</span>` : d },
+              { data: 'returnedTotal', title: 'Devuelto', render: (d, t) => t === 'display' ? (d > 0 ? '<span class="status-badge status-inactive">' + money(d) + '</span>' : '-') : d },
+              { data: null, title: 'Acciones', orderable: false, render: () => `<button class="action-icon edit-icon" data-action="view"><i class="fas fa-receipt"></i></button>` + (role === 'Admin' ? `<button class="action-icon qr-icon" data-action="return"><i class="fas fa-rotate-left"></i></button>` : '') }
             ],
             pageLength: 10,
             lengthMenu: [[10, 25, 50, -1], [10, 25, 50, 'All']],
@@ -4984,7 +4984,7 @@
             buttons: [
               { extend: 'csv', text: '<i class="fas fa-file-csv"></i> CSV', exportOptions: { columns: ':not(:last-child)' } },
               { extend: 'pdf', text: '<i class="fas fa-file-pdf"></i> PDF', exportOptions: { columns: ':not(:last-child)' } },
-              { extend: 'print', text: '<i class="fas fa-print"></i> Print', exportOptions: { columns: ':not(:last-child)' } }
+              { extend: 'print', text: '<i class="fas fa-print"></i> Imprimir', exportOptions: { columns: ':not(:last-child)' } }
             ],
             order: [[1, 'desc']]
           });
@@ -5004,11 +5004,11 @@
 
       return (
         <div className="data-section">
-          <div className="section-header"><h2><i className="fas fa-receipt"></i> Sales History</h2><RefreshBtn onClick={reload} /></div>
+          <div className="section-header"><h2><i className="fas fa-receipt"></i> Historial de Ventas</h2><RefreshBtn onClick={reload} /></div>
           {loading && <TableSkeleton rows={8} columns={10} />}
           <div style={{ display: loading ? 'none' : 'block' }}>
             <table id="salesTable" className="display" style={{ width: '100%' }}></table>
-            {sales.length > 0 && <SummaryBar items={[{ label: 'Sales', value: summary.count }, { label: 'Total', value: money(summary.total) }, { label: 'Profit', value: money(summary.profit) }, { label: 'Returned', value: money(summary.returned) }]} />}
+            {sales.length > 0 && <SummaryBar items={[{ label: 'Ventas', value: summary.count }, { label: 'Total', value: money(summary.total) }, { label: 'Ganancia', value: money(summary.profit) }, { label: 'Devuelto', value: money(summary.returned) }]} />}
           </div>
           {viewSale && <ThermalReceiptOverlay sale={viewSale} onClose={() => setViewSale(null)} />}
           {returnSaleId && <ReturnModal sale={byId[returnSaleId]} returns={returns} user={user} onClose={() => setReturnSaleId(null)} onDone={() => { setReturnSaleId(null); reload(); }} />}
