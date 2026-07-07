@@ -4576,7 +4576,7 @@
           runningRef.current = true;
           if (cancelled) safeStop(); // modal was closed while the camera was still starting up
         }).catch((err) => {
-          Swal.fire({ icon: 'error', title: 'Camera Error', text: 'Could not start camera: ' + (err && err.message ? err.message : err) });
+          Swal.fire({ icon: 'error', title: 'Error de Cámara', text: 'No se pudo iniciar la cámara: ' + (err && err.message ? err.message : err) });
           onClose();
         });
         return () => {
