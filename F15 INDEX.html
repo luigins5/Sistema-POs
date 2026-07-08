@@ -3207,7 +3207,7 @@
     ];
     const ACTIVE_OPTS = [{ value: '1', label: 'Activo' }, { value: '0', label: 'Inactivo' }];
     const LOW_STOCK_OPTS = [{ value: '1', label: 'Solo Stock Bajo' }];
-    const ROLE_OPTS = [{ value: 'Admin', label: 'Administrador' }, { value: 'User', label: 'Usuario' }];
+    const ROLE_OPTS = [{ value: 'Admin', label: 'Administrador' }, { value: 'User', label: 'Usuario' }, { value: 'Vendedor Móvil', label: 'Vendedor Móvil' }];
     const STATUS_OPTS = [{ value: 'active', label: 'Activo' }, { value: 'discontinued', label: 'Descontinuado' }];
     const PRODUCT_STATUS_FILTER = [{ value: 'active', label: 'Solo Activos' }, { value: 'discontinued', label: 'Solo Descontinuados' }];
     const CUSTOMER_TYPE_OPTS = [{ value: 'Retail', label: 'Minorista' }, { value: 'Wholesale', label: 'Mayorista' }, { value: 'Lead', label: 'Prospecto' }, { value: 'VIP', label: 'VIP' }];
@@ -3616,7 +3616,7 @@
               {isAdmin && <li><button className={activeMenu === 'dashboard' ? 'active' : ''} onClick={() => setActiveMenu('dashboard')}><i className="fas fa-chart-line"></i><span>Panel</span></button></li>}
               <li><button className={activeMenu === 'pos' ? 'active' : ''} onClick={() => setActiveMenu('pos')}><i className="fas fa-cash-register"></i><span>Ventas QR</span></button></li>
               <li><button className={activeMenu === 'products' ? 'active' : ''} onClick={() => setActiveMenu('products')}><i className="fas fa-boxes-stacked"></i><span>Productos</span></button></li>
-              <li><button className={activeMenu === 'stock' ? 'active' : ''} onClick={() => setActiveMenu('stock')}><i className="fas fa-dolly"></i><span>Entrada/Salida Stock</span></button></li>
+              {role !== 'Vendedor Móvil' && <li><button className={activeMenu === 'stock' ? 'active' : ''} onClick={() => setActiveMenu('stock')}><i className="fas fa-dolly"></i><span>Entrada/Salida Stock</span></button></li>}
               <li><button className={activeMenu === 'sales-history' ? 'active' : ''} onClick={() => setActiveMenu('sales-history')}><i className="fas fa-receipt"></i><span>Historial de Ventas</span></button></li>
               <li><button className={activeMenu === 'records' ? 'active' : ''} onClick={() => setActiveMenu('records')}><i className="fas fa-address-book"></i><span>Clientes</span></button></li>
               {isAdmin && <li><button className={activeMenu === 'suppliers' ? 'active' : ''} onClick={() => setActiveMenu('suppliers')}><i className="fas fa-truck-field"></i><span>Proveedores</span></button></li>}
@@ -5058,7 +5058,7 @@
       const tableInstanceRef = useRef(null);
 
       const { loading, data, err } = useFetch(() => Promise.all([fbGetSales(), fbGetReturns()]), [reloadKey]);
-      const sales = useMemo(() => (data && data[0] && data[0].success ? data[0].data : []), [data]);
+      const sales = useMemo(() => { let arr = (data && data[0] && data[0].success ? data[0].data : []); return role === 'Vendedor Móvil' ? arr.filter(s => s.cashier === user?.name) : arr; }, [data, role, user?.name]);
       const returns = useMemo(() => (data && data[1] && data[1].success ? data[1].data : []), [data]);
       const reload = () => setReloadKey(k => k + 1);
       const byId = useMemo(() => sales.reduce((m, s) => (m[s.id] = s, m), {}), [sales]);
@@ -5910,28 +5910,28 @@
             <p className="mb-24">El sistema cuenta con diferentes roles de usuario. Cada rol puede hacer diferentes cosas según su nivel de acceso.</p>
             <div className="about-table-wrapper">
               <table className="about-roles-table">
-                <thead><tr><th>Función / Acción</th><th><span className="role-badge role-admin">Admin</span></th><th><span className="role-badge role-emp">Usuario</span></th></tr></thead>
+                <thead><tr><th>Función / Acción</th><th><span className="role-badge role-admin">Admin</span></th><th><span className="role-badge role-emp">Usuario</span></th><th><span className="role-badge" style={{background:'#0074D9',color:'white'}}>Vendedor Móvil</span></th></tr></thead>
                 <tbody>
-                  <tr><td>Ver Panel Principal</td><td><i className="fas fa-check-circle text-success"></i> Sí</td><td><i className="fas fa-times-circle text-danger"></i> No</td></tr>
-                  <tr><td>Ver Clientes</td><td><i className="fas fa-check-circle text-success"></i> Sí</td><td><i className="fas fa-check-circle text-success"></i> Sí</td></tr>
-                  <tr><td>Agregar / Editar Clientes</td><td><i className="fas fa-check-circle text-success"></i> Sí</td><td><i className="fas fa-check-circle text-success"></i> Sí</td></tr>
-                  <tr><td>Eliminar Clientes</td><td><i className="fas fa-check-circle text-success"></i> Sí</td><td><i className="fas fa-times-circle text-danger"></i> No</td></tr>
-                  <tr><td>Ver Productos</td><td><i className="fas fa-check-circle text-success"></i> Sí</td><td><i className="fas fa-check-circle text-success"></i> Sí</td></tr>
-                  <tr><td>Agregar / Editar Productos</td><td><i className="fas fa-check-circle text-success"></i> Sí</td><td><i className="fas fa-check-circle text-success"></i> Sí</td></tr>
-                  <tr><td>Eliminar Productos</td><td><i className="fas fa-check-circle text-success"></i> Sí</td><td><i className="fas fa-times-circle text-danger"></i> No</td></tr>
-                  <tr><td>Imprimir Etiquetas QR</td><td><i className="fas fa-check-circle text-success"></i> Sí</td><td><i className="fas fa-check-circle text-success"></i> Sí</td></tr>
-                  <tr><td>Registrar Entrada de Stock</td><td><i className="fas fa-check-circle text-success"></i> Sí</td><td><i className="fas fa-check-circle text-success"></i> Sí</td></tr>
-                  <tr><td>Registrar Salida de Stock</td><td><i className="fas fa-check-circle text-success"></i> Sí</td><td><i className="fas fa-check-circle text-success"></i> Sí</td></tr>
-                  <tr><td>Eliminar Registros de Stock</td><td><i className="fas fa-check-circle text-success"></i> Sí</td><td><i className="fas fa-times-circle text-danger"></i> No</td></tr>
-                  <tr><td>Procesar Venta / POS (Ventas QR)</td><td><i className="fas fa-check-circle text-success"></i> Sí</td><td><i className="fas fa-check-circle text-success"></i> Sí</td></tr>
-                  <tr><td>Ver Historial de Ventas</td><td><i className="fas fa-check-circle text-success"></i> Sí</td><td><i className="fas fa-check-circle text-success"></i> Sí</td></tr>
-                  <tr><td>Procesar Devolución</td><td><i className="fas fa-check-circle text-success"></i> Sí</td><td><i className="fas fa-times-circle text-danger"></i> No</td></tr>
-                  <tr><td>Recepción Masiva de Stock</td><td><i className="fas fa-check-circle text-success"></i> Sí</td><td><i className="fas fa-check-circle text-success"></i> Sí</td></tr>
-                  <tr><td>Gestionar Usuarios</td><td><i className="fas fa-check-circle text-success"></i> Sí</td><td><i className="fas fa-times-circle text-danger"></i> No</td></tr>
-                  <tr><td>Gestionar Proveedores</td><td><i className="fas fa-check-circle text-success"></i> Sí</td><td><i className="fas fa-times-circle text-danger"></i> No</td></tr>
-                  <tr><td>Gestionar Gastos</td><td><i className="fas fa-check-circle text-success"></i> Sí</td><td><i className="fas fa-times-circle text-danger"></i> No</td></tr>
-                  <tr><td>Gestionar Configuración y Categorías</td><td><i className="fas fa-check-circle text-success"></i> Sí</td><td><i className="fas fa-times-circle text-danger"></i> No</td></tr>
-                  <tr><td>Ver Registro de Actividad</td><td><i className="fas fa-check-circle text-success"></i> Sí</td><td><i className="fas fa-times-circle text-danger"></i> No</td></tr>
+                  <tr><td>Ver Panel Principal</td><td><i className="fas fa-check-circle text-success"></i> Sí</td><td><i className="fas fa-times-circle text-danger"></i> No</td><td><i className="fas fa-times-circle text-danger"></i> No</td></tr>
+                  <tr><td>Ver Clientes</td><td><i className="fas fa-check-circle text-success"></i> Sí</td><td><i className="fas fa-check-circle text-success"></i> Sí</td><td><i className="fas fa-check-circle text-success"></i> Sí</td></tr>
+                  <tr><td>Agregar / Editar Clientes</td><td><i className="fas fa-check-circle text-success"></i> Sí</td><td><i className="fas fa-check-circle text-success"></i> Sí</td><td><i className="fas fa-check-circle text-success"></i> Sí</td></tr>
+                  <tr><td>Eliminar Clientes</td><td><i className="fas fa-check-circle text-success"></i> Sí</td><td><i className="fas fa-times-circle text-danger"></i> No</td><td><i className="fas fa-times-circle text-danger"></i> No</td></tr>
+                  <tr><td>Ver Productos</td><td><i className="fas fa-check-circle text-success"></i> Sí</td><td><i className="fas fa-check-circle text-success"></i> Sí</td><td><i className="fas fa-check-circle text-success"></i> Sí</td></tr>
+                  <tr><td>Agregar / Editar Productos</td><td><i className="fas fa-check-circle text-success"></i> Sí</td><td><i className="fas fa-check-circle text-success"></i> Sí</td><td><i className="fas fa-times-circle text-danger"></i> No</td></tr>
+                  <tr><td>Eliminar Productos</td><td><i className="fas fa-check-circle text-success"></i> Sí</td><td><i className="fas fa-times-circle text-danger"></i> No</td><td><i className="fas fa-times-circle text-danger"></i> No</td></tr>
+                  <tr><td>Imprimir Etiquetas QR</td><td><i className="fas fa-check-circle text-success"></i> Sí</td><td><i className="fas fa-check-circle text-success"></i> Sí</td><td><i className="fas fa-times-circle text-danger"></i> No</td></tr>
+                  <tr><td>Registrar Entrada de Stock</td><td><i className="fas fa-check-circle text-success"></i> Sí</td><td><i className="fas fa-check-circle text-success"></i> Sí</td><td><i className="fas fa-times-circle text-danger"></i> No</td></tr>
+                  <tr><td>Registrar Salida de Stock</td><td><i className="fas fa-check-circle text-success"></i> Sí</td><td><i className="fas fa-check-circle text-success"></i> Sí</td><td><i className="fas fa-times-circle text-danger"></i> No</td></tr>
+                  <tr><td>Eliminar Registros de Stock</td><td><i className="fas fa-check-circle text-success"></i> Sí</td><td><i className="fas fa-times-circle text-danger"></i> No</td><td><i className="fas fa-times-circle text-danger"></i> No</td></tr>
+                  <tr><td>Procesar Venta / POS (Ventas QR)</td><td><i className="fas fa-check-circle text-success"></i> Sí</td><td><i className="fas fa-check-circle text-success"></i> Sí</td><td><i className="fas fa-check-circle text-success"></i> Sí</td></tr>
+                  <tr><td>Ver Historial de Ventas</td><td><i className="fas fa-check-circle text-success"></i> Sí</td><td><i className="fas fa-check-circle text-success"></i> Sí</td><td><i className="fas fa-check-circle text-success"></i> Sí (Propias)</td></tr>
+                  <tr><td>Procesar Devolución</td><td><i className="fas fa-check-circle text-success"></i> Sí</td><td><i className="fas fa-times-circle text-danger"></i> No</td><td><i className="fas fa-times-circle text-danger"></i> No</td></tr>
+                  <tr><td>Recepción Masiva de Stock</td><td><i className="fas fa-check-circle text-success"></i> Sí</td><td><i className="fas fa-check-circle text-success"></i> Sí</td><td><i className="fas fa-times-circle text-danger"></i> No</td></tr>
+                  <tr><td>Gestionar Usuarios</td><td><i className="fas fa-check-circle text-success"></i> Sí</td><td><i className="fas fa-times-circle text-danger"></i> No</td><td><i className="fas fa-times-circle text-danger"></i> No</td></tr>
+                  <tr><td>Gestionar Proveedores</td><td><i className="fas fa-check-circle text-success"></i> Sí</td><td><i className="fas fa-times-circle text-danger"></i> No</td><td><i className="fas fa-times-circle text-danger"></i> No</td></tr>
+                  <tr><td>Gestionar Gastos</td><td><i className="fas fa-check-circle text-success"></i> Sí</td><td><i className="fas fa-times-circle text-danger"></i> No</td><td><i className="fas fa-times-circle text-danger"></i> No</td></tr>
+                  <tr><td>Gestionar Configuración y Categorías</td><td><i className="fas fa-check-circle text-success"></i> Sí</td><td><i className="fas fa-times-circle text-danger"></i> No</td><td><i className="fas fa-times-circle text-danger"></i> No</td></tr>
+                  <tr><td>Ver Registro de Actividad</td><td><i className="fas fa-check-circle text-success"></i> Sí</td><td><i className="fas fa-times-circle text-danger"></i> No</td><td><i className="fas fa-times-circle text-danger"></i> No</td></tr>
                 </tbody>
               </table>
             </div>
@@ -6109,7 +6109,7 @@
     }
 
     function Dashboard({ user, role, onLogout }) {
-      const [activeMenu, setActiveMenu] = useState(role === 'Admin' ? 'dashboard' : 'records');
+      const [activeMenu, setActiveMenu] = useState(role === 'Admin' ? 'dashboard' : role === 'Vendedor Móvil' ? 'pos' : 'records');
       const [collapsed, setCollapsed] = useState(() => localStorage.getItem('sb_collapsed') === '1');
       const toggleSidebar = () => setCollapsed(c => { localStorage.setItem('sb_collapsed', c ? '0' : '1'); return !c; });
       const { data: logsData } = useFetch(() => fbGetLogs(), [activeMenu]);
