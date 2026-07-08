@@ -2163,6 +2163,53 @@
       border: 2px solid var(--navy-accent) !important;
     }
 
+    .pos-name-suggestions {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: #fff;
+      border: 1px solid #d5e3f2;
+      border-top: none;
+      border-radius: 0 0 8px 8px;
+      box-shadow: 0 8px 24px rgba(0,31,63,.15);
+      z-index: 1000;
+      max-height: 320px;
+      overflow-y: auto;
+    }
+
+    .pos-suggestion-item {
+      padding: 10px 16px;
+      cursor: pointer;
+      border-bottom: 1px solid #f0f4f8;
+      transition: background .15s;
+    }
+
+    .pos-suggestion-item:last-child { border-bottom: none; }
+
+    .pos-suggestion-item:hover {
+      background: #eef4fb;
+    }
+
+    .pos-sug-name {
+      font-weight: 600;
+      color: var(--navy-primary);
+      font-size: 14px;
+    }
+
+    .pos-sug-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: #888;
+      margin-top: 2px;
+    }
+
+    .pos-sug-meta span:last-child {
+      font-weight: 600;
+      color: var(--navy-accent);
+    }
+
     .pos-scan-actions {
       display: flex;
       gap: 8px;
@@ -3215,8 +3262,19 @@
     // build an instant lookup for POS - normalized id/sku/barcode -> product (avoids a firebase round-trip per scan)
     function buildCodeIndex(products) {
       const m = new Map();
-      (products || []).forEach(p => { [p.id, p.sku, p.barcode].forEach(k => { if (k) m.set(String(k).trim().toLowerCase(), p); }); });
+      (products || []).forEach(p => {
+        [p.id, p.sku, p.barcode].forEach(k => { if (k) m.set(String(k).trim().toLowerCase(), p); });
+        // also index by name (lowercased) for name-based search
+        if (p.name) m.set(String(p.name).trim().toLowerCase(), p);
+      });
       return m;
+    }
+
+    // fuzzy name search - returns products whose name contains the query
+    function searchProductsByName(products, query) {
+      if (!query || query.length < 2) return [];
+      const q = query.toLowerCase();
+      return (products || []).filter(p => p.name && p.name.toLowerCase().includes(q)).slice(0, 8);
     }
 
 
@@ -4691,6 +4749,9 @@
       const [tendered, setTendered] = useState('');
       const [held, setHeld] = useState(() => { try { return JSON.parse(localStorage.getItem('pos_held') || '[]'); } catch (e) { return []; } });
       const scanRef = useRef(null);
+      const [nameSuggestions, setNameSuggestions] = useState([]);
+      const [showSuggestions, setShowSuggestions] = useState(false);
+      const suggestionsRef = useRef(null);
 
       const { loading: loadingProducts, data: productsData } = useFetch(() => fbGetProducts(), []);
       const products = useMemo(() => (productsData && productsData.success ? productsData.data : []), [productsData]);
@@ -4741,8 +4802,42 @@
         e.preventDefault();
         const code = scanValue;
         setScanValue('');
+        setShowSuggestions(false);
+        setNameSuggestions([]);
         resolveAndAddToCart(code);
       };
+
+      const handleScanChange = (e) => {
+        const val = e.target.value;
+        setScanValue(val);
+        if (catalogReady && val.length >= 2) {
+          const matches = searchProductsByName(products, val);
+          setNameSuggestions(matches);
+          setShowSuggestions(matches.length > 0);
+        } else {
+          setNameSuggestions([]);
+          setShowSuggestions(false);
+        }
+      };
+
+      const selectSuggestion = (product) => {
+        setScanValue('');
+        setShowSuggestions(false);
+        setNameSuggestions([]);
+        addToCart(product, 1);
+        if (scanRef.current) scanRef.current.focus();
+      };
+
+      // close suggestions when clicking outside
+      useEffect(() => {
+        const handler = (e) => {
+          if (suggestionsRef.current && !suggestionsRef.current.contains(e.target) && scanRef.current && !scanRef.current.contains(e.target)) {
+            setShowSuggestions(false);
+          }
+        };
+        document.addEventListener('mousedown', handler);
+        return () => document.removeEventListener('mousedown', handler);
+      }, []);
 
       const handleDetected = (decodedText) => { setShowCamera(false); resolveAndAddToCart(decodedText); };
 
@@ -4823,11 +4918,23 @@
             </div>
           </div>
 
-          <form className="pos-scan-box" onSubmit={handleScanSubmit}>
-            <div className="form-group">
-              <label><i className="fas fa-barcode"></i> Escanea o escribe SKU / Código de Producto</label>
+          <form className="pos-scan-box" onSubmit={handleScanSubmit} style={{ position: 'relative' }}>
+            <div className="form-group" style={{ position: 'relative' }}>
+              <label><i className="fas fa-barcode"></i> Escanea o escribe SKU / Código / Nombre de Producto</label>
               <input ref={scanRef} type="text" className="pos-scan-input" autoFocus disabled={!catalogReady} value={scanValue}
-                onChange={(e) => setScanValue(e.target.value)} placeholder={catalogReady ? 'Escanea código o ingresa SKU, luego presiona Enter' : 'Cargando catálogo...'} />
+                onChange={handleScanChange} onFocus={() => { if (nameSuggestions.length > 0) setShowSuggestions(true); }}
+                placeholder={catalogReady ? 'Escanea código o ingresa SKU, luego presiona Enter' : 'Cargando catálogo...'}
+                autoComplete="off" />
+              {showSuggestions && nameSuggestions.length > 0 && (
+                <div ref={suggestionsRef} className="pos-name-suggestions">
+                  {nameSuggestions.map(p => (
+                    <div key={p.id} className="pos-suggestion-item" onClick={() => selectSuggestion(p)}>
+                      <div className="pos-sug-name">{p.name}</div>
+                      <div className="pos-sug-meta"><span>{p.sku}</span><span>{money(p.price)}</span></div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
             <button type="submit" className="btn btn-primary" disabled={!catalogReady}><i className="fas fa-plus"></i> Agregar</button>
           </form>
