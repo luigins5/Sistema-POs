@@ -1192,8 +1192,9 @@
     .toggle {
       appearance: none;
       -webkit-appearance: none;
-      width: 48px;
-      height: 26px;
+      width: 48px !important;
+      height: 26px !important;
+      padding: 0 !important;
       border-radius: 26px;
       background: #e4e4e4;
       position: relative;
@@ -3195,7 +3196,7 @@
     // category dropdown options - live list from DB, falls back to the seed defaults while loading
     const useCategoryOpts = () => { const { categories } = useConfig(); return useMemo(() => categories.length ? categories.map(c => ({ value: c.name, label: c.name })) : CATEGORY_OPTS, [categories]); };
 
-    const LOGO_URL = 'https://i.pinimg.com/736x/7d/1d/89/7d1d89802c3c826c32b4b07e045a3453.jpg';
+    const LOGO_URL = 'https://i.pinimg.com/736x/c1/dc/41/c1dc4134eba1fa9c9cff468c801c2c2e.jpg';
 
     const CATEGORY_OPTS = [
       { value: 'Electrónica', label: 'Electrónica' },
@@ -5980,7 +5981,7 @@
           <div className="about-card about-developer">
             <h2><i className="fas fa-code"></i> Acerca del Desarrollador</h2>
             <div className="developer-info">
-              <img src={LOGO_URL} alt="Luis Alberto Lasso Rodríguez" className="developer-avatar" />
+              <img src="https://i.pinimg.com/736x/42/c5/a9/42c5a9da2412b909eb058c55f1570116.jpg" alt="Luis Alberto Lasso Rodríguez" className="developer-avatar" />
               <div className="developer-details">
                 <h3>Luis Alberto Lasso Rodríguez</h3>
                 <p className="developer-brand">Somos NS-5</p>
