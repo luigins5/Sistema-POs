@@ -2559,7 +2559,7 @@
 
     .ts-total {
       font-weight: 700;
-      font-size: 15px;
+      font-size: 13px;
       border-top: 1px solid #000;
       margin-top: 4px;
       padding-top: 6px;
@@ -3247,7 +3247,7 @@
       return { subtotal: round2(subtotal), discount: round2(discAmt), tax: round2(taxTotal), grand: round2(grand), lines };
     }
 
-    const money = (n) => CFG.currency + Number(n || 0).toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    const money = (n) => CFG.currency + Number(n || 0).toLocaleString('es-MX', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
     const round2 = (n) => Math.round((Number(n) || 0) * 100) / 100;
     const formatDateForDisplay = (iso) => new Date(iso).toLocaleString('es-MX', { year: 'numeric', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit' });
     const getTimeAgo = (iso) => {
@@ -4699,7 +4699,6 @@
               <div className="ts-item-row" key={it.sku || i}>
                 <div className="ts-item-name-col">
                   <span className="ts-item-name">{it.name}</span>
-                  {it.sku && <span className="ts-item-sku">SKU: {it.sku}</span>}
                 </div>
                 <span className="ts-item-calc">{it.qty} x {money(it.price)} = {money(it.lineTotal)}</span>
               </div>
