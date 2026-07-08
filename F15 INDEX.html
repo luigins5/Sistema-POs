@@ -3565,7 +3565,7 @@
       );
     }
 
-    function Navbar({ icon, title, userName, role, notifs = [], onLogout, setActiveMenu, toggleSidebar }) {
+    function Navbar({ icon, title, userName, role, notifs = [], unreadCount = 0, onNotifRead, onNotifClear, onLogout, setActiveMenu, toggleSidebar }) {
       return (
         <div className="navbar">
           <div className="navbar-start">
@@ -3577,10 +3577,13 @@
           </div>
           <div className="navbar-end">
             <span className="nav-welcome"><span className="nav-welcome-hi">Bienvenido</span><strong>{userName}</strong></span>
-            <NavDropdown trigger={<button className="nav-btn" title="Notificaciones"><i className="fas fa-bell"></i>{notifs.length > 0 && <span className="nav-badge">{notifs.length}</span>}</button>}>
+            <NavDropdown trigger={<button className="nav-btn" title="Notificaciones" onClick={onNotifRead}><i className="fas fa-bell"></i>{unreadCount > 0 && <span className="nav-badge">{unreadCount}</span>}</button>}>
               <div className="nav-dd-head"><div className="dd-title">{notifs.length} Notificaciones</div>{notifs[0] && <div className="dd-sub">{notifs[0].text}</div>}</div>
               {notifs.slice(0, 5).map((n, i) => <div className="nav-notif" key={i}><i className={`fas ${n.icon || 'fa-circle-info'}`}></i><span>{n.text}</span></div>)}
-              <div className="nav-dd-foot"><button className="btn-block" onClick={() => setActiveMenu('logs')}><i className="fas fa-list"></i> Ver todo</button></div>
+              <div className="nav-dd-foot" style={{ display: 'flex', gap: '8px' }}>
+                {notifs.length > 0 && <button className="btn-block" style={{ flex: 1, color: '#ea4335' }} onClick={onNotifClear}><i className="fas fa-trash"></i> Limpiar</button>}
+                <button className="btn-block" style={{ flex: 1 }} onClick={() => setActiveMenu('logs')}><i className="fas fa-list"></i> Ver todo</button>
+              </div>
             </NavDropdown>
             <NavDropdown trigger={<img className="nav-avatar" src={LOGO_URL} alt="" />}>
               <a onClick={() => setActiveMenu('about')}><span><i className="fas fa-user"></i> Perfil</span><span className="dd-badge">{role}</span></a>
@@ -6103,7 +6106,28 @@
       const [collapsed, setCollapsed] = useState(() => localStorage.getItem('sb_collapsed') === '1');
       const toggleSidebar = () => setCollapsed(c => { localStorage.setItem('sb_collapsed', c ? '0' : '1'); return !c; });
       const { data: logsData } = useFetch(() => fbGetLogs(), [activeMenu]);
-      const notifs = useMemo(() => (logsData && logsData.success ? logsData.data.slice(0, 5).map(l => ({ text: `${l.action}: ${l.detail}`, icon: 'fa-bell' })) : []), [logsData]);
+      const allNotifs = useMemo(() => (logsData && logsData.success ? logsData.data.slice(0, 5).map(l => ({ text: `${l.action}: ${l.detail}`, icon: 'fa-bell', ts: l.ts || l.createdAt })) : []), [logsData]);
+      const [readTs, setReadTs] = useState(() => { try { return localStorage.getItem('notif_read_ts') || ''; } catch(e) { return ''; } });
+      const [cleared, setCleared] = useState(false);
+      const notifs = cleared ? [] : allNotifs;
+      const unreadCount = useMemo(() => {
+        if (cleared) return 0;
+        if (!readTs) return notifs.length;
+        return notifs.filter(n => n.ts && n.ts > readTs).length;
+      }, [notifs, readTs, cleared]);
+      const handleNotifRead = useCallback(() => {
+        const now = new Date().toISOString();
+        setReadTs(now);
+        localStorage.setItem('notif_read_ts', now);
+      }, []);
+      const handleNotifClear = useCallback(() => {
+        setCleared(true);
+        const now = new Date().toISOString();
+        setReadTs(now);
+        localStorage.setItem('notif_read_ts', now);
+      }, []);
+      // reset cleared when new data arrives
+      useEffect(() => { setCleared(false); }, [logsData]);
 
       // app config (settings + categories) loaded once here, shared via context; mirrored into CFG for non-component code
       const [cfgKey, setCfgKey] = useState(0);
@@ -6120,7 +6144,7 @@
           <div className="app-container">
             <Sidebar activeMenu={activeMenu} setActiveMenu={setActiveMenu} role={role} user={user} onLogout={onLogout} collapsed={collapsed} />
             <div className="main-content">
-              <Navbar icon={icons[activeMenu]} title={titles[activeMenu]} userName={user?.name} role={role} notifs={notifs} onLogout={onLogout} setActiveMenu={setActiveMenu} toggleSidebar={toggleSidebar} />
+              <Navbar icon={icons[activeMenu]} title={titles[activeMenu]} userName={user?.name} role={role} notifs={notifs} unreadCount={unreadCount} onNotifRead={handleNotifRead} onNotifClear={handleNotifClear} onLogout={onLogout} setActiveMenu={setActiveMenu} toggleSidebar={toggleSidebar} />
               <MainContent activeMenu={activeMenu} user={user} role={role} setActiveMenu={setActiveMenu} />
             </div>
           </div>
