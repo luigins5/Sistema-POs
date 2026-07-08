@@ -2805,7 +2805,7 @@
       catch (e) { return { success: false, message: tErr(e.message), data: {} }; }
     }
     async function fbSaveSettings(data, user) {
-      try { await db.ref('settings').update(data); await fbLogActivity('Update Settings', user, 'Business settings updated'); return { success: true, message: 'Configuración guardada' }; }
+      try { await db.ref('settings').update(data); await fbLogActivity('Actualizar Configuración', user, 'Configuración del negocio actualizada'); return { success: true, message: 'Configuración guardada' }; }
       catch (e) { return { success: false, message: tErr(e.message) }; }
     }
 
@@ -2821,12 +2821,12 @@
         const dupe = await db.ref('categories').orderByChild('name').equalTo(nm).once('value');
         if (dupe.exists()) return { success: false, message: 'Esa categoría ya existe' };
         const ref = await db.ref('categories').push({ name: nm, createdAt: nowIso() });
-        await fbLogActivity('Add Category', user, nm);
+        await fbLogActivity('Agregar Categoría', user, nm);
         return { success: true, message: 'Categoría agregada', id: ref.key };
       } catch (e) { return { success: false, message: tErr(e.message) }; }
     }
     async function fbDeleteCategory(id, name, user) {
-      try { await db.ref('categories/' + id).remove(); await fbLogActivity('Delete Category', user, name); return { success: true, message: 'Categoría eliminada' }; }
+      try { await db.ref('categories/' + id).remove(); await fbLogActivity('Eliminar Categoría', user, name); return { success: true, message: 'Categoría eliminada' }; }
       catch (e) { return { success: false, message: tErr(e.message) }; }
     }
 
@@ -2834,7 +2834,7 @@
     async function fbAddRecord(data, user) {
       try {
         const ref = await db.ref('records').push(Object.assign({}, data, { addedBy: user.email, createdAt: nowIso() }));
-        await fbLogActivity('Add Customer', user, data.name);
+        await fbLogActivity('Agregar Cliente', user, data.name);
         return { success: true, message: 'Cliente agregado', id: ref.key };
       } catch (e) { return { success: false, message: tErr(e.message) }; }
     }
@@ -2842,7 +2842,7 @@
     async function fbUpdateRecord(id, data, user) {
       try {
         await db.ref('records/' + id).update(data);
-        await fbLogActivity('Update Customer', user, data.name);
+        await fbLogActivity('Actualizar Cliente', user, data.name);
         return { success: true, message: 'Cliente actualizado' };
       } catch (e) { return { success: false, message: tErr(e.message) }; }
     }
@@ -2850,7 +2850,7 @@
     async function fbDeleteRecord(id, name, user) {
       try {
         await db.ref('records/' + id).remove();
-        await fbLogActivity('Delete Customer', user, name);
+        await fbLogActivity('Eliminar Cliente', user, name);
         return { success: true, message: 'Cliente eliminado' };
       } catch (e) { return { success: false, message: tErr(e.message) }; }
     }
@@ -2905,7 +2905,7 @@
         const skuRes = await fbGenerateSku();
         if (!skuRes.success) return { success: false, message: skuRes.message };
         const ref = await db.ref('products').push(Object.assign({}, data, { sku: skuRes.data, addedBy: user.email, createdAt: nowIso() }));
-        await fbLogActivity('Add Product', user, data.name + ' (' + skuRes.data + ')');
+        await fbLogActivity('Agregar Producto', user, data.name + ' (' + skuRes.data + ')');
         return { success: true, message: 'Producto agregado (' + skuRes.data + ')', id: ref.key };
       } catch (e) { return { success: false, message: tErr(e.message) }; }
     }
@@ -2914,7 +2914,7 @@
     async function fbUpdateProduct(id, data, user) {
       try {
         await db.ref('products/' + id).update(data);
-        await fbLogActivity('Update Product', user, data.name);
+        await fbLogActivity('Actualizar Producto', user, data.name);
         return { success: true, message: 'Producto actualizado' };
       } catch (e) { return { success: false, message: tErr(e.message) }; }
     }
@@ -2922,7 +2922,7 @@
     async function fbDeleteProduct(id, name, user) {
       try {
         await db.ref('products/' + id).remove();
-        await fbLogActivity('Delete Product', user, name);
+        await fbLogActivity('Eliminar Producto', user, name);
         return { success: true, message: 'Producto eliminado' };
       } catch (e) { return { success: false, message: tErr(e.message) }; }
     }
@@ -2940,7 +2940,7 @@
     async function fbAddStockMovement(data, productName, user) {
       try {
         const ref = await db.ref('stock_movements').push(Object.assign({}, data, { performedBy: user.email, createdAt: nowIso() }));
-        const action = data.type === 'in' ? 'Stock In' : 'Stock Out';
+        const action = data.type === 'in' ? 'Entrada de Stock' : 'Salida de Stock';
         await fbLogActivity(action, user, data.qty + ' x ' + productName + (data.reason ? ' (' + data.reason + ')' : ''));
         return { success: true, message: action + ' registrado', id: ref.key };
       } catch (e) { return { success: false, message: tErr(e.message) }; }
@@ -2949,7 +2949,7 @@
     async function fbDeleteStockMovement(id, detail, user) {
       try {
         await db.ref('stock_movements/' + id).remove();
-        await fbLogActivity('Delete Stock Entry', user, detail);
+        await fbLogActivity('Eliminar Mov. Stock', user, detail);
         return { success: true, message: 'Registro de stock eliminado' };
       } catch (e) { return { success: false, message: tErr(e.message) }; }
     }
@@ -2984,10 +2984,10 @@
         const ref = await db.ref('sales').push(payload);
         const saleId = ref.key;
         await Promise.all(sale.items.map(function (it) {
-          return fbAddStockMovement({ productId: it.productId, type: 'out', qty: it.qty, reason: 'Sale', reference: saleId }, it.name, user);
+          return fbAddStockMovement({ productId: it.productId, type: 'out', qty: it.qty, reason: 'Venta', reference: saleId }, it.name, user);
         }));
         const totalStr = CFG.currency + Number(sale.total || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-        await fbLogActivity('Sale', user, invoiceNo + ' — Total ' + totalStr + ' (' + sale.items.length + ' item' + (sale.items.length === 1 ? '' : 's') + ')');
+        await fbLogActivity('Venta', user, invoiceNo + ' — Total ' + totalStr + ' (' + sale.items.length + ' artículo' + (sale.items.length === 1 ? '' : 's') + ')');
         return { success: true, message: 'Venta completada', id: saleId, data: Object.assign({ id: saleId }, payload) };
       } catch (e) { return { success: false, message: tErr(e.message) }; }
     }
@@ -3016,10 +3016,10 @@
         const totalRefund = items.reduce(function (s, it) { return s + it.lineTotal; }, 0);
         const ref = await db.ref('returns').push({ saleId: saleId, items: items, totalRefund: totalRefund, processedBy: user.email, createdAt: nowIso() });
         await Promise.all(items.map(function (it) {
-          return fbAddStockMovement({ productId: it.productId, type: 'in', qty: it.qty, reason: 'Return', reference: saleId }, it.name, user);
+          return fbAddStockMovement({ productId: it.productId, type: 'in', qty: it.qty, reason: 'Devolución', reference: saleId }, it.name, user);
         }));
         const refundStr = '$' + Number(totalRefund || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-        await fbLogActivity('Return', user, 'Refund ' + refundStr + ' (' + items.length + ' item' + (items.length === 1 ? '' : 's') + ') for sale ' + saleId);
+        await fbLogActivity('Devolución', user, 'Reembolso ' + refundStr + ' (' + items.length + ' artículo' + (items.length === 1 ? '' : 's') + ') de venta ' + saleId);
         return { success: true, message: 'Devolución procesada', id: ref.key };
       } catch (e) { return { success: false, message: tErr(e.message) }; }
     }
@@ -3031,8 +3031,8 @@
           return fbAddStockMovement({ productId: l.productId, type: 'in', qty: l.qty, reason: l.reason, reference: l.reference }, l.name, user);
         }));
         const ref = lines[0] && lines[0].reference ? ' (' + lines[0].reference + ')' : '';
-        await fbLogActivity('Bulk Stock In', user, lines.length + ' product' + (lines.length === 1 ? '' : 's') + ' received' + ref);
-        return { success: true, message: 'Stock recibido (' + lines.length + ' item' + (lines.length === 1 ? '' : 's') + ')' };
+        await fbLogActivity('Recepción Masiva', user, lines.length + ' producto' + (lines.length === 1 ? '' : 's') + ' recibido' + (lines.length === 1 ? '' : 's') + ref);
+        return { success: true, message: 'Stock recibido (' + lines.length + ' artículo' + (lines.length === 1 ? '' : 's') + ')' };
       } catch (e) { return { success: false, message: tErr(e.message) }; }
     }
 
@@ -3044,16 +3044,16 @@
     async function fbAddSupplier(data, user) {
       try {
         const ref = await db.ref('suppliers').push(Object.assign({}, data, { addedBy: user.email, createdAt: nowIso() }));
-        await fbLogActivity('Add Supplier', user, data.name);
+        await fbLogActivity('Agregar Proveedor', user, data.name);
         return { success: true, message: 'Proveedor agregado', id: ref.key };
       } catch (e) { return { success: false, message: tErr(e.message) }; }
     }
     async function fbUpdateSupplier(id, data, user) {
-      try { await db.ref('suppliers/' + id).update(data); await fbLogActivity('Update Supplier', user, data.name || id); return { success: true, message: 'Proveedor actualizado' }; }
+      try { await db.ref('suppliers/' + id).update(data); await fbLogActivity('Actualizar Proveedor', user, data.name || id); return { success: true, message: 'Proveedor actualizado' }; }
       catch (e) { return { success: false, message: tErr(e.message) }; }
     }
     async function fbDeleteSupplier(id, name, user) {
-      try { await db.ref('suppliers/' + id).remove(); await fbLogActivity('Delete Supplier', user, name); return { success: true, message: 'Proveedor eliminado' }; }
+      try { await db.ref('suppliers/' + id).remove(); await fbLogActivity('Eliminar Proveedor', user, name); return { success: true, message: 'Proveedor eliminado' }; }
       catch (e) { return { success: false, message: tErr(e.message) }; }
     }
 
@@ -3065,16 +3065,16 @@
     async function fbAddExpense(data, user) {
       try {
         const ref = await db.ref('expenses').push(Object.assign({}, data, { addedBy: user.email, createdAt: nowIso() }));
-        await fbLogActivity('Add Expense', user, (data.category || 'Expense') + ' ' + CFG.currency + (Number(data.amount) || 0));
+        await fbLogActivity('Agregar Gasto', user, (data.category || 'Gasto') + ' ' + CFG.currency + (Number(data.amount) || 0));
         return { success: true, message: 'Gasto agregado', id: ref.key };
       } catch (e) { return { success: false, message: tErr(e.message) }; }
     }
     async function fbUpdateExpense(id, data, user) {
-      try { await db.ref('expenses/' + id).update(data); await fbLogActivity('Update Expense', user, (data.category || 'Expense')); return { success: true, message: 'Gasto actualizado' }; }
+      try { await db.ref('expenses/' + id).update(data); await fbLogActivity('Actualizar Gasto', user, (data.category || 'Gasto')); return { success: true, message: 'Gasto actualizado' }; }
       catch (e) { return { success: false, message: tErr(e.message) }; }
     }
     async function fbDeleteExpense(id, detail, user) {
-      try { await db.ref('expenses/' + id).remove(); await fbLogActivity('Delete Expense', user, detail); return { success: true, message: 'Gasto eliminado' }; }
+      try { await db.ref('expenses/' + id).remove(); await fbLogActivity('Eliminar Gasto', user, detail); return { success: true, message: 'Gasto eliminado' }; }
       catch (e) { return { success: false, message: tErr(e.message) }; }
     }
 
@@ -3096,7 +3096,7 @@
         const poNumber = poRes.success ? poRes.data : '';
         const payload = Object.assign({ status: 'ordered' }, po, { poNumber, createdBy: user.email, createdAt: nowIso() });
         const ref = await db.ref('purchase_orders').push(payload);
-        await fbLogActivity('Create PO', user, poNumber + ' — ' + (po.supplierName || '') + ' (' + CFG.currency + (Number(po.total) || 0) + ')');
+        await fbLogActivity('Crear OC', user, poNumber + ' — ' + (po.supplierName || '') + ' (' + CFG.currency + (Number(po.total) || 0) + ')');
         return { success: true, message: 'OC ' + poNumber + ' creada', id: ref.key, data: Object.assign({ id: ref.key }, payload) };
       } catch (e) { return { success: false, message: tErr(e.message) }; }
     }
@@ -3108,16 +3108,16 @@
         }));
         if (updateCost) await Promise.all((po.items || []).filter(function (it) { return Number(it.unitCost) > 0; }).map(function (it) { return fbUpdateProduct(it.productId, { cost: Number(it.unitCost) }, user); }));
         await db.ref('purchase_orders/' + po.id).update({ status: 'received', receivedAt: nowIso() });
-        await fbLogActivity('Receive PO', user, po.poNumber + ' (' + (po.items || []).length + ' line' + ((po.items || []).length === 1 ? '' : 's') + ')');
+        await fbLogActivity('Recibir OC', user, po.poNumber + ' (' + (po.items || []).length + ' línea' + ((po.items || []).length === 1 ? '' : 's') + ')');
         return { success: true, message: 'OC recibida — stock actualizado' };
       } catch (e) { return { success: false, message: tErr(e.message) }; }
     }
     async function fbUpdatePurchaseOrder(id, data, user) {
-      try { await db.ref('purchase_orders/' + id).update(data); await fbLogActivity('Update PO', user, data.poNumber || id); return { success: true, message: 'OC actualizada' }; }
+      try { await db.ref('purchase_orders/' + id).update(data); await fbLogActivity('Actualizar OC', user, data.poNumber || id); return { success: true, message: 'OC actualizada' }; }
       catch (e) { return { success: false, message: tErr(e.message) }; }
     }
     async function fbDeletePurchaseOrder(id, poNumber, user) {
-      try { await db.ref('purchase_orders/' + id).remove(); await fbLogActivity('Delete PO', user, poNumber); return { success: true, message: 'OC eliminada' }; }
+      try { await db.ref('purchase_orders/' + id).remove(); await fbLogActivity('Eliminar OC', user, poNumber); return { success: true, message: 'OC eliminada' }; }
       catch (e) { return { success: false, message: tErr(e.message) }; }
     }
 
@@ -3134,7 +3134,7 @@
         const existing = await db.ref('users').orderByChild('email').equalTo(data.email).once('value');
         if (existing.exists()) return { success: false, message: 'Ya existe un usuario con este correo' };
         const ref = await db.ref('users').push({ name: data.name, email: data.email, password: data.password, role: data.role });
-        await fbLogActivity('Add User', user, data.name + ' (' + data.email + ')');
+        await fbLogActivity('Agregar Usuario', user, data.name + ' (' + data.email + ')');
         return { success: true, message: 'Usuario agregado', id: ref.key };
       } catch (e) { return { success: false, message: tErr(e.message) }; }
     }
@@ -3149,7 +3149,7 @@
           if (clash) return { success: false, message: 'Otro usuario ya utiliza este correo' };
         }
         await db.ref('users/' + id).update(data);
-        await fbLogActivity('Update User', user, data.name || id);
+        await fbLogActivity('Actualizar Usuario', user, data.name || id);
         return { success: true, message: 'Usuario actualizado' };
       } catch (e) { return { success: false, message: tErr(e.message) }; }
     }
@@ -3157,7 +3157,7 @@
     async function fbDeleteUser(id, name, user) {
       try {
         await db.ref('users/' + id).remove();
-        await fbLogActivity('Delete User', user, name);
+        await fbLogActivity('Eliminar Usuario', user, name);
         return { success: true, message: 'Usuario eliminado' };
       } catch (e) { return { success: false, message: tErr(e.message) }; }
     }
