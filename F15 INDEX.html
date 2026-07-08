@@ -3140,7 +3140,7 @@
     // category dropdown options - live list from DB, falls back to the seed defaults while loading
     const useCategoryOpts = () => { const { categories } = useConfig(); return useMemo(() => categories.length ? categories.map(c => ({ value: c.name, label: c.name })) : CATEGORY_OPTS, [categories]); };
 
-    const LOGO_URL = 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiGXxCe0WNNedmFqSWeF761f7Kshhc-NP5ChRQKz9fr97cO8VaarvD0KlCwqHojJVBWv-RAxfOqMI5rD4H78KnARyOc6QgwL1nRRFWf5xNQ1d9F9HfAoLPPGlTyP0GwNl4n-INMEsWLQ4Y7zJtz5bOdAnc2ePH9-uCRgshlo6BsS6gJEz6fhrxL-5U5O3sX/s160/channels4_profile.jpg';
+    const LOGO_URL = 'https://i.pinimg.com/736x/7b/ce/f3/7bcef32b2e11dc92f022ba6925641acd.jpg';
 
     const CATEGORY_OPTS = [
       { value: 'Electrónica', label: 'Electrónica' },
@@ -5748,7 +5748,7 @@
             <div className="about-logo"><img src={LOGO_URL} alt="Logo del Desarrollador" /></div>
             <div className="about-title">
               <h1>Gestor de Registros Firebase</h1>
-              <p className="about-dev">Desarrollado por <strong>Mohammad Rameez Imdad</strong> (Rameez Scripts)</p>
+              <p className="about-dev">Desarrollado por <strong>Luis Alberto Lasso Rodríguez</strong> (Somos NS-5)</p>
             </div>
           </div>
           <div className="about-card">
@@ -5862,10 +5862,10 @@
           <div className="about-card about-developer">
             <h2><i className="fas fa-code"></i> Acerca del Desarrollador</h2>
             <div className="developer-info">
-              <img src={LOGO_URL} alt="Mohammad Rameez Imdad" className="developer-avatar" />
+              <img src={LOGO_URL} alt="Luis Alberto Lasso Rodríguez" className="developer-avatar" />
               <div className="developer-details">
-                <h3>Mohammad Rameez Imdad</h3>
-                <p className="developer-brand">Rameez Scripts</p>
+                <h3>Luis Alberto Lasso Rodríguez</h3>
+                <p className="developer-brand">Somos NS-5</p>
                 <p>Construyo aplicaciones web, paneles de control y herramientas de automatización a medida. Si necesitas que te construya algo para tu negocio o proyecto, ¡no dudes en contactarme!</p>
                 <div className="developer-links">
                   <a href="https://wa.me/923224083545" target="_blank" className="dev-link whatsapp"><i className="fab fa-whatsapp"></i> Escríbeme a WhatsApp</a>
@@ -5875,7 +5875,7 @@
             </div>
           </div>
           <div className="about-footer">
-            <p>Hecho con <i className="fas fa-heart" style={{ color: '#ea4335' }}></i> por Rameez Scripts</p>
+            <p>Hecho con <i className="fas fa-heart" style={{ color: '#ea4335' }}></i> por Somos NS-5</p>
             <p className="about-version">Versión 1.0.0</p>
           </div>
         </div>
