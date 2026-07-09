@@ -19,6 +19,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
   <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css">
   <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.dataTables.min.css">
@@ -3208,6 +3209,47 @@
       } catch (e) { return { success: false, message: tErr(e.message) }; }
     }
 
+    async function fbGenerateSkuBulk(count) {
+      try {
+        const res = await db.ref('counters/products').transaction(function (cur) { return (cur || 0) + count; });
+        if (!res.committed) return { success: false, message: 'No se pudo reservar los SKUs, intente de nuevo' };
+        const end = res.snapshot.val();
+        const start = end - count + 1;
+        return { success: true, start, end };
+      } catch (e) { return { success: false, message: tErr(e.message) }; }
+    }
+
+    async function fbAddProductsBulk(products, user) {
+      try {
+        const skuRes = await fbGenerateSkuBulk(products.length);
+        if (!skuRes.success) return { success: false, message: skuRes.message };
+        
+        let updates = {};
+        let logs = {};
+        const now = nowIso();
+        const timestamp = new Date().getTime();
+        
+        products.forEach((data, index) => {
+          const skuNum = skuRes.start + index;
+          const skuStr = 'SKU-' + String(skuNum).padStart(5, '0');
+          const newRef = db.ref('products').push();
+          updates[`products/${newRef.key}`] = Object.assign({}, data, { sku: skuStr, addedBy: user.email, createdAt: now });
+          // Batch activity log entries
+          const logRef = db.ref('activity').push();
+          logs[`activity/${logRef.key}`] = { 
+            action: 'Importación Masiva', 
+            details: data.name + ' (' + skuStr + ')', 
+            user: user.email, 
+            role: user.role || 'Admin', 
+            timestamp: timestamp + index 
+          };
+        });
+        
+        await db.ref().update({ ...updates, ...logs });
+        return { success: true, message: `¡Se importaron ${products.length} productos correctamente!` };
+      } catch (e) { return { success: false, message: tErr(e.message) }; }
+    }
+
     // atomic sequential invoice number - prefix from settings
     async function fbGenerateInvoiceNo() {
       try {
@@ -4207,6 +4249,157 @@
       );
     }
 
+    function BulkImportModal({ onClose, onImport, user }) {
+      const [file, setFile] = useState(null);
+      const [previewData, setPreviewData] = useState([]);
+      const [loading, setLoading] = useState(false);
+
+      const downloadTemplate = () => {
+        const ws = window.XLSX.utils.json_to_sheet([{
+          "Nombre del Producto": "Producto Ejemplo",
+          "Categoría": "General",
+          "Marca": "MarcaX",
+          "Código de Barras": "1234567890",
+          "Precio de Venta": 100,
+          "Costo": 80,
+          "Precio Mayorista": 90,
+          "Precio de Lista": 110,
+          "Nivel de Reorden": 10,
+          "Stock Máximo": 50,
+          "Cant. Reorden": 20,
+          "Proveedor": "Proveedor Y",
+          "Ubicación": "Pasillo 1",
+          "Unidad": "pz",
+          "Estado (active/inactive)": "active"
+        }]);
+        const wb = window.XLSX.utils.book_new();
+        window.XLSX.utils.book_append_sheet(wb, ws, "Productos");
+        window.XLSX.writeFile(wb, "Plantilla_Productos.xlsx");
+      };
+
+      const handleFileUpload = (e) => {
+        const f = e.target.files[0];
+        if (!f) return;
+        setFile(f);
+        const reader = new FileReader();
+        reader.onload = (evt) => {
+          const bstr = evt.target.result;
+          const wb = window.XLSX.read(bstr, { type: 'binary' });
+          const wsname = wb.SheetNames[0];
+          const ws = wb.Sheets[wsname];
+          const data = window.XLSX.utils.sheet_to_json(ws);
+          
+          const parsed = data.map((row, i) => {
+            const name = row['Nombre del Producto'] || row['Nombre'] || '';
+            const price = Number(row['Precio de Venta'] || row['Precio']) || 0;
+            const valid = name.trim() !== '' && price > 0;
+            return {
+              _id: i,
+              _valid: valid,
+              name: name.trim(),
+              category: row['Categoría'] || 'General',
+              brand: row['Marca'] || '',
+              barcode: String(row['Código de Barras'] || row['Codigo de Barras'] || ''),
+              price: price,
+              cost: Number(row['Costo']) || 0,
+              wholesalePrice: Number(row['Precio Mayorista']) || 0,
+              mrp: Number(row['Precio de Lista']) || 0,
+              reorderLevel: Number(row['Nivel de Reorden']) || 0,
+              maxStock: Number(row['Stock Máximo']) || '',
+              reorderQty: Number(row['Cant. Reorden']) || '',
+              supplier: row['Proveedor'] || '',
+              location: row['Ubicación'] || row['Ubicacion'] || '',
+              unit: row['Unidad'] || '',
+              status: (row['Estado'] || row['Estado (active/inactive)']) === 'inactive' ? 'inactive' : 'active'
+            };
+          });
+          setPreviewData(parsed);
+        };
+        reader.readAsBinaryString(f);
+      };
+
+      const processImport = async () => {
+        const validProducts = previewData.filter(p => p._valid);
+        if (validProducts.length === 0) return Swal.fire('Error', 'No hay productos válidos para importar', 'error');
+        setLoading(true);
+        const toImport = validProducts.map(({ _id, _valid, ...rest }) => rest);
+        const res = await onImport(toImport, user);
+        setLoading(false);
+        if (res.success) {
+          Swal.fire({ icon: 'success', title: '¡Éxito!', text: res.message, timer: 3000 });
+          onClose();
+        } else {
+          Swal.fire('Error', res.message, 'error');
+        }
+      };
+
+      const validCount = previewData.filter(p => p._valid).length;
+      const invalidCount = previewData.length - validCount;
+
+      return (
+        <div className="modal-overlay" onClick={onClose}>
+          <div className="modal" style={{ maxWidth: '800px' }} onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3><i className="fas fa-file-excel"></i> Importación Masiva</h3>
+              <button className="close-btn" onClick={onClose}><i className="fas fa-times"></i></button>
+            </div>
+            <div className="modal-body">
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px', alignItems: 'center' }}>
+                <p style={{ margin: 0, fontSize: '14px', color: '#555' }}>Sube un archivo Excel (.xlsx) o CSV con tus productos.</p>
+                <button type="button" className="btn btn-secondary" onClick={downloadTemplate}><i className="fas fa-download"></i> Descargar Plantilla</button>
+              </div>
+              
+              <div className="form-group" style={{ marginBottom: '20px' }}>
+                <input type="file" accept=".xlsx, .xls, .csv" onChange={handleFileUpload} style={{ width: '100%', padding: '10px', border: '2px dashed #ccc', borderRadius: '8px', cursor: 'pointer' }} />
+              </div>
+
+              {previewData.length > 0 && (
+                <div>
+                  <h4>Vista Previa ({previewData.length} encontrados)</h4>
+                  <p style={{ fontSize: '13px', color: invalidCount > 0 ? '#ea4335' : '#34a853', fontWeight: 'bold' }}>
+                    <i className="fas fa-check-circle"></i> {validCount} Válidos | <i className="fas fa-times-circle"></i> {invalidCount} con Errores (Falta nombre o precio)
+                  </p>
+                  
+                  <div style={{ maxHeight: '300px', overflowY: 'auto', border: '1px solid #ddd', borderRadius: '4px', marginTop: '10px' }}>
+                    <table className="display" style={{ width: '100%', fontSize: '12px' }}>
+                      <thead>
+                        <tr>
+                          <th>Estado</th>
+                          <th>Nombre</th>
+                          <th>Precio</th>
+                          <th>Categoría</th>
+                          <th>C. Barras</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {previewData.slice(0, 100).map(p => (
+                          <tr key={p._id} style={{ background: p._valid ? '#fff' : '#fce8e6' }}>
+                            <td style={{ textAlign: 'center' }}>{p._valid ? '✅' : '❌'}</td>
+                            <td>{p.name || '-'}</td>
+                            <td>${p.price}</td>
+                            <td>{p.category}</td>
+                            <td>{p.barcode}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                  {previewData.length > 100 && <p style={{ fontSize: '11px', textAlign: 'center', marginTop: '5px', color: '#888' }}>Mostrando los primeros 100 registros...</p>}
+                </div>
+              )}
+
+              <div className="form-actions" style={{ marginTop: '25px' }}>
+                <button type="button" className="btn btn-primary" disabled={loading || validCount === 0} onClick={processImport}>
+                  {loading ? <><i className="fas fa-spinner fa-spin"></i> Procesando...</> : <><i className="fas fa-check"></i> Importar {validCount} Productos</>}
+                </button>
+                <button type="button" className="btn btn-secondary" onClick={onClose}><i className="fas fa-times"></i> Cancelar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
     // --- Product Modal (Add/Edit) ---
     function ProductModal({ product, onClose, onSave }) {
       const catOpts = useCategoryOpts();
@@ -4409,6 +4602,7 @@
     function ProductsView({ user, role }) {
       const catOpts = useCategoryOpts();
       const [showModal, setShowModal] = useState(false);
+      const [showBulkImport, setShowBulkImport] = useState(false);
       const [editingId, setEditingId] = useState(null);
       const [qrProductId, setQrProductId] = useState(null);
       const [viewProd, setViewProd] = useState(null);
@@ -4522,6 +4716,14 @@
         setPrintAll(true);
       };
 
+      const handleBulkImport = async (productsData, user) => {
+        setLoad('Importando productos masivamente...');
+        const result = await fbAddProductsBulk(productsData, user);
+        setLoad('');
+        if (result.success) reload();
+        return result;
+      };
+
       const handleSave = async (formData) => {
         setLoad(editingId ? 'Actualizando producto...' : 'Guardando producto...');
         const result = editingId ? await fbUpdateProduct(editingId, formData, user) : await fbAddProduct(formData, user);
@@ -4555,6 +4757,7 @@
               <RefreshBtn onClick={reload} />
               <button className="btn btn-secondary" onClick={() => setShowReorderReport(true)} disabled={reorderRows.length === 0}><i className="fas fa-triangle-exclamation"></i> Imprimir Reporte de Reorden</button>
               <button className="btn btn-secondary" onClick={handlePrintLabels} disabled={products.length === 0}><i className="fas fa-print"></i> {isFiltered ? 'Imprimir Etiquetas Filtradas' : 'Imprimir Etiquetas QR'}</button>
+              <button className="btn btn-secondary" onClick={() => setShowBulkImport(true)}><i className="fas fa-file-excel"></i> Importar Masivo</button>
               <button className="btn btn-success" onClick={() => { setEditingId(null); setShowModal(true); }}><i className="fas fa-plus"></i> Agregar Producto</button>
             </div>
           </div>
@@ -4581,6 +4784,7 @@
           {qrProductId && <QRModal product={byId[qrProductId]} onClose={() => setQrProductId(null)} />}
           {printAll && <PrintAllLabels products={printRows} onDone={() => setPrintAll(false)} />}
           {showReorderReport && <ReorderReportPrint rows={reorderRows} onDone={() => setShowReorderReport(false)} />}
+          {showBulkImport && <BulkImportModal onClose={() => setShowBulkImport(false)} onImport={handleBulkImport} user={user} />}
         </div>
       );
     }
