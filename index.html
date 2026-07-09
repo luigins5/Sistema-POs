@@ -4876,6 +4876,11 @@
 
         // Now start the QR scanner (permission already granted)
         try {
+          // Make container visible BEFORE initializing so it has dimensions
+          setCamState('scanning');
+          // Wait a tick for React to render display:block
+          await new Promise(r => setTimeout(r, 50));
+
           const qr = new Html5Qrcode('pos-qr-reader');
           scannerRef.current = qr;
           await qr.start(
@@ -4888,7 +4893,6 @@
             () => {}
           );
           runningRef.current = true;
-          setCamState('scanning');
         } catch (startErr) {
           setCamState('error');
           setCamError('Error al iniciar el escáner: ' + (startErr && startErr.message ? startErr.message : startErr));
