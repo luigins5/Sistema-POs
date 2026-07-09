@@ -2030,73 +2030,296 @@
 
     /* Mobile Responsive */
     @media (max-width: 768px) {
+      /* Sidebar: off-canvas overlay */
       .sidebar {
-        width: 220px;
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 280px;
+        height: 100vh;
+        z-index: 1100;
+        transform: translateX(-100%);
+        transition: transform .3s cubic-bezier(.4,0,.2,1);
+      }
+      .sidebar.mobile-open {
+        transform: translateX(0);
+      }
+      .sidebar.collapsed {
+        width: 280px;
+        transform: translateX(-100%);
+      }
+      .sidebar.collapsed.mobile-open {
+        transform: translateX(0);
+      }
+      .sidebar.collapsed .sidebar-brand-name,
+      .sidebar.collapsed .sidebar-user-info,
+      .sidebar.collapsed .sidebar-menu-title,
+      .sidebar.collapsed .sidebar-menu span,
+      .sidebar.collapsed .sidebar-logout span {
+        display: block;
+      }
+      .sidebar.collapsed .sidebar-menu button,
+      .sidebar.collapsed .sidebar-logout button {
+        justify-content: flex-start;
+      }
+      /* Sidebar backdrop */
+      .sidebar-backdrop {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,.5);
+        z-index: 1050;
+        backdrop-filter: blur(2px);
+        -webkit-backdrop-filter: blur(2px);
+      }
+      .sidebar-backdrop.show {
+        display: block;
+        animation: fadeIn .25s;
+      }
+      @keyframes fadeIn { from { opacity:0 } to { opacity:1 } }
+
+      /* Main content full width */
+      .main-content {
+        padding: 12px 10px 80px 10px;
+      }
+
+      /* Navbar compact */
+      .navbar {
+        padding: 8px 10px;
+        margin-bottom: 10px;
+        border-radius: 10px;
+        gap: 4px;
+      }
+      .nav-page-title { font-size: 15px; gap: 6px; }
+      .nav-page-title i { font-size: 14px; }
+      .nav-btn { width: 36px; height: 36px; font-size: 15px; }
+      .nav-avatar { width: 32px; height: 32px; }
+
+      /* Data section tighter */
+      .data-section {
+        padding: 14px 12px;
+        border-radius: 10px;
+      }
+      .section-header {
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 14px;
+      }
+      .section-header h2 {
+        font-size: 16px;
+        gap: 8px;
       }
 
       .form-grid {
         grid-template-columns: 1fr;
+        gap: 12px;
       }
 
       .dashboard-grid-3,
       .dashboard-grid-2 {
         grid-template-columns: 1fr;
+        gap: 12px;
       }
 
+      /* Modal full screen on mobile */
+      .modal-overlay {
+        padding: 0;
+        align-items: flex-end;
+      }
       .modal {
-        width: 95%;
+        width: 100%;
+        max-width: 100%;
+        max-height: 92vh;
+        border-radius: 16px 16px 0 0;
+        animation: slideUp .3s ease;
+      }
+      @keyframes slideUp { from { transform: translateY(100%) } to { transform: translateY(0) } }
+      .modal-header {
+        padding: 16px 18px;
+        border-radius: 16px 16px 0 0;
+      }
+      .modal-header h3 { font-size: 16px; }
+      .modal-body {
+        padding: 18px 16px;
       }
 
+      /* Filters - collapsible & compact */
       .filters-section {
-        padding: 15px;
+        padding: 12px;
+        border-radius: 10px;
+        margin-bottom: 14px;
       }
-
       .filters-grid {
         grid-template-columns: 1fr;
-        gap: 15px;
+        gap: 10px;
       }
-
       .filters-header {
-        flex-direction: column;
-        gap: 15px;
-        align-items: flex-start;
+        flex-direction: row;
+        gap: 10px;
+        align-items: center;
+        margin-bottom: 12px;
+        padding-bottom: 10px;
+        cursor: pointer;
       }
+      .filters-header h3 { font-size: 15px; margin: 0; }
+      .filter-group label { font-size: 12px; }
 
       .about-header {
         flex-direction: column;
         text-align: center;
       }
-
       .developer-info {
         flex-direction: column;
         align-items: center;
         text-align: center;
       }
-
       .developer-links {
         justify-content: center;
       }
 
+      /* Form inputs - bigger touch targets */
       input,
       select,
       textarea {
         font-size: 16px !important;
       }
-
+      .form-group {
+        margin-bottom: 14px;
+      }
       .form-group input,
       .form-group select,
       .form-group textarea {
         font-size: 16px !important;
         padding: 12px 14px;
+        border-radius: 8px;
       }
-
       .filter-input {
         font-size: 16px !important;
+        border-radius: 8px;
+        padding: 10px 12px;
       }
-
       .searchable-dropdown-input {
         font-size: 16px !important;
+        border-radius: 8px;
       }
+
+      /* Buttons - bigger touch targets */
+      .btn {
+        padding: 12px 18px;
+        border-radius: 8px;
+        font-size: 14px;
+        min-height: 44px;
+      }
+      .btn-sm {
+        padding: 10px 14px;
+        min-height: 40px;
+      }
+
+      /* Stat cards */
+      .stat-card {
+        padding: 16px;
+        border-radius: 10px;
+      }
+      .stat-card:hover {
+        transform: none;
+      }
+
+      /* POS area */
+      .pos-scan-actions {
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+      .pos-scan-box {
+        flex-direction: column;
+      }
+
+      /* DataTables compact */
+      table.dataTable thead th {
+        padding: 10px 8px !important;
+        font-size: 12px;
+      }
+      table.dataTable tbody td {
+        padding: 10px 8px !important;
+        font-size: 13px;
+      }
+      .dt-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-bottom: 10px;
+      }
+      .dt-button {
+        padding: 8px 12px !important;
+        font-size: 12px !important;
+        margin-right: 0 !important;
+        border-radius: 6px !important;
+      }
+
+      /* Summary bar horizontal scroll */
+      .summary-bar {
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      /* Camera modal */
+      .pos-camera-frame {
+        border-radius: 12px;
+        overflow: hidden;
+      }
+
+      /* Bottom tab bar for mobile */
+      .mobile-bottom-bar {
+        display: flex;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: #fff;
+        border-top: 1px solid #e0e4e8;
+        box-shadow: 0 -2px 12px rgba(0,0,0,.08);
+        z-index: 900;
+        padding: 4px 0;
+        padding-bottom: max(4px, env(safe-area-inset-bottom));
+      }
+      .mob-tab {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 2px;
+        padding: 6px 2px;
+        border: none;
+        background: none;
+        color: #8c96a3;
+        font-size: 10px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: color .2s;
+        -webkit-tap-highlight-color: transparent;
+      }
+      .mob-tab i {
+        font-size: 18px;
+        transition: transform .2s;
+      }
+      .mob-tab.active {
+        color: var(--navy-accent);
+      }
+      .mob-tab.active i {
+        transform: scale(1.15);
+      }
+
+      /* Hide login box extra padding */
+      .login-box {
+        padding: 30px 24px;
+        border-radius: 16px;
+      }
+    }
+
+    /* Desktop: hide mobile-only elements */
+    @media (min-width: 769px) {
+      .mobile-bottom-bar { display: none !important; }
+      .sidebar-backdrop { display: none !important; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -3604,10 +3827,11 @@
     }
 
     // --- Sidebar ---
-    function Sidebar({ activeMenu, setActiveMenu, role, user, onLogout, collapsed }) {
+    function Sidebar({ activeMenu, setActiveMenu, role, user, onLogout, collapsed, mobileOpen }) {
       const isAdmin = role === 'Admin';
+      const cls = 'sidebar' + (collapsed ? ' collapsed' : '') + (mobileOpen ? ' mobile-open' : '');
       return (
-        <div className={'sidebar' + (collapsed ? ' collapsed' : '')}>
+        <div className={cls}>
           <div className="sidebar-brand"><img src={LOGO_URL} alt="" className="sidebar-brand-logo" /><span className="sidebar-brand-name">Sistema POS</span></div>
           <div className="sidebar-user-info"><div className="sidebar-user-name">{user?.name}</div><div className="sidebar-user-role">{role}</div></div>
           <div className="sidebar-menu-section">
@@ -4620,39 +4844,62 @@
 
     // --- Camera scan modal (secondary path, feeds the same resolve function as manual input) ---
     function CameraScanModal({ onDetected, onClose }) {
-      // html5-qrcode's stop() throws SYNCHRONOUSLY (not a rejected promise) once the scanner
-      // is already stopped - a .catch() after it doesn't help. runningRef gates every stop()
-      // call so the decode callback and the unmount cleanup can never both call it.
       const scannerRef = useRef(null);
       const runningRef = useRef(false);
+      const [camState, setCamState] = useState('idle'); // idle | requesting | scanning | error
+      const [camError, setCamError] = useState('');
 
-      useEffect(() => {
-        let cancelled = false;
-        const qr = new Html5Qrcode('pos-qr-reader');
-        scannerRef.current = qr;
+      const safeStop = useCallback(() => {
+        if (!runningRef.current || !scannerRef.current) return;
+        runningRef.current = false;
+        try { scannerRef.current.stop().then(() => scannerRef.current.clear()).catch(() => {}); } catch(e) {}
+      }, []);
 
-        const safeStop = () => {
-          if (!runningRef.current) return;
-          runningRef.current = false;
-          try { qr.stop().then(() => qr.clear()).catch(() => { }); } catch (e) { /* already stopped */ }
-        };
+      const startScanner = useCallback(async () => {
+        setCamState('requesting');
+        setCamError('');
+        try {
+          // Request permission explicitly first (user gesture context)
+          const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+          // Permission granted - stop this test stream
+          stream.getTracks().forEach(t => t.stop());
+        } catch (permErr) {
+          const msg = permErr && permErr.name === 'NotAllowedError'
+            ? 'Permiso de cámara denegado. Por favor, permite el acceso a la cámara en la configuración de tu navegador y vuelve a intentarlo.'
+            : permErr && permErr.name === 'NotFoundError'
+            ? 'No se encontró ninguna cámara en este dispositivo.'
+            : 'No se pudo acceder a la cámara: ' + (permErr && permErr.message ? permErr.message : permErr);
+          setCamState('error');
+          setCamError(msg);
+          return;
+        }
 
-        qr.start({ facingMode: 'environment' }, { fps: 10, qrbox: 250 }, (decodedText) => {
-          if (cancelled) return;
-          cancelled = true;
-          safeStop();
-          onDetected(decodedText);
-        }, () => { }).then(() => {
+        // Now start the QR scanner (permission already granted)
+        try {
+          const qr = new Html5Qrcode('pos-qr-reader');
+          scannerRef.current = qr;
+          await qr.start(
+            { facingMode: 'environment' },
+            { fps: 10, qrbox: { width: 250, height: 250 } },
+            (decodedText) => {
+              safeStop();
+              onDetected(decodedText);
+            },
+            () => {}
+          );
           runningRef.current = true;
-          if (cancelled) safeStop(); // modal was closed while the camera was still starting up
-        }).catch((err) => {
-          Swal.fire({ icon: 'error', title: 'Error de Cámara', text: 'No se pudo iniciar la cámara: ' + (err && err.message ? err.message : err) });
-          onClose();
-        });
-        return () => {
-          cancelled = true;
-          safeStop();
-        };
+          setCamState('scanning');
+        } catch (startErr) {
+          setCamState('error');
+          setCamError('Error al iniciar el escáner: ' + (startErr && startErr.message ? startErr.message : startErr));
+        }
+      }, [onDetected, safeStop]);
+
+      // Auto-start on mount (works on desktop), but on mobile the user may need to tap
+      useEffect(() => {
+        // Small delay to let DOM render the #pos-qr-reader div first
+        const t = setTimeout(() => startScanner(), 300);
+        return () => { clearTimeout(t); safeStop(); };
       }, []);
 
       return (
@@ -4663,8 +4910,32 @@
               <button className="close-btn" onClick={onClose}><i className="fas fa-times"></i></button>
             </div>
             <div className="modal-body">
-              <div className="pos-camera-frame"><div id="pos-qr-reader"></div></div>
-              <p style={{ textAlign: 'center', color: '#888', fontSize: 13, marginTop: 12 }}>Apunta la cámara al código QR o de barras del producto</p>
+              {camState === 'error' && (
+                <div style={{ textAlign: 'center', padding: '20px 10px' }}>
+                  <i className="fas fa-exclamation-triangle" style={{ fontSize: 40, color: '#ea4335', marginBottom: 16, display: 'block' }}></i>
+                  <p style={{ color: '#555', fontSize: 14, marginBottom: 20, lineHeight: 1.6 }}>{camError}</p>
+                  <button className="btn btn-primary" onClick={startScanner} style={{ margin: '0 auto' }}>
+                    <i className="fas fa-redo"></i> Reintentar
+                  </button>
+                </div>
+              )}
+              {camState === 'idle' && (
+                <div style={{ textAlign: 'center', padding: '30px 10px' }}>
+                  <i className="fas fa-camera" style={{ fontSize: 48, color: 'var(--navy-accent)', marginBottom: 16, display: 'block' }}></i>
+                  <p style={{ color: '#555', fontSize: 14, marginBottom: 20 }}>Toca el botón para activar la cámara</p>
+                  <button className="btn btn-primary" onClick={startScanner}>
+                    <i className="fas fa-camera"></i> Activar Cámara
+                  </button>
+                </div>
+              )}
+              {camState === 'requesting' && (
+                <div style={{ textAlign: 'center', padding: '40px 10px' }}>
+                  <i className="fas fa-spinner fa-spin" style={{ fontSize: 36, color: 'var(--navy-accent)', marginBottom: 16, display: 'block' }}></i>
+                  <p style={{ color: '#888', fontSize: 14 }}>Solicitando acceso a la cámara...</p>
+                </div>
+              )}
+              <div className="pos-camera-frame" style={{ display: camState === 'scanning' ? 'block' : 'none' }}><div id="pos-qr-reader"></div></div>
+              {camState === 'scanning' && <p style={{ textAlign: 'center', color: '#888', fontSize: 13, marginTop: 12 }}>Apunta la cámara al código QR o de barras del producto</p>}
             </div>
           </div>
         </div>
@@ -6146,13 +6417,41 @@
 
       const titles = { dashboard: 'Panel', pos: 'Ventas QR', products: 'Productos', stock: 'Entrada/Salida Stock', 'sales-history': 'Historial de Ventas', records: 'Clientes', suppliers: 'Proveedores', 'purchase-orders': 'Órdenes de Compra', expenses: 'Gastos', users: 'Usuarios', settings: 'Configuración', logs: 'Registro de Actividad', about: 'Acerca de' };
       const icons = { dashboard: 'fa-chart-line', pos: 'fa-cash-register', products: 'fa-boxes-stacked', stock: 'fa-dolly', 'sales-history': 'fa-receipt', records: 'fa-address-book', suppliers: 'fa-truck-field', 'purchase-orders': 'fa-file-invoice-dollar', expenses: 'fa-money-bill-trend-up', users: 'fa-users-cog', settings: 'fa-gear', logs: 'fa-history', about: 'fa-info-circle' };
+      const [mobileOpen, setMobileOpen] = useState(false);
+      const isMobile = typeof window !== 'undefined' && window.innerWidth <= 768;
+      const handleMenuChange = (menu) => { setActiveMenu(menu); setMobileOpen(false); };
+      const handleToggle = () => { if (isMobile || window.innerWidth <= 768) { setMobileOpen(o => !o); } else { toggleSidebar(); } };
+
+      // Build mobile tabs based on role
+      const mobileTabs = useMemo(() => {
+        const tabs = [];
+        tabs.push({ key: 'pos', icon: 'fa-cash-register', label: 'Ventas' });
+        tabs.push({ key: 'products', icon: 'fa-boxes-stacked', label: 'Productos' });
+        tabs.push({ key: 'records', icon: 'fa-address-book', label: 'Clientes' });
+        tabs.push({ key: 'sales-history', icon: 'fa-receipt', label: 'Historial' });
+        return tabs;
+      }, [role]);
+
       return (
         <ConfigContext.Provider value={{ settings, categories, refreshConfig }}>
           <div className="app-container">
-            <Sidebar activeMenu={activeMenu} setActiveMenu={setActiveMenu} role={role} user={user} onLogout={onLogout} collapsed={collapsed} />
+            <div className={'sidebar-backdrop' + (mobileOpen ? ' show' : '')} onClick={() => setMobileOpen(false)}></div>
+            <Sidebar activeMenu={activeMenu} setActiveMenu={handleMenuChange} role={role} user={user} onLogout={onLogout} collapsed={collapsed} mobileOpen={mobileOpen} />
             <div className="main-content">
-              <Navbar icon={icons[activeMenu]} title={titles[activeMenu]} userName={user?.name} role={role} notifs={notifs} unreadCount={unreadCount} onNotifRead={handleNotifRead} onNotifClear={handleNotifClear} onLogout={onLogout} setActiveMenu={setActiveMenu} toggleSidebar={toggleSidebar} />
-              <MainContent activeMenu={activeMenu} user={user} role={role} setActiveMenu={setActiveMenu} />
+              <Navbar icon={icons[activeMenu]} title={titles[activeMenu]} userName={user?.name} role={role} notifs={notifs} unreadCount={unreadCount} onNotifRead={handleNotifRead} onNotifClear={handleNotifClear} onLogout={onLogout} setActiveMenu={handleMenuChange} toggleSidebar={handleToggle} />
+              <MainContent activeMenu={activeMenu} user={user} role={role} setActiveMenu={handleMenuChange} />
+            </div>
+            <div className="mobile-bottom-bar">
+              {mobileTabs.map(t => (
+                <button key={t.key} className={'mob-tab' + (activeMenu === t.key ? ' active' : '')} onClick={() => setActiveMenu(t.key)}>
+                  <i className={'fas ' + t.icon}></i>
+                  <span>{t.label}</span>
+                </button>
+              ))}
+              <button className="mob-tab" onClick={() => setMobileOpen(true)}>
+                <i className="fas fa-bars"></i>
+                <span>Más</span>
+              </button>
             </div>
           </div>
         </ConfigContext.Provider>
