@@ -4752,6 +4752,7 @@
       const [counted, setCounted] = useState('');
       const [notes, setNotes] = useState('');
       const [saving, setSaving] = useState(false);
+      const [showCamera, setShowCamera] = useState(false);
       const productOpts = useMemo(() => (products || []).map(p => ({ value: p.id, label: `${p.name} (${p.sku})` })), [products]);
       const selected = (products || []).find(p => p.id === productId);
       const onHand = useMemo(() => productId ? computeQtyOnHand(productId, movements) : 0, [productId, movements]);
@@ -4773,7 +4774,12 @@
             <div className="modal-header"><h3><i className="fas fa-scale-balanced"></i> Inventario / Ajuste</h3><button className="close-btn" onClick={onClose}><i className="fas fa-times"></i></button></div>
             <div className="modal-body">
               <form onSubmit={submit}>
-                <SearchableDropdown label="Producto" icon="fas fa-box" options={productOpts} value={productId} onChange={setProductId} placeholder="Buscar producto..." required={true} />
+                <div style={{ display: 'flex', gap: '8px', alignItems: 'flex-start' }}>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <SearchableDropdown label="Producto" icon="fas fa-box" options={productOpts} value={productId} onChange={setProductId} placeholder="Buscar producto..." required={true} />
+                  </div>
+                  <button type="button" className="btn btn-secondary" onClick={() => setShowCamera(true)} title="Escanear con Cámara" style={{ padding: '0 16px', height: '48px', marginTop: '28px' }}><i className="fas fa-camera"></i></button>
+                </div>
                 {productId && <p className="stock-onhand-hint">En sistema: <strong>{onHand}</strong></p>}
                 <div className="form-grid">
                   <div className="form-group"><label>Cantidad Contada *</label><input type="number" min="0" step="1" value={counted} onChange={(e) => setCounted(e.target.value)} required /></div>
@@ -4787,6 +4793,17 @@
               </form>
             </div>
           </div>
+          {showCamera && (
+            <CameraScanModal
+              onDetected={(code) => {
+                const p = (products || []).find(x => x.barcode === code || x.sku === code || x.id === code);
+                if (p) setProductId(p.id);
+                else Swal.fire({ icon: 'warning', title: 'No encontrado', text: 'El código escaneado no coincide con ningún producto en el sistema.' });
+                setShowCamera(false);
+              }}
+              onClose={() => setShowCamera(false)}
+            />
+          )}
         </div>
       );
     }
