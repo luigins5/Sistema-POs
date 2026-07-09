@@ -3051,6 +3051,13 @@
 
     function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
     function nowIso() { return new Date().toISOString(); }
+    function localYMD(d) {
+      try {
+        const dt = d ? new Date(d) : new Date();
+        if (isNaN(dt.getTime())) return '';
+        return dt.getFullYear() + '-' + String(dt.getMonth() + 1).padStart(2, '0') + '-' + String(dt.getDate()).padStart(2, '0');
+      } catch(e) { return ''; }
+    }
 
     // seed demo login + sample records once, first run only
     async function seedDemoData() {
@@ -5758,8 +5765,8 @@
 
       const barRef = useRef(null), payRef = useRef(null);
       const barChart = useRef(null), payChart = useRef(null);
-      const ymd = (d) => { try { return new Date(d).toISOString().slice(0, 10); } catch (e) { return ''; } };
-      const today = new Date().toISOString().slice(0, 10);
+      const ymd = (d) => localYMD(d);
+      const today = localYMD();
 
       const s = useMemo(() => {
         const todaySales = sales.filter(x => ymd(x.createdAt) === today);
@@ -5783,7 +5790,7 @@
         if (loading) return;
         const days = [...Array(7)].map((_, i) => { const d = new Date(); d.setDate(d.getDate() - (6 - i)); return d; });
         const labels = days.map(d => d.toLocaleDateString('es-MX', { weekday: 'short' }));
-        const revByDay = days.map(d => { const k = d.toISOString().slice(0, 10); return sales.filter(x => ymd(x.createdAt) === k).reduce((a, x) => a + Number(x.total || 0), 0); });
+        const revByDay = days.map(d => { const k = localYMD(d); return sales.filter(x => ymd(x.createdAt) === k).reduce((a, x) => a + Number(x.total || 0), 0); });
         const byPay = sales.reduce((m, x) => { const k = x.paymentMethod || 'Other'; m[k] = (m[k] || 0) + Number(x.total || 0); return m; }, {});
 
         if (barChart.current) barChart.current.destroy();
@@ -5984,7 +5991,7 @@
 
     // --- Expense Modal ---
     function ExpenseModal({ editItem, onClose, onSave }) {
-      const today = new Date().toISOString().slice(0, 10);
+      const today = localYMD();
       const [f, setF] = useState({ date: editItem?.date || today, category: editItem?.category || 'Other', payee: editItem?.payee || '', amount: editItem?.amount ?? '', paymentMethod: editItem?.paymentMethod || 'Cash', notes: editItem?.notes || '' });
       const [saving, setSaving] = useState(false);
       const upd = (k, v) => setF(p => ({ ...p, [k]: v }));
