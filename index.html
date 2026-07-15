@@ -5165,7 +5165,7 @@
         <div className="pos-cart-list">
           {items.map((it) => (
             <div className="pos-cart-row" key={it.productId}>
-              <div className="pi-name"><strong>{it.name}</strong><small>SKU: {it.sku}</small></div>
+              <div className="pi-name"><strong>{it.name}</strong><small>SKU: {it.sku} | Costo: {money(it.cost)}</small></div>
               <div className="pos-qty-ctrl">
                 <button type="button" onClick={() => onDec(it.productId)}><i className="fas fa-minus"></i></button>
                 <span>{it.qty}</span>
@@ -5406,7 +5406,7 @@
           const nextQty = (existing ? existing.qty : 0) + qtyToAdd;
           if (!capacityCheck(product.id, product.name, nextQty)) return prev;
           if (existing) return prev.map(l => l.productId === product.id ? { ...l, qty: nextQty } : l);
-          return [...prev, { productId: product.id, name: product.name, sku: product.sku, price: Number(product.price) || 0, qty: qtyToAdd }];
+          return [...prev, { productId: product.id, name: product.name, sku: product.sku, price: Number(product.price) || 0, cost: Number(product.cost) || 0, qty: qtyToAdd }];
         });
       }, [capacityCheck]);
 
@@ -5553,7 +5553,7 @@
                   {nameSuggestions.map(p => (
                     <div key={p.id} className="pos-suggestion-item" onClick={() => selectSuggestion(p)}>
                       <div className="pos-sug-name">{p.name}</div>
-                      <div className="pos-sug-meta"><span>{p.sku}</span><span>{money(p.price)}</span></div>
+                      <div className="pos-sug-meta"><span>{p.sku}</span><span>{money(p.price)}</span><span>Costo: {money(p.cost)}</span></div>
                     </div>
                   ))}
                 </div>
